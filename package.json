@@ -209,15 +209,12 @@
     },
     "win": {
       "target": [
-        "nsis",
-        "msi"
+        "nsis"
       ]
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb",
-        "pacman"
+        "AppImage"
       ],
       "category": "Development"
     },
