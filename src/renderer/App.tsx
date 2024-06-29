@@ -1,16 +1,21 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
+import RouteHandler from './RouteHandler';
+import { ThemeProvider, useTheme } from './Components/Contexts/ThemeContext';
 
-function Hello() {
-  return <div className=" p-3 bg-slate-300 font-bold">test</div>;
+function App() {
+  const { theme } = useTheme();
+
+  return (
+    <div className={theme}>
+      <RouteHandler />
+    </div>
+  );
 }
 
-export default function App() {
+export default function RootApp() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   );
 }

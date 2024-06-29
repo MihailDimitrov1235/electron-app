@@ -90,6 +90,9 @@
     }
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
@@ -160,6 +163,7 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "tw-colors": "^3.3.1",
     "typescript": "^5.2.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.88.2",
