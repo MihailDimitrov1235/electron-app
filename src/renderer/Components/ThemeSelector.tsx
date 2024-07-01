@@ -1,32 +1,35 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material/Select';
 import { useTheme, themes, type Theme } from './Contexts/ThemeContext';
+import Dropdown from './Dropdown';
 
 function ThemeSelector() {
-  const { theme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
 
-  const handleChange = (event: SelectChangeEvent<Theme>) => {
-    // Cast the event target value to Theme type
-    const selectedTheme = event.target?.value as Theme;
+  const handleChange = (th: String) => {
+    const selectedTheme = th as Theme;
     setTheme(selectedTheme);
   };
 
   return (
-    <FormControl className=" w-auto">
-      <InputLabel>Theme</InputLabel>
-      <Select
-        value={theme}
-        onChange={handleChange}
-        // input={<OutlinedInput label="Name" />}
-      >
-        {themes.map((t) => (
-          <MenuItem key={t} value={t}>
-            {t} theme
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Dropdown
+      name="Theme"
+      options={themes.map((t) => t)}
+      onSelect={handleChange}
+    />
+    // <FormControl className=" w-auto">
+    //   <InputLabel>Theme</InputLabel>
+    //   <Select
+    //     value={theme}
+    //     onChange={handleChange}
+    //     // input={<OutlinedInput label="Name" />}
+    //   >
+    //     {themes.map((t) => (
+    //       <MenuItem key={t} value={t}>
+    //         {t} theme
+    //       </MenuItem>
+    //     ))}
+    //   </Select>
+    // </FormControl>
   );
 }
 
