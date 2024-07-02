@@ -6,7 +6,7 @@ function App() {
   const { theme } = useTheme();
 
   return (
-    <div className={theme}>
+    <div className={`${theme} w-[100vw] h-[100vh]`}>
       <RouteHandler />
     </div>
   );

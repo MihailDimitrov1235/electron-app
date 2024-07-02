@@ -16,20 +16,6 @@ function ThemeSelector() {
       options={themes.map((t) => t)}
       onSelect={handleChange}
     />
-    // <FormControl className=" w-auto">
-    //   <InputLabel>Theme</InputLabel>
-    //   <Select
-    //     value={theme}
-    //     onChange={handleChange}
-    //     // input={<OutlinedInput label="Name" />}
-    //   >
-    //     {themes.map((t) => (
-    //       <MenuItem key={t} value={t}>
-    //         {t} theme
-    //       </MenuItem>
-    //     ))}
-    //   </Select>
-    // </FormControl>
   );
 }
 
