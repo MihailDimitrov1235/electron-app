@@ -27,13 +27,13 @@ export default function Dropdown({
   }
 
   return (
-    <div className=" w-fit text-black text-sm font-small gap-2">
+    <div className=" w-fit h-fit text-text text-sm font-small gap-2 shadow-md">
       <button
         id="dropdownDefaultButton"
         data-dropdown-toggle="dropdown"
         className={`${
-          !open ? 'rounded-md' : 'rounded-t-md border-b-[1px]'
-        }  bg-white border-2 border-primary w-full hover:bg-gray-50 focus:outline-none px-5 py-2.5 flex items-center, justify-between gap-2`}
+          !open ? 'rounded-md' : 'rounded-t-md'
+        }  bg-background w-full border border-transparent hover:border-backgroundDark box-border px-5 py-2.5 flex items-center, justify-between gap-2`}
         type="button"
         onClick={handleDropdownClick}
       >
@@ -51,14 +51,16 @@ export default function Dropdown({
         id="dropdown"
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-white rounded-b-md border-t-0 border-2 border-primary shadow flex flex-col`}
+        } z-10 bg-background rounded-b-md flex flex-col`}
       >
         {options.map((option, index) => (
           <button
             // eslint-disable-next-line react/no-array-index-key
             key={index}
             type="button"
-            className=" text-start px-5 py-2 hover:bg-gray-50 w-full"
+            className={`${
+              index == options.length - 1 && 'rounded-b-md'
+            } text-start px-5 py-2 w-full border border-transparent hover:border-backgroundDark`}
             onClick={() => handleOptionSelect(option)}
           >
             {option}

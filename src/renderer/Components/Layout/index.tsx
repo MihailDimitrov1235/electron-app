@@ -4,9 +4,11 @@ import Sidebar from './Sidebar';
 
 export default function Layout() {
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex bg-background">
       <Sidebar />
-      <Outlet />
+      <div className="w-full h-full">
+        <Outlet />
+      </div>
     </div>
   );
 }
