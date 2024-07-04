@@ -14,8 +14,9 @@ export default function Sidebar() {
   return (
     <div className="h-full px-2 py-2 overflow-y-auto bg-background shadow-md">
       <ul className="space-y-2 font-medium">
-        {menuItems.map((item) => (
-          <li>
+        {menuItems.map((item, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <li key={index}>
             <Link
               to={item.href}
               className="flex flex-col items-center p-2 text-text rounded-md hover:bg-backgroundDark group"

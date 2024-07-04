@@ -1,6 +1,7 @@
 import 'tailwindcss/tailwind.css';
 import RouteHandler from './RouteHandler';
 import { ThemeProvider, useTheme } from './Components/Contexts/ThemeContext';
+import { AuthProvider } from './Components/Contexts/AuthContext';
 
 function App() {
   const { theme } = useTheme();
@@ -15,7 +16,9 @@ function App() {
 export default function RootApp() {
   return (
     <ThemeProvider>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

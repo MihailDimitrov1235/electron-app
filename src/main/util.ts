@@ -11,3 +11,15 @@ export function resolveHtmlPath(htmlFileName: string) {
   }
   return `file://${path.resolve(__dirname, '../renderer/', htmlFileName)}`;
 }
+
+export function getAccessTokenFromUrl(url: string): string | null {
+  try {
+    const urlObj = new URL(url);
+    const hashParams = new URLSearchParams(urlObj.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    return accessToken;
+  } catch (error) {
+    console.error('Error parsing access token from URL:', error);
+    return null;
+  }
+}

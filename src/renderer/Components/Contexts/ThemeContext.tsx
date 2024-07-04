@@ -11,11 +11,20 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>(() => {
+    const storageTheme = localStorage.getItem('theme');
+    return themes.includes(storageTheme as Theme)
+      ? (storageTheme as Theme)
+      : 'light';
+  });
+  function changeTheme(th: Theme) {
+    localStorage.setItem('theme', th);
+    setTheme(th);
+  }
   const value = useMemo(
     () => ({
       theme,
-      setTheme,
+      setTheme: changeTheme,
     }),
     [theme],
   );

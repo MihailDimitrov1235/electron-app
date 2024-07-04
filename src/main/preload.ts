@@ -2,28 +2,27 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+contextBridge.exposeInMainWorld('electronAPI', {
+  // renderer to main
 
-const electronHandler = {
-  ipcRenderer: {
-    sendMessage(channel: Channels, ...args: unknown[]) {
-      ipcRenderer.send(channel, ...args);
-    },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
+  // renderer to renderer
 
-      return () => {
-        ipcRenderer.removeListener(channel, subscription);
-      };
-    },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
+  // main to renderer
+  handleSetToken: (callback: (message: string) => void) => {
+    const listener = (_: IpcRendererEvent, message: string) =>
+      callback(message);
+    ipcRenderer.on('set-token', listener);
+
+    return () => {
+      ipcRenderer.removeListener('set-token', listener);
+    };
   },
-};
+});
 
-contextBridge.exposeInMainWorld('electron', electronHandler);
-
-export type ElectronHandler = typeof electronHandler;
+declare global {
+  interface Window {
+    electronAPI: {
+      handleSetToken: (callback: (message: string) => void) => () => void;
+    };
+  }
+}
