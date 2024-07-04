@@ -4,6 +4,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 // import MenuBuilder from './menu';
 import { resolveHtmlPath, getAccessTokenFromUrl } from './util';
+import SetupIPCHandlers from './ipc-handlers';
 
 class AppUpdater {
   constructor() {
@@ -16,10 +17,7 @@ class AppUpdater {
 const protocolName = 'electron-app';
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  event.reply('ipc-example', msgTemplate('pong'));
-});
+SetupIPCHandlers();
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {

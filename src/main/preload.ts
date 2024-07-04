@@ -4,7 +4,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   // renderer to main
-
+  openUrl: (url: string) => ipcRenderer.invoke('open-url', url),
   // renderer to renderer
 
   // main to renderer
@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      openUrl: (url: string) => Promise<void>;
       handleSetToken: (callback: (message: string) => void) => () => void;
     };
   }

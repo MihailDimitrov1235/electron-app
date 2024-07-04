@@ -8,7 +8,7 @@ type DropdownProps = {
   // eslint-disable-next-line react/require-default-props
   closeOnSelect?: boolean | undefined;
   // eslint-disable-next-line react/require-default-props
-  classes: String;
+  classes?: String;
 };
 
 export default function Dropdown({
