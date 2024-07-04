@@ -9,6 +9,8 @@ export default function RouteHandler() {
       <Routes>
         <Route path="" element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Home />} />
+          <Route path="/user" element={<Home />} />
           <Route path="*" element={<Page404 />} />
         </Route>
       </Routes>

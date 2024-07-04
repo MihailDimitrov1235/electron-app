@@ -1,5 +1,7 @@
+/* eslint-disable react/jsx-no-bind */
 import React, { useState } from 'react';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
+import Button from './Button';
 
 type DropdownProps = {
   name: String;
@@ -33,12 +35,23 @@ export default function Dropdown({
     <div
       className={`${classes} w-fit h-fit text-text text-sm font-small gap-2 shadow-md relative`}
     >
-      <button
-        id="dropdownDefaultButton"
-        data-dropdown-toggle="dropdown"
+      <Button
+        onClick={handleDropdownClick}
+        classess="w-full flex items-center justify-between gap-2"
+      >
+        {name}{' '}
+        <div className=" items-center ">
+          {open ? (
+            <IoMdArrowDropup size="19px" />
+          ) : (
+            <IoMdArrowDropdown size="19px" />
+          )}
+        </div>
+      </Button>
+      {/* <button
         className={`${
           !open ? 'rounded-md' : 'rounded-t-md '
-        }  bg-background w-full border border-transparent hover:border-backgroundDark box-border px-5 py-2.5 flex items-center, justify-between gap-2`}
+        }  bg-background w-full border border-transparent hover:border-backgroundDark px-3 py-2 flex items-center, justify-between gap-2`}
         type="button"
         onClick={handleDropdownClick}
       >
@@ -50,7 +63,7 @@ export default function Dropdown({
             <IoMdArrowDropdown size="19px" />
           )}
         </div>
-      </button>
+      </button> */}
 
       <div
         id="dropdown"

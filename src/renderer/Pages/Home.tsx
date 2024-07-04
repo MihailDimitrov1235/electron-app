@@ -1,6 +1,7 @@
 import ThemeSelector from '../Components/ThemeSelector';
 import { useAuth } from '../Components/Contexts/AuthContext';
 import { useMainUtils } from '../Components/Contexts/MainUtilsContext';
+import Button from '../Components/Button';
 
 export default function Home() {
   const { token } = useAuth();
@@ -17,9 +18,11 @@ export default function Home() {
       >
         Login with AniList
       </button>
-      <br />
-      {token} - token
       <ThemeSelector />
+
+      <Button variant="default">default</Button>
+      <Button variant="gradient">default</Button>
+      <Button variant="outline">default</Button>
     </div>
   );
 }
