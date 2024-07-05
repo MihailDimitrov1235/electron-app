@@ -33,11 +33,13 @@ export default function Dropdown({
 
   return (
     <div
-      className={`${classes} w-fit h-fit text-text text-sm font-small gap-2 shadow-md relative`}
+      className={`${classes} w-fit h-fit text-text-main text-sm font-small gap-2 shadow-md relative`}
     >
       <Button
         onClick={handleDropdownClick}
-        classess="w-full flex items-center justify-between gap-2"
+        classess={`w-full flex items-center justify-between gap-2 ${
+          open ? 'rounded-b-none' : ''
+        }`}
       >
         {name}{' '}
         <div className=" items-center ">
@@ -48,28 +50,11 @@ export default function Dropdown({
           )}
         </div>
       </Button>
-      {/* <button
-        className={`${
-          !open ? 'rounded-md' : 'rounded-t-md '
-        }  bg-background w-full border border-transparent hover:border-backgroundDark px-3 py-2 flex items-center, justify-between gap-2`}
-        type="button"
-        onClick={handleDropdownClick}
-      >
-        {name}{' '}
-        <div className=" items-center ">
-          {open ? (
-            <IoMdArrowDropup size="19px" />
-          ) : (
-            <IoMdArrowDropdown size="19px" />
-          )}
-        </div>
-      </button> */}
 
       <div
-        id="dropdown"
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-background rounded-b-md flex flex-col absolute w-full shadow-md`}
+        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-md`}
       >
         {options.map((option, index) => (
           <button
@@ -78,7 +63,7 @@ export default function Dropdown({
             type="button"
             className={`${
               index === options.length - 1 && 'rounded-b-md'
-            } text-start px-5 py-2 w-full border border-transparent hover:border-backgroundDark`}
+            } text-start px-5 py-2 w-full border border-transparent hover:border-background-dark`}
             onClick={() => handleOptionSelect(option)}
           >
             {option}

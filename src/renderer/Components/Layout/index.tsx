@@ -16,7 +16,7 @@ export default function Layout() {
     };
   });
   return (
-    <div className="w-full h-full flex bg-background">
+    <div className="w-full h-full flex bg-background-dark">
       <Sidebar />
       <div className="w-full h-full">
         <Outlet />

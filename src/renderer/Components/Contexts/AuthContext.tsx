@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useMemo } from 'react';
 type AuthContextType = {
   token: string | null;
   setToken: (token: string | null) => void;
+  isLoggedIn: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       token,
       setToken: changeToken,
+      isLoggedIn: token != null,
     }),
     [token],
   );

@@ -1,28 +1,46 @@
 /* eslint-disable react/require-default-props */
+import { IconType } from 'react-icons';
 import React, { MouseEventHandler, JSX } from 'react';
-import DefaultButton from './DefaultButton';
 
 type ButtonProps = {
   variant?: 'default' | 'gradient' | 'outline';
   children?: JSX.Element | React.ReactNode;
   onClick?: MouseEventHandler;
   classess?: string;
+  Icon?: IconType | null;
 };
+
+function DefaultButton({
+  children,
+  classess,
+  onClick,
+}: {
+  children: React.ReactNode;
+  classess: string;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}) {
+  return (
+    <button onClick={onClick} type="button" className={classess}>
+      {children}
+    </button>
+  );
+}
 
 export default function Button({
   children,
   onClick = () => {},
   variant = 'default',
   classess = '',
+  Icon = null,
 }: ButtonProps) {
-  const commonClassess = 'px-3 py-2 rounded-md shadow-md text-center';
+  const commonClassess =
+    'px-3 py-2 rounded-md shadow-md text-center flex felx-col items-center justify-center gap-2 w-fit';
   const styles = {
     default:
-      'text-text bg-background border border-transparent hover:border-backgroundDark',
+      'text-text-main bg-background-main border border-transparent hover:border-background-dark',
     gradient:
-      'text-textPrimary bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl',
-    outline:
-      '!p-1 text-text group bg-gradient-to-br from-primary to-secondary relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden',
+      'text-text-primary bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate',
+    outline: `text-text-main bg-gradient-to-r from-primary to-secondary gradient element-to-rotate`,
   };
 
   return (
@@ -30,13 +48,7 @@ export default function Button({
       onClick={onClick}
       classess={`${commonClassess} ${styles[variant]} ${classess}`}
     >
-      {variant === 'outline' ? (
-        <span className="px-2 py-1 relative transition-all ease-in duration-75 bg-background rounded-md group-hover:bg-opacity-0 group-hover:text-textPrimary">
-          {children}
-        </span>
-      ) : (
-        <div className={classess}>{children}</div>
-      )}
+      {Icon && <Icon />} {children}
     </DefaultButton>
   );
 }

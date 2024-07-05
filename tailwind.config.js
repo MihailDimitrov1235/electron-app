@@ -7,29 +7,45 @@ module.exports = {
     extend: {},
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'login-bg': "url('../../img/login-bg.jpg')",
+      },
+    },
   },
   plugins: [
     createThemes({
       light: {
-        primary: '#9400D3',
-        secondary: '#732E9B',
-        background: '#f0f0f0',
-        backgroundDark: '#dedede',
-        backgroundDarker: '#cccccc',
-        text: '#000000',
-        textPrimary: '#ffffff',
-        lightText: '#111111',
+        primary: '#3a0ca3',
+        secondary: '#b5179e',
+        contrast: '#4cc9f0',
+        background: {
+          main: '#e0e1dd',
+          dark: '#d5d6d2',
+          light: '#e9ebe6',
+        },
+        text: {
+          main: '#000000',
+          primary: '#ffffff',
+          light: '#111111',
+        },
+        devider: '#aaaaaa',
       },
       dark: {
-        primary: '#9400D3',
-        secondary: '#732E9B',
-        background: '#374151',
-        backgroundDark: '#1F2937',
-        backgroundDarker: '#111827',
-        text: '#ffffff',
-        textPrimary: '#ffffff',
-        lightText: '#eeeeee',
+        primary: '#3a0ca3',
+        secondary: '#b5179e',
+        contrast: '#4cc9f0',
+        background: {
+          main: '#1b263b',
+          dark: '#0d1b2a',
+          light: '#415a77',
+        },
+        text: {
+          main: '#ffffff',
+          primary: '#ffffff',
+          light: '#eeeeee',
+        },
+        devider: '#415a77',
       },
     }),
   ],
