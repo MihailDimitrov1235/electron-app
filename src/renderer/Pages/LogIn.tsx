@@ -25,3 +25,18 @@ export default function LogIn() {
     </div>
   );
 }
+
+// {
+//   MediaListCollection(userId: 6058291, type: ANIME, sort: SCORE_DESC) {
+//     lists {
+//       entries {
+//         media {
+//           title {
+//             english
+//           }
+//         }
+//         score
+//       }
+//     }
+//   }
+// }

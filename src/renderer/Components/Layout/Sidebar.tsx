@@ -3,7 +3,6 @@ import { GoHomeFill } from 'react-icons/go';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import ThemeSelector from '../ThemeSelector';
 import Settings from './Settings';
 
 const menuItems = [
@@ -31,7 +30,6 @@ export default function Sidebar() {
         ))}
       </ul>
       <ul className="space-y-2 font-medium">
-        <ThemeSelector />
         <li>
           <button
             type="button"
@@ -54,7 +52,7 @@ export default function Sidebar() {
           </button>
         </li>
       </ul>
-      <Settings open={openSettings} />
+      <Settings open={openSettings} setOpen={setOpenSettings} />
     </div>
   );
 }

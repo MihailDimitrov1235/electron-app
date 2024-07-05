@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import Button from './Button';
 
@@ -21,6 +21,23 @@ export default function Dropdown({
   classes = '',
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   function handleDropdownClick() {
     setOpen(!open);
   }
@@ -33,6 +50,7 @@ export default function Dropdown({
 
   return (
     <div
+      ref={dropdownRef}
       className={`${classes} w-fit h-fit text-text-main text-sm font-small gap-2 shadow-md relative`}
     >
       <Button

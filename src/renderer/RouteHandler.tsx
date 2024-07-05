@@ -2,6 +2,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   redirect,
+  Navigate,
 } from 'react-router-dom';
 import LogIn from './Pages/LogIn';
 import { useAuth } from './Components/Contexts/AuthContext';
@@ -37,6 +38,10 @@ export default function RouteHandler() {
           path: '/user',
           loader: redirectIfNotLoggedIn,
           element: <Home />,
+        },
+        {
+          path: '/index.html',
+          element: <Navigate to="/" replace />,
         },
         {
           path: '*',

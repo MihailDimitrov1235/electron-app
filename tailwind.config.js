@@ -36,8 +36,8 @@ module.exports = {
         secondary: '#b5179e',
         contrast: '#4cc9f0',
         background: {
-          main: '#1b263b',
-          dark: '#0d1b2a',
+          main: '#0B1622', // 0d1b2a
+          dark: '#101D2D', // 1b263b 132032
           light: '#415a77',
         },
         text: {
