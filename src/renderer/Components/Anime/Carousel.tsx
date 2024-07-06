@@ -1,0 +1,113 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/require-default-props */
+import React, { useState, useEffect } from 'react';
+import Button from '../Button';
+import { SeasonalAnimeData } from '../../graphql/queries/animeQueries';
+import AnimeCard from '../Card/AnimeCard';
+
+type CarouselProps = {
+  data: SeasonalAnimeData;
+  autoSlideInterval?: number;
+};
+
+export default function Carousel({
+  data,
+  autoSlideInterval = 5000,
+}: CarouselProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const animes = data.Page.media;
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % animes.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + animes.length) % animes.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, autoSlideInterval);
+
+    return () => clearInterval(interval);
+  });
+
+  return (
+    <div id="default-carousel" className="relative w-full h-fit">
+      {/* Carousel wrapper */}
+      <div className="relative h-[450px] overflow-hidden w-full">
+        {animes.map((anime, index) => (
+          <div
+            key={index}
+            className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="absolute z-10 inset-0 bg-gradient-to-b from-transparent to-background-dark" />
+            <img
+              src={
+                anime.bannerImage
+                  ? anime.bannerImage
+                  : anime.coverImage.extraLarge
+              }
+              className="absolute block w-full cover blur-sm"
+              alt={`Carousel item ${index + 1}`}
+            />
+            <div className="absolute z-20 left-10 top-7 bg-gradient-to-b from-transparent to-background-dark">
+              <AnimeCard
+                id={anime.id}
+                title={anime.title.english}
+                coverImage={anime.coverImage.extraLarge}
+                score={anime.meanScore}
+                episodes={{
+                  watched: anime.episodes,
+                  released: anime.episodes,
+                  planned: anime.episodes,
+                }}
+                withTitle={false}
+                size={5}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Slider indicators */}
+      <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+        {animes.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            className={`w-3 h-3 rounded-full  ${
+              index === currentSlide ? 'bg-primary' : 'bg-primary/50'
+            }`}
+            aria-current={index === currentSlide}
+            aria-label={`Slide ${index + 1}`}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
+      </div>
+
+      {/* Slider controls */}
+      {/* <Button
+        variant="default"
+        classess="absolute inset-y-auto start-0 z-30 flex items-center justify-center px-4 cursor-pointer"
+        onClick={prevSlide}
+      >
+        prev
+      </Button>
+      <Button
+        variant="default"
+        classess="absolute  end-0 z-30 flex items-center justify-center px-4 cursor-pointer"
+        onClick={nextSlide}
+      >
+        next
+      </Button> */}
+    </div>
+  );
+}

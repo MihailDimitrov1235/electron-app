@@ -17,7 +17,7 @@ type AnimeCardPropsType = {
     released: number | null;
     planned: number | null;
   };
-  status: TStatus;
+  status?: TStatus;
   withTitle?: boolean;
   size?: number;
 };
@@ -34,7 +34,10 @@ export default function AnimeCard({
   const width = 46 * size;
   const height = 65 * size;
   return (
-    <div className=" flex flex-col gap-1" style={{ width: `${width}px` }}>
+    <div
+      className={`flex flex-col gap-1 ${withTitle && 'py-4'}`}
+      style={{ width: `${width}px` }}
+    >
       <Link to={`/anime/${id}`}>
         <div
           className={` relative bg-cover bg-center rounded-md overflow-hidden shadow-md`}
@@ -53,9 +56,7 @@ export default function AnimeCard({
       </Link>
       {withTitle && (
         <>
-          <div className="px-1 leading-4 max-h-16 overflow-hidden text-ellipsis">
-            {title}
-          </div>
+          <div className="px-1 leading-4 max-h-16 line-clamp-2">{title}</div>
           <div className="px-1">
             <span className="text-primary">
               {episodes.watched ? episodes.watched : '~'}

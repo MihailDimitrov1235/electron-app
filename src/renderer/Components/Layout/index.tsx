@@ -18,7 +18,7 @@ export default function Layout() {
   return (
     <div className="w-full h-full flex bg-background-dark overflow-hidden">
       <Sidebar />
-      <div className="w-full h-full">
+      <div className="w-full h-full overflow-x-hidden">
         <Outlet />
       </div>
     </div>
