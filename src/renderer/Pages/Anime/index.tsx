@@ -1,5 +1,10 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
 import AnimeCard, { TStatus } from '../../Components/Card/AnimeCard';
+import {
+  GET_SEASONAL_ANIME,
+  SeasonalAnimeData,
+} from '../../graphql/queries/animeQueries';
 
 const pr = {
   id: 166531,
@@ -17,15 +22,28 @@ const pr = {
 };
 
 export default function AnimeHome() {
+  const { loading, error, data } =
+    useQuery<SeasonalAnimeData>(GET_SEASONAL_ANIME);
+  console.log(data);
+  if (!data || !data.Page || !data.Page.media) {
+    return <p>No data available</p>;
+  }
   return (
-    <AnimeCard
-      id={pr.id}
-      title={pr.title}
-      coverImage={pr.coverImage}
-      score={pr.score}
-      episodes={pr.episodes}
-      status={pr.status as TStatus}
-      size={3}
-    />
+    <div className="flex gap-6 overflow-x-scroll">
+      {data.Page.media.map((anime) => (
+        <AnimeCard
+          id={anime.id}
+          title={anime.title.english}
+          coverImage={anime.coverImage.extraLarge}
+          score={anime.meanScore}
+          episodes={{
+            watched: anime.episodes,
+            released: anime.episodes,
+            planned: anime.episodes,
+          }}
+          status={anime.status as TStatus}
+        />
+      ))}
+    </div>
   );
 }

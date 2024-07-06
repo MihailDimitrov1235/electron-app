@@ -46,21 +46,23 @@ export default function AnimeCard({
         >
           {score && (
             <div className=" absolute bottom-0 right-0 px-3 bg-gradient-to-br from-primary/70 to-secondary/70 text-text-primary rounded-tl-md font-medium">
-              {score}
+              {score / 10}
             </div>
           )}
         </div>
       </Link>
       {withTitle && (
         <>
-          <div className="px-1 leading-4">{title}</div>
+          <div className="px-1 leading-4 max-h-16 overflow-hidden text-ellipsis">
+            {title}
+          </div>
           <div className="px-1">
             <span className="text-primary">
               {episodes.watched ? episodes.watched : '~'}
             </span>{' '}
             |{' '}
             {episodes.released === episodes.planned
-              ? episodes.released
+              ? `${episodes.released ? episodes.released : '~'}`
               : `${episodes.released ? episodes.released : '~'}|${
                   episodes.planned ? episodes.planned : '~'
                 }`}
