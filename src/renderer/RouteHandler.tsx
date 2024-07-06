@@ -8,6 +8,7 @@ import LogIn from './Pages/LogIn';
 import { useAuth } from './Components/Contexts/AuthContext';
 import Layout from './Components/Layout';
 import Home from './Pages/Home';
+import AnimeHome from './Pages/Anime';
 import Page404 from './Pages/Page404';
 
 export default function RouteHandler() {
@@ -42,6 +43,10 @@ export default function RouteHandler() {
         {
           path: '/index.html',
           element: <Navigate to="/" replace />,
+        },
+        {
+          path: '/anime',
+          children: [{ path: '', element: <AnimeHome /> }],
         },
         {
           path: '*',

@@ -2,7 +2,6 @@ const { createThemes } = require('tw-colors');
 
 module.exports = {
   content: ['./src/renderer/**/*.{js,jsx,ts,tsx,ejs}'],
-  darkMode: false,
   theme: {
     extend: {},
   },
@@ -32,7 +31,7 @@ module.exports = {
         devider: '#aaaaaa',
       },
       dark: {
-        primary: '#3a0ca3',
+        primary: '#7247C7',
         secondary: '#b5179e',
         contrast: '#4cc9f0',
         background: {

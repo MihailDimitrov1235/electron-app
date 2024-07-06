@@ -8,7 +8,7 @@ function App() {
   const { theme } = useTheme();
 
   return (
-    <div className={`${theme} w-[100vw] h-[100vh]`}>
+    <div className={`${theme} w-[100vw] h-[100vh] text-text-main`}>
       <RouteHandler />
     </div>
   );
