@@ -38,8 +38,7 @@ export default function Carousel({
   });
 
   return (
-    <div id="default-carousel" className="relative w-full h-fit">
-      {/* Carousel wrapper */}
+    <div className="relative w-full h-fit">
       <div className="relative h-[450px] overflow-hidden w-full">
         {animes.map((anime, index) => (
           <div
@@ -48,22 +47,21 @@ export default function Carousel({
               index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <div className="absolute z-10 inset-0 bg-gradient-to-b from-transparent to-background-dark" />
+            <div className="absolute z-10 inset-0 bg-gradient-to-b from-background-main/50 to-background-dark" />
             <img
               src={
                 anime.bannerImage
                   ? anime.bannerImage
                   : anime.coverImage.extraLarge
               }
-              className="absolute block w-full cover blur-sm"
+              className="absolute block w-full cover blur-sm select-none"
               alt={`Carousel item ${index + 1}`}
             />
-            <div className="absolute z-20 left-10 top-7 bg-gradient-to-b from-transparent to-background-dark">
+            <div className="absolute flex gap-8 z-20 px-10 top-7">
               <AnimeCard
                 id={anime.id}
                 title={anime.title.english}
                 coverImage={anime.coverImage.extraLarge}
-                score={anime.meanScore}
                 episodes={{
                   watched: anime.episodes,
                   released: anime.episodes,
@@ -72,12 +70,23 @@ export default function Carousel({
                 withTitle={false}
                 size={5}
               />
+              <div className="flex flex-col justify-between">
+                <div className="flex flex-col gap-8">
+                  <div className=" text-4xl font-semibold">
+                    {anime.title.english}
+                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: anime.description }}
+                    className=" text-md line-clamp-6 text-ellipsis"
+                  />
+                </div>
+                <div>tet</div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Slider indicators */}
       <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
         {animes.map((_, index) => (
           <button
