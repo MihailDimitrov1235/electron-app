@@ -55,7 +55,7 @@ export default function Dropdown({
     >
       <Button
         onClick={handleDropdownClick}
-        classess={`w-full flex items-center justify-between gap-2 ${
+        className={`w-full flex items-center justify-between gap-2 ${
           open ? 'rounded-b-none' : ''
         }`}
       >

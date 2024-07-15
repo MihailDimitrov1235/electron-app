@@ -11,8 +11,11 @@ import Carousel from '../../Components/Anime/Carousel';
 export default function AnimeHome() {
   const { loading, error, data } =
     useQuery<SeasonalAnimeData>(GET_SEASONAL_ANIME);
-  if (!data || !data.Page || !data.Page.media) {
+  if (error) {
     return <p>No data available</p>;
+  }
+  if (loading || !data || !data.Page || !data.Page.media) {
+    return <p>loading</p>;
   }
   return (
     <>

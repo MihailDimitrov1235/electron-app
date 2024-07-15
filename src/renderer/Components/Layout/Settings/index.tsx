@@ -2,8 +2,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { IoMdClose } from 'react-icons/io';
-import React from 'react';
-import ThemeSelector from '../ThemeSelector';
+import React, { useState } from 'react';
+import Tabs from '../../Tabs';
+import ProfileTab from './ProfileTab';
+import StyleTab from './StyleTab';
+
+const settingTabs = ['Profile', 'Style', 'Anime', 'Manga'];
 
 export default function Settings({
   open,
@@ -12,6 +16,7 @@ export default function Settings({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const [openTab, setOpenTab] = useState(0);
   return (
     <div
       className={`${
@@ -35,8 +40,23 @@ export default function Settings({
               <IoMdClose />
             </button>
           </div>
-          <div className="p-4">
-            <ThemeSelector />
+          <div className="p-4 flex gap-4">
+            <Tabs
+              tabs={settingTabs}
+              openTab={openTab}
+              setOpenTab={setOpenTab}
+              col
+            />
+            <div
+              className={`w-full h-full ${openTab === 0 ? 'block' : 'hidden'}`}
+            >
+              <ProfileTab />
+            </div>
+            <div
+              className={`w-full h-full ${openTab === 1 ? 'block' : 'hidden'}`}
+            >
+              <StyleTab />
+            </div>
           </div>
         </div>
       </div>

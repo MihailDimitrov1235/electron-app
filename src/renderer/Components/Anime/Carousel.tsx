@@ -105,14 +105,14 @@ export default function Carousel({
       {/* Slider controls */}
       {/* <Button
         variant="default"
-        classess="absolute inset-y-auto start-0 z-30 flex items-center justify-center px-4 cursor-pointer"
+        className="absolute inset-y-auto start-0 z-30 flex items-center justify-center px-4 cursor-pointer"
         onClick={prevSlide}
       >
         prev
       </Button>
       <Button
         variant="default"
-        classess="absolute  end-0 z-30 flex items-center justify-center px-4 cursor-pointer"
+        className="absolute  end-0 z-30 flex items-center justify-center px-4 cursor-pointer"
         onClick={nextSlide}
       >
         next

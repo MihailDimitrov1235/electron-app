@@ -4,14 +4,14 @@ import { IconType } from 'react-icons';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'gradient' | 'outline';
-  classess?: string;
+  className?: string;
   Icon?: IconType | null;
 }
 
 function Button({
   children,
   variant = 'default',
-  classess = '',
+  className = '',
   Icon = null,
   ...buttonProps
 }: ButtonProps) {
@@ -27,7 +27,7 @@ function Button({
       'text-text-main bg-gradient-to-r from-primary to-secondary gradient element-to-rotate',
   };
 
-  const buttonClassess = `${commonClassess} ${styles[variant]} ${classess}`;
+  const buttonClassess = `${commonClassess} ${styles[variant]} ${className}`;
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
