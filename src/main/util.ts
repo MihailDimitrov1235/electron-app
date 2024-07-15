@@ -1,5 +1,4 @@
 /* eslint import/prefer-default-export: off */
-import { URL } from 'url';
 import path from 'path';
 
 export function resolveHtmlPath(htmlFileName: string) {
@@ -13,13 +12,9 @@ export function resolveHtmlPath(htmlFileName: string) {
 }
 
 export function getAccessTokenFromUrl(url: string): string | null {
-  try {
-    const urlObj = new URL(url);
-    const hashParams = new URLSearchParams(urlObj.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    return accessToken;
-  } catch (error) {
-    console.error('Error parsing access token from URL:', error);
-    return null;
-  }
+  const parsedUrl = new URL(url);
+  const fragment = parsedUrl.hash.slice(1);
+  const params = new URLSearchParams(fragment);
+  const accessToken = params.get('access_token');
+  return accessToken;
 }

@@ -6,7 +6,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // renderer to main
   openUrl: (url: string) => ipcRenderer.invoke('open-url', url),
   // renderer to renderer
-
   // main to renderer
   handleSetToken: (callback: (message: string) => void) => {
     const listener = (_: IpcRendererEvent, message: string) =>

@@ -15,7 +15,7 @@ export default function Tabs({ tabs, openTab, setOpenTab, col }: TabsPropType) {
       } flex list-none flex-wrap w-fit gap-4 `}
     >
       {tabs.map((tab, index) => (
-        <li className=" flex-auto text-center w-full">
+        <li key={tab} className=" flex-auto text-center w-full">
           <Button
             variant={openTab === index ? 'gradient' : 'default'}
             className="w-full"
