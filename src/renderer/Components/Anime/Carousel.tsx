@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../Button';
 import { SeasonalAnimeData } from '../../graphql/queries/animeQueries';
 import AnimeCard from '../Card/AnimeCard';
+import { useAuth } from '../Contexts/AuthContext';
 
 type CarouselProps = {
   data: SeasonalAnimeData;
@@ -16,6 +17,7 @@ export default function Carousel({
 }: CarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const animes = data.Page.media;
+  const { isLoggedIn } = useAuth();
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % animes.length);
@@ -47,7 +49,7 @@ export default function Carousel({
               index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <div className="absolute z-10 inset-0 bg-gradient-to-b from-background-main/50 to-background-dark" />
+            <div className="absolute w-full z-10 inset-0 bg-gradient-to-b from-background-main/50 to-background-dark" />
             <img
               src={
                 anime.bannerImage
@@ -57,21 +59,23 @@ export default function Carousel({
               className="absolute block w-full cover blur-sm select-none"
               alt={`Carousel item ${index + 1}`}
             />
-            <div className="absolute flex gap-8 z-20 px-10 top-7">
+            <div className="absolute flex w-full gap-8 z-20 px-10 top-7">
               <AnimeCard
                 id={anime.id}
                 title={anime.title.english}
                 coverImage={anime.coverImage.extraLarge}
                 episodes={{
-                  watched: anime.episodes,
-                  released: anime.episodes,
+                  watched: anime.mediaListEntry?.progress,
+                  released: anime.nextAiringEpisode
+                    ? anime.nextAiringEpisode.episode - 1
+                    : anime.episodes,
                   planned: anime.episodes,
                 }}
                 withTitle={false}
                 size={5}
               />
-              <div className="flex flex-col justify-between">
-                <div className="flex flex-col gap-8">
+              <div className="flex w-full flex-col justify-between">
+                <div className="flex w-full flex-col gap-8">
                   <div className=" text-4xl font-semibold">
                     {anime.title.english}
                   </div>
@@ -80,7 +84,9 @@ export default function Carousel({
                     className=" text-md line-clamp-6 text-ellipsis"
                   />
                 </div>
-                <div>tet</div>
+                <div>
+                  {/* <Button variant="outline">Add to list</Button> */}
+                </div>
               </div>
             </div>
           </div>

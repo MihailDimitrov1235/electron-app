@@ -33,8 +33,10 @@ export default function AnimeHome() {
               coverImage={anime.coverImage.extraLarge}
               score={anime.meanScore}
               episodes={{
-                watched: anime.episodes,
-                released: anime.episodes,
+                watched: anime.mediaListEntry?.progress,
+                released: anime.nextAiringEpisode
+                  ? anime.nextAiringEpisode.episode - 1
+                  : anime.episodes,
                 planned: anime.episodes,
               }}
               status={anime.status as TStatus}

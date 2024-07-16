@@ -17,14 +17,35 @@ export type SeasonalAnimeData = {
       description: string;
       episodes: number | null;
       status: string;
+      mediaListEntry: {
+        progress: number;
+      } | null;
+      nextAiringEpisode: {
+        episode: number;
+      } | null;
     }>;
   };
 };
 
+const now = new Date();
+const month = now.getMonth(); // 0-11
+const year = now.getFullYear();
+
+let season;
+if (month >= 0 && month <= 2) {
+  season = 'WINTER';
+} else if (month >= 3 && month <= 5) {
+  season = 'SPRING';
+} else if (month >= 6 && month <= 8) {
+  season = 'SUMMER';
+} else {
+  season = 'FALL';
+}
+
 export const GET_SEASONAL_ANIME = gql`
   query GET_SEASONAL_ANIME {
     Page(page: 1, perPage: 20) {
-      media(season: SUMMER, seasonYear: 2024, sort: POPULARITY_DESC) {
+      media(season: ${season}, seasonYear: ${year}, sort: POPULARITY_DESC) {
         id
         meanScore
         bannerImage
@@ -39,6 +60,12 @@ export const GET_SEASONAL_ANIME = gql`
         description
         episodes
         status
+        mediaListEntry {
+          progress
+        }
+        nextAiringEpisode {
+          episode
+        }
       }
     }
   }

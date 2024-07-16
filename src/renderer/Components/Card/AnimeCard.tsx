@@ -13,7 +13,7 @@ type AnimeCardPropsType = {
   coverImage: string; // url
   score?: number | null;
   episodes: {
-    watched: number | null;
+    watched: number | undefined;
     released: number | null;
     planned: number | null;
   };
@@ -64,7 +64,7 @@ export default function AnimeCard({
             |{' '}
             {episodes.released === episodes.planned
               ? `${episodes.released ? episodes.released : '~'}`
-              : `${episodes.released ? episodes.released : '~'}|${
+              : `${episodes.released ? episodes.released : '~'} | ${
                   episodes.planned ? episodes.planned : '~'
                 }`}
           </div>
