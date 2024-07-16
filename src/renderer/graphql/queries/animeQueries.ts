@@ -15,6 +15,7 @@ export type SeasonalAnimeData = {
         english: string;
       };
       description: string;
+      genres: string[];
       episodes: number | null;
       status: string;
       mediaListEntry: {
@@ -58,6 +59,7 @@ export const GET_SEASONAL_ANIME = gql`
           english
         }
         description
+        genres
         episodes
         status
         mediaListEntry {

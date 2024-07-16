@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../Button';
 import { SeasonalAnimeData } from '../../graphql/queries/animeQueries';
-import AnimeCard from '../Card/AnimeCard';
+import AnimeCard from './AnimeCard';
 import { useAuth } from '../Contexts/AuthContext';
+import { Link } from 'react-router-dom';
+import EpisodesDisplay from './EpisodesDisplay';
 
 type CarouselProps = {
   data: SeasonalAnimeData;
@@ -65,7 +67,7 @@ export default function Carousel({
                 title={anime.title.english}
                 coverImage={anime.coverImage.extraLarge}
                 episodes={{
-                  watched: anime.mediaListEntry?.progress,
+                  watched: anime.mediaListEntry?.progress || null,
                   released: anime.nextAiringEpisode
                     ? anime.nextAiringEpisode.episode - 1
                     : anime.episodes,
@@ -84,8 +86,28 @@ export default function Carousel({
                     className=" text-md line-clamp-6 text-ellipsis"
                   />
                 </div>
-                <div>
-                  {/* <Button variant="outline">Add to list</Button> */}
+                <div className="flex justify-between">
+                  <EpisodesDisplay
+                    episodes={{
+                      watched: anime.mediaListEntry?.progress || null,
+                      released: anime.nextAiringEpisode
+                        ? anime.nextAiringEpisode.episode - 1
+                        : anime.episodes,
+                      planned: anime.episodes,
+                    }}
+                    className="text-xl"
+                  />
+                  <div className="flex gap-2">
+                    {anime.genres.map((genre, index) => (
+                      <Link
+                        key={genre}
+                        to={`/anime/genre/${genre}`}
+                        className="bg-primary text-text-primary px-2 py-1 rounded-md"
+                      >
+                        {genre}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

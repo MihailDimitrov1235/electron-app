@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
 import { Link } from 'react-router-dom';
+import EpisodesDisplay from './EpisodesDisplay';
 
 export type TStatus =
   | 'FINISHED'
@@ -13,7 +14,7 @@ type AnimeCardPropsType = {
   coverImage: string; // url
   score?: number | null;
   episodes: {
-    watched: number | undefined;
+    watched: number | null;
     released: number | null;
     planned: number | null;
   };
@@ -57,17 +58,7 @@ export default function AnimeCard({
       {withTitle && (
         <>
           <div className="px-1 leading-4 max-h-16 line-clamp-2">{title}</div>
-          <div className="px-1">
-            <span className="text-primary">
-              {episodes.watched ? episodes.watched : '~'}
-            </span>{' '}
-            |{' '}
-            {episodes.released === episodes.planned
-              ? `${episodes.released ? episodes.released : '~'}`
-              : `${episodes.released ? episodes.released : '~'} | ${
-                  episodes.planned ? episodes.planned : '~'
-                }`}
-          </div>
+          <EpisodesDisplay episodes={episodes} />
         </>
       )}
     </div>

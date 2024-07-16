@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import AnimeCard, { TStatus } from '../../Components/Card/AnimeCard';
+import AnimeCard, { TStatus } from '../../Components/Anime/AnimeCard';
 import {
   GET_SEASONAL_ANIME,
   SeasonalAnimeData,
@@ -33,7 +33,7 @@ export default function AnimeHome() {
               coverImage={anime.coverImage.extraLarge}
               score={anime.meanScore}
               episodes={{
-                watched: anime.mediaListEntry?.progress,
+                watched: anime.mediaListEntry?.progress || null,
                 released: anime.nextAiringEpisode
                   ? anime.nextAiringEpisode.episode - 1
                   : anime.episodes,
