@@ -46,7 +46,7 @@ if (month >= 0 && month <= 2) {
 export const GET_SEASONAL_ANIME = gql`
   query GET_SEASONAL_ANIME {
     Page(page: 1, perPage: 20) {
-      media(season: ${season}, seasonYear: ${year}, sort: POPULARITY_DESC) {
+      media(type:ANIME, season: ${season}, seasonYear: ${year}, sort: POPULARITY_DESC) {
         id
         meanScore
         bannerImage
@@ -84,7 +84,7 @@ export type OnListData = {
 
 export const GET_ON_LIST = gql`
   query {
-    Media(onList: true) {
+    Media(type: ANIME, onList: true) {
       id
       title {
         english

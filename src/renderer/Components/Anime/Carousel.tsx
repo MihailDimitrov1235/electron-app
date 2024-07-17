@@ -1,11 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
-import Button from '../Button';
+import { FaStar } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { SeasonalAnimeData } from '../../graphql/queries/animeQueries';
 import AnimeCard from './AnimeCard';
 import { useAuth } from '../Contexts/AuthContext';
-import { Link } from 'react-router-dom';
 import EpisodesDisplay from './EpisodesDisplay';
 
 type CarouselProps = {
@@ -77,9 +77,22 @@ export default function Carousel({
                 size={5}
               />
               <div className="flex w-full flex-col justify-between">
-                <div className="flex w-full flex-col gap-8">
-                  <div className=" text-4xl font-semibold">
-                    {anime.title.english}
+                <div className="flex w-full flex-col gap-6">
+                  <div className=" text-4xl font-semibold flex justify-between">
+                    <Link
+                      to={`/anime/${anime.id}`}
+                      className=" line-clamp-2 text-ellipsis pb-2"
+                    >
+                      {anime.title.english}
+                    </Link>
+                    {anime.meanScore && (
+                      <div className="flex gap-4 items-start">
+                        {(anime.meanScore / 10).toFixed(1)}{' '}
+                        <span className="text-yellow-400 mt-[2px]">
+                          <FaStar />
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div
                     dangerouslySetInnerHTML={{ __html: anime.description }}
