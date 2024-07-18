@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../Contexts/AuthContext';
+import Topbar from './Topbar';
 
 export default function Layout() {
   const { setToken } = useAuth();
@@ -19,6 +20,7 @@ export default function Layout() {
     <div className="w-full h-full flex bg-background-dark overflow-hidden">
       <Sidebar />
       <div className="w-full h-full overflow-x-hidden">
+        <Topbar />
         <Outlet />
       </div>
     </div>

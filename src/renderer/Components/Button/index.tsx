@@ -3,7 +3,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 import { IconType } from 'react-icons';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'gradient' | 'outline';
+  variant?: 'default' | 'gradient' | 'outline' | 'icon';
   className?: string;
   Icon?: IconType | null;
 }
@@ -16,18 +16,19 @@ function Button({
   ...buttonProps
 }: ButtonProps) {
   const commonClassess =
-    'px-3 py-2 rounded-md shadow-md text-center flex items-center justify-center gap-2 w-fit';
+    ' shadow-md text-center flex items-center justify-center gap-2 ';
 
   const styles = {
     default:
-      'text-text-main bg-background-main border border-transparent hover:border-background-dark',
+      'w-fit px-3 py-2 rounded-md text-text-main bg-background-main border border-transparent hover:border-background-dark',
     gradient:
-      'text-text-primary bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate',
+      'w-fit px-3 py-2 rounded-md text-text-primary bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate',
     outline:
-      'text-test-main hover:text-test-primary border border-primary/50 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary',
+      'w-fit px-3 py-2 rounded-md text-test-main hover:text-test-primary border border-primary/50 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary',
+    icon: 'w-10 p-0 rounded-full aspect-square border-background-dark border ring-text-main hover:ring-1 text-2xl',
   };
 
-  const buttonClassess = `${commonClassess} ${styles[variant]} ${className}`;
+  const buttonClassess = `${className} ${styles[variant]} ${commonClassess}`;
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
