@@ -11,17 +11,18 @@ export default function Layout() {
       setToken(message);
     });
 
-    // Clean up function to remove the listener when the component unmounts
     return () => {
       removeListener();
     };
   });
   return (
-    <div className="w-full h-full flex bg-background-dark overflow-hidden">
-      <Sidebar />
-      <div className="w-full h-full overflow-x-hidden">
-        <Topbar />
-        <Outlet />
+    <div className="w-full h-full flex flex-col bg-background-dark overflow-hidden">
+      <Topbar />
+      <div className="w-full h-full flex bg-background-dark overflow-hidden">
+        <Sidebar />
+        <div className="w-full h-full overflow-x-hidden">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

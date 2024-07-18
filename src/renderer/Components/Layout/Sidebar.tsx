@@ -14,14 +14,8 @@ const menuItems = [
 export default function Sidebar() {
   const [openSettings, setOpenSettings] = useState(false);
   return (
-    <div className="h-full px-1 py-2 bg-background-main shadow-md flex flex-col justify-between">
+    <div className="h-full px-1 pb-2 bg-background-main shadow-md flex flex-col justify-between">
       <div>
-        <Link
-          to="/"
-          className="flex items-center justify-center h-10 text-text-main rounded-md hover:bg-background-dark mb-3"
-        >
-          LOGO
-        </Link>
         <ul className="space-y-2 font-medium">
           {menuItems.map((item, index) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -49,11 +43,9 @@ export default function Sidebar() {
         </li>
         <li>
           <button
-            data-modal-target="settings"
-            data-modal-toggle="settings"
             type="button"
             onClick={() => setOpenSettings(true)}
-            className=" w-full flex flex-col items-center p-2 text-text-main rounded-md hover:bg-background-dark group"
+            className=" w-full flex flex-col items-center p-1 text-text-main rounded-md hover:bg-background-dark group"
           >
             {/* <item.icon className="w-6 h-6" /> */}
             <span className="text-xs">Settings</span>
