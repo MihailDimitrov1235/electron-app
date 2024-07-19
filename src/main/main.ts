@@ -17,7 +17,7 @@ class AppUpdater {
 const protocolName = 'electron-app';
 let mainWindow: BrowserWindow | null = null;
 
-SetupIPCHandlers();
+SetupIPCHandlers(mainWindow);
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
