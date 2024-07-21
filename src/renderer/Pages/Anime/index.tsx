@@ -1,7 +1,8 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import AnimeCard, { TStatus } from '../../Components/Anime/AnimeCard';
+import AnimeCard from '../../Components/Anime/AnimeCard';
 import {
   GET_SEASONAL_ANIME,
   SeasonalAnimeData,
@@ -26,21 +27,7 @@ export default function AnimeHome() {
         <div className=" text-xl">Trending</div>
         <div className="flex gap-6 overflow-x-scroll ">
           {data.Page.media.map((anime, index) => (
-            <AnimeCard
-              key={index}
-              id={anime.id}
-              title={anime.title.english}
-              coverImage={anime.coverImage.extraLarge}
-              score={anime.meanScore}
-              episodes={{
-                watched: anime.mediaListEntry?.progress || null,
-                released: anime.nextAiringEpisode
-                  ? anime.nextAiringEpisode.episode - 1
-                  : anime.episodes,
-                planned: anime.episodes,
-              }}
-              status={anime.status as TStatus}
-            />
+            <AnimeCard key={index} {...anime} />
           ))}
         </div>
       </div>

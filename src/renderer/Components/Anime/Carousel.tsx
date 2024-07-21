@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
@@ -63,17 +64,9 @@ export default function Carousel({
             />
             <div className="absolute flex w-full gap-8 z-20 px-10 top-7">
               <AnimeCard
-                id={anime.id}
-                title={anime.title.english}
-                coverImage={anime.coverImage.extraLarge}
-                episodes={{
-                  watched: anime.mediaListEntry?.progress || null,
-                  released: anime.nextAiringEpisode
-                    ? anime.nextAiringEpisode.episode - 1
-                    : anime.episodes,
-                  planned: anime.episodes,
-                }}
+                {...anime}
                 withTitle={false}
+                withScore={false}
                 size={5}
               />
               <div className="flex w-full flex-col justify-between">
@@ -115,7 +108,7 @@ export default function Carousel({
                       <Link
                         key={genre}
                         to={`/anime/genre/${genre}`}
-                        className="bg-primary text-text-primary px-2 py-1 rounded-md"
+                        className="bg-primary text-primary-background px-2 py-1 rounded-md"
                       >
                         {genre}
                       </Link>

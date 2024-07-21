@@ -24,7 +24,7 @@ function Button({
 
   const styles = {
     default: `w-fit px-3 py-2 rounded-md text-text-main bg-background-main border border-transparent hover:border-background-dark`,
-    gradient: `w-fit px-3 py-2 rounded-md text-text-primary bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate`,
+    gradient: `w-fit px-3 py-2 rounded-md text-primary-background bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate`,
     outline: `w-fit px-3 py-2 rounded-md text-test-main hover:text-test-primary border border-primary/50 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary`,
     icon: `rounded-full ${iconProps}`,
     'icon-square': `rounded-md ${iconProps}`,

@@ -2,63 +2,116 @@
 import { Link } from 'react-router-dom';
 import EpisodesDisplay from './EpisodesDisplay';
 
-export type TStatus =
-  | 'FINISHED'
-  | 'RELEASING'
-  | 'NOT_YET_RELEASED'
-  | 'CANCELLED'
-  | 'HIATUS';
-type AnimeCardPropsType = {
+// id: number;
+// meanScore: number;
+// bannerImage: string;
+// coverImage: {
+//   medium: string;
+//   extraLarge: string;
+//   color: string;
+// };
+// title: {
+//   english: string;
+// };
+// description: string;
+// genres: string[];
+// episodes: number | null;
+// status: string;
+// mediaListEntry: {
+//   progress: number;
+// } | null;
+// nextAiringEpisode: {
+//   episode: number;
+// } | null;
+
+type RequiredAnimeCardProps = {
   id: number;
-  title: string;
-  coverImage: string; // url
-  score?: number | null;
-  episodes: {
-    watched: number | null;
-    released: number | null;
-    planned: number | null;
+  meanScore: number;
+  coverImage: {
+    medium: string;
+    extraLarge: string;
+    color: string;
   };
-  status?: TStatus;
-  withTitle?: boolean;
-  size?: number;
+  title: {
+    romaji?: string;
+    english: string;
+    native?: string;
+    userPreferred?: string;
+  };
+  episodes: number | null;
+  mediaListEntry: {
+    progress: number;
+  } | null;
+  nextAiringEpisode: {
+    episode: number;
+  } | null;
 };
+
+type OptionalAnimeCardProps = {
+  score?: number | null;
+  withTitle?: boolean;
+  withScore?: boolean;
+  size?: number;
+  [key: string]: any;
+};
+
+type AnimeCardPropsType = RequiredAnimeCardProps & OptionalAnimeCardProps;
+
 export default function AnimeCard({
   id,
-  title,
+  meanScore,
   coverImage,
-  score = null,
+  title,
   episodes,
-  status,
+  mediaListEntry,
+  nextAiringEpisode,
   withTitle = true,
+  withScore = true,
   size = 3,
+  ...rest
 }: AnimeCardPropsType) {
   const width = 46 * size;
   const height = 65 * size;
+  const fontSize = Math.min(6.5 * size, 16);
+
   return (
     <div
-      className={`flex flex-col gap-1 ${withTitle && 'py-4'}`}
-      style={{ width: `${width}px` }}
+      className={`flex flex-col gap-1 h-fit w-fit `}
+      style={{ fontSize: `${fontSize}px` }}
     >
       <Link to={`/anime/${id}`}>
         <div
-          className={` relative bg-cover bg-center rounded-md overflow-hidden shadow-md`}
+          className={`relative bg-cover bg-center rounded-md overflow-hidden shadow-md `}
           style={{
-            backgroundImage: `url(${coverImage})`,
+            backgroundImage: `url(${coverImage.extraLarge})`,
             height: `${height}px`,
             width: `${width}px`,
           }}
         >
-          {score && (
-            <div className=" absolute bottom-0 right-0 px-3 bg-gradient-to-br from-primary/70 to-secondary/70 text-text-primary rounded-tl-md font-medium">
-              {score / 10}
+          {withScore && (
+            <div className="absolute bottom-0 right-0 px-3 bg-gradient-to-br from-primary/70 to-secondary/70 text-primary-background rounded-tl-md font-medium">
+              {(meanScore / 10).toFixed(1)}
             </div>
           )}
         </div>
       </Link>
       {withTitle && (
         <>
-          <div className="px-1 leading-4 max-h-16 line-clamp-2">{title}</div>
-          <EpisodesDisplay episodes={episodes} />
+          <div
+            className="px-1 max-h-16 line-clamp-2"
+            style={{ width: `${width}px`, lineHeight: `${fontSize + 1}px` }}
+          >
+            {title.english}
+          </div>
+          <EpisodesDisplay
+            episodes={{
+              watched: mediaListEntry?.progress || null,
+              released: nextAiringEpisode
+                ? nextAiringEpisode.episode - 1
+                : null,
+              planned: episodes,
+            }}
+          />
         </>
       )}
     </div>
