@@ -10,6 +10,7 @@ import Layout from './Components/Layout';
 import Home from './Pages/Home';
 import AnimeHome from './Pages/Anime';
 import Page404 from './Pages/Page404';
+import AnimeDetails from './Pages/Anime/AnimeDetails';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -46,7 +47,10 @@ export default function RouteHandler() {
         },
         {
           path: '/anime',
-          children: [{ path: '', element: <AnimeHome /> }],
+          children: [
+            { path: '', element: <AnimeHome /> },
+            { path: ':id', element: <AnimeDetails /> },
+          ],
         },
         {
           path: '*',

@@ -1,5 +1,13 @@
 const { createThemes } = require('tw-colors');
 
+const defaultColors = {
+  watching: '#338543',
+  completed: '#2D4276',
+  onHold: '#C9A31F',
+  dropped: '#832F30',
+  planToWatch: '#747474',
+};
+
 const primaryThemeColors = {
   primary: '#7247C7', // #7247C7 #3a0ca3
   secondary: '#b5179e',
@@ -48,10 +56,12 @@ module.exports = {
   plugins: [
     createThemes({
       light: {
+        ...defaultColors,
         ...primaryThemeColors,
         ...lightThemeColors,
       },
       dark: {
+        ...defaultColors,
         ...primaryThemeColors,
         ...darkThemeColors,
       },
