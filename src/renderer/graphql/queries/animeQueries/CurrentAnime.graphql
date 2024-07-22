@@ -1,0 +1,35 @@
+query GetCurrentAnime($userId: Int) {
+  MediaListCollection(userId: $userId, type: ANIME, status: CURRENT) {
+    lists {
+      name
+      entries {
+        id
+        media {
+          id
+          meanScore
+          bannerImage
+          coverImage {
+            medium
+            extraLarge
+            color
+          }
+          title {
+            english
+          }
+          description
+          genres
+          episodes
+          status
+          mediaListEntry {
+            progress
+          }
+          nextAiringEpisode {
+            episode
+          }
+        }
+        progress
+        score
+      }
+    }
+  }
+}

@@ -2,48 +2,26 @@
 import { Link } from 'react-router-dom';
 import EpisodesDisplay from './EpisodesDisplay';
 
-// id: number;
-// meanScore: number;
-// bannerImage: string;
-// coverImage: {
-//   medium: string;
-//   extraLarge: string;
-//   color: string;
-// };
-// title: {
-//   english: string;
-// };
-// description: string;
-// genres: string[];
-// episodes: number | null;
-// status: string;
-// mediaListEntry: {
-//   progress: number;
-// } | null;
-// nextAiringEpisode: {
-//   episode: number;
-// } | null;
-
 type RequiredAnimeCardProps = {
-  id: number;
-  meanScore: number;
-  coverImage: {
-    medium: string;
-    extraLarge: string;
-    color: string;
-  };
-  title: {
-    romaji?: string;
-    english: string;
-    native?: string;
-    userPreferred?: string;
-  };
-  episodes: number | null;
-  mediaListEntry: {
-    progress: number;
+  id?: number;
+  meanScore?: number | null;
+  coverImage?: {
+    medium?: string | null;
+    extraLarge?: string | null;
+    color?: string | null;
   } | null;
-  nextAiringEpisode: {
-    episode: number;
+  title?: {
+    romaji?: string | null;
+    english?: string | null;
+    native?: string | null;
+    userPreferred?: string | null;
+  } | null;
+  episodes?: number | null;
+  mediaListEntry?: {
+    progress?: number | null;
+  } | null;
+  nextAiringEpisode?: {
+    episode?: number | null;
   } | null;
 };
 
@@ -83,12 +61,12 @@ export default function AnimeCard({
         <div
           className={`relative bg-cover bg-center rounded-md overflow-hidden shadow-md `}
           style={{
-            backgroundImage: `url(${coverImage.extraLarge})`,
+            backgroundImage: `url(${coverImage?.extraLarge})`,
             height: `${height}px`,
             width: `${width}px`,
           }}
         >
-          {withScore && (
+          {withScore && meanScore && (
             <div className="absolute bottom-0 right-0 px-3 bg-gradient-to-br from-primary/70 to-secondary/70 text-primary-background rounded-tl-md font-medium">
               {(meanScore / 10).toFixed(1)}
             </div>
@@ -101,15 +79,15 @@ export default function AnimeCard({
             className="px-1 max-h-16 line-clamp-2"
             style={{ width: `${width}px`, lineHeight: `${fontSize + 1}px` }}
           >
-            {title.english}
+            {title?.english}
           </div>
           <EpisodesDisplay
             episodes={{
               watched: mediaListEntry?.progress || null,
-              released: nextAiringEpisode
+              released: nextAiringEpisode?.episode
                 ? nextAiringEpisode.episode - 1
                 : null,
-              planned: episodes,
+              planned: episodes || null,
             }}
           />
         </>

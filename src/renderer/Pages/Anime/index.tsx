@@ -1,17 +1,30 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { useQuery } from '@apollo/client';
+
 import AnimeCard from '../../Components/Anime/AnimeCard';
-import {
-  GET_SEASONAL_ANIME,
-  SeasonalAnimeData,
-} from '../../graphql/queries/animeQueries';
+import { useGet_Seasonal_AnimeQuery } from '../../graphql/generated/operations';
 import Carousel from '../../Components/Anime/Carousel';
 
 export default function AnimeHome() {
-  const { loading, error, data } =
-    useQuery<SeasonalAnimeData>(GET_SEASONAL_ANIME);
+  const now = new Date();
+  const month = now.getMonth(); // 0-11
+  const year = now.getFullYear();
+
+  let season;
+  if (month >= 0 && month <= 2) {
+    season = 'WINTER';
+  } else if (month >= 3 && month <= 5) {
+    season = 'SPRING';
+  } else if (month >= 6 && month <= 8) {
+    season = 'SUMMER';
+  } else {
+    season = 'FALL';
+  }
+
+  const { loading, error, data } = useGet_Seasonal_AnimeQuery({
+    variables: { season, year },
+  });
   if (error) {
     return <p>No data available</p>;
   }
