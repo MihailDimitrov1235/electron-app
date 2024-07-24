@@ -3,8 +3,15 @@ query getAnimeDetails($mediaId: Int) {
     id
     favourites
     popularity
+    status
     episodes
     chapters
+    title {
+      romaji
+      english
+      native
+      userPreferred
+    }
     coverImage {
       extraLarge
       color

@@ -32,7 +32,7 @@ const darkThemeColors = {
   background: {
     main: '#0B1622', // 0d1b2a
     dark: '#101D2D', // 1b263b 132032
-    light: '#415a77',
+    light: '#081118',
   },
   text: {
     main: '#ffffff',

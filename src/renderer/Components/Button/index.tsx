@@ -16,7 +16,7 @@ function Button({
   ...buttonProps
 }: ButtonProps) {
   const commonClassess =
-    ' shadow-md text-center flex items-center justify-center gap-2 ';
+    ' shadow-md text-center flex items-center justify-center gap-2 uppercase';
 
   const iconProps = `w-10 p-0 aspect-square border-background-dark border ring-text-main ${
     buttonProps.disabled ? '!text-devider' : 'hover:ring-1'
@@ -25,7 +25,7 @@ function Button({
   const styles = {
     default: `w-fit px-3 py-2 rounded-md text-text-main bg-background-main border border-transparent hover:border-background-dark`,
     gradient: `w-fit px-3 py-2 rounded-md text-primary-background bg-gradient-to-br from-primary to-secondary hover:bg-gradient-to-bl gradient element-to-rotate`,
-    outline: `w-fit px-3 py-2 rounded-md text-test-main hover:text-test-primary border border-primary/50 hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary`,
+    outline: `w-fit px-3 py-2 rounded-md text-test-main hover:text-primary-background border border-primary/50 hover:bg-primary focus:ring-2 focus:outline-none focus:ring-primary`,
     icon: `rounded-full ${iconProps}`,
     'icon-square': `rounded-md ${iconProps}`,
   };

@@ -29,6 +29,7 @@ type OptionalAnimeCardProps = {
   score?: number | null;
   withTitle?: boolean;
   withScore?: boolean;
+  withLink?: boolean;
   size?: number;
   [key: string]: any;
 };
@@ -45,6 +46,7 @@ export default function AnimeCard({
   nextAiringEpisode,
   withTitle = true,
   withScore = true,
+  withLink = true,
   size = 3,
   ...rest
 }: AnimeCardPropsType) {
@@ -57,7 +59,24 @@ export default function AnimeCard({
       className={`flex flex-col gap-1 h-fit w-fit `}
       style={{ fontSize: `${fontSize}px` }}
     >
-      <Link to={`/anime/${id}`}>
+      {withLink ? (
+        <Link to={`/anime/${id}`}>
+          <div
+            className={`relative bg-cover bg-center rounded-md overflow-hidden shadow-md `}
+            style={{
+              backgroundImage: `url(${coverImage?.extraLarge})`,
+              height: `${height}px`,
+              width: `${width}px`,
+            }}
+          >
+            {withScore && meanScore && (
+              <div className="absolute bottom-0 right-0 px-3 bg-gradient-to-br from-primary/70 to-secondary/70 text-primary-background rounded-tl-md font-medium">
+                {(meanScore / 10).toFixed(1)}
+              </div>
+            )}
+          </div>
+        </Link>
+      ) : (
         <div
           className={`relative bg-cover bg-center rounded-md overflow-hidden shadow-md `}
           style={{
@@ -72,7 +91,8 @@ export default function AnimeCard({
             </div>
           )}
         </div>
-      </Link>
+      )}
+
       {withTitle && (
         <>
           <div
