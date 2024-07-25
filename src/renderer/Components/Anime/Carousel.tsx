@@ -1,16 +1,17 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { SeasonalAnimeData } from '../../graphql/queries/animeQueries';
 import AnimeCard from './AnimeCard';
-import { useAuth } from '../Contexts/AuthContext';
 import EpisodesDisplay from './EpisodesDisplay';
+import { Get_Seasonal_AnimeQuery } from '../../graphql/generated/operations';
+import GenreButton from '../GenreButton';
 
 type CarouselProps = {
-  data: SeasonalAnimeData;
+  data: Get_Seasonal_AnimeQuery;
   autoSlideInterval?: number;
 };
 
@@ -19,16 +20,16 @@ export default function Carousel({
   autoSlideInterval = 5000,
 }: CarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const animes = data.Page.media;
-  const { isLoggedIn } = useAuth();
+  const animes = data?.Page?.media;
+  const aniLength = animes?.length || 1;
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % animes.length);
+    setCurrentSlide((prev) => (prev + 1) % aniLength);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + animes.length) % animes.length);
-  };
+  // const prevSlide = () => {
+  //   setCurrentSlide((prev) => (prev - 1 + aniLength) % aniLength);
+  // };
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -45,7 +46,7 @@ export default function Carousel({
   return (
     <div className="relative w-full h-fit">
       <div className="relative h-[450px] overflow-hidden w-full">
-        {animes.map((anime, index) => (
+        {animes?.map((anime, index) => (
           <div
             key={index}
             className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
@@ -55,9 +56,9 @@ export default function Carousel({
             <div className="absolute w-full z-10 inset-0 bg-gradient-to-b from-background-main/50 to-background-dark" />
             <img
               src={
-                anime.bannerImage
+                anime?.bannerImage
                   ? anime.bannerImage
-                  : anime.coverImage.extraLarge
+                  : anime?.coverImage?.extraLarge || ''
               }
               className="absolute block w-full cover blur-sm select-none"
               alt={`Carousel item ${index + 1}`}
@@ -73,12 +74,12 @@ export default function Carousel({
                 <div className="flex w-full flex-col gap-6">
                   <div className=" text-4xl font-semibold flex justify-between">
                     <Link
-                      to={`/anime/${anime.id}`}
+                      to={`/anime/${anime?.id}`}
                       className=" line-clamp-2 text-ellipsis pb-2"
                     >
-                      {anime.title.english}
+                      {anime?.title?.userPreferred}
                     </Link>
-                    {anime.meanScore && (
+                    {anime?.meanScore && (
                       <div className="flex gap-4 items-start">
                         {(anime.meanScore / 10).toFixed(1)}{' '}
                         <span className="text-yellow-400 mt-[2px]">
@@ -88,30 +89,24 @@ export default function Carousel({
                     )}
                   </div>
                   <div
-                    dangerouslySetInnerHTML={{ __html: anime.description }}
+                    dangerouslySetInnerHTML={{
+                      __html: anime?.description || '',
+                    }}
                     className=" text-md line-clamp-6 text-ellipsis"
                   />
                 </div>
                 <div className="flex justify-between">
                   <EpisodesDisplay
                     episodes={{
-                      watched: anime.mediaListEntry?.progress || null,
-                      released: anime.nextAiringEpisode
-                        ? anime.nextAiringEpisode.episode - 1
-                        : anime.episodes,
-                      planned: anime.episodes,
+                      watched: anime?.mediaListEntry?.progress,
+                      nextAiring: anime?.nextAiringEpisode?.episode,
+                      planned: anime?.episodes,
                     }}
                     className="text-xl"
                   />
                   <div className="flex gap-2">
-                    {anime.genres.map((genre, index) => (
-                      <Link
-                        key={genre}
-                        to={`/anime/genre/${genre}`}
-                        className="bg-primary text-primary-background px-2 py-1 rounded-md"
-                      >
-                        {genre}
-                      </Link>
+                    {anime?.genres?.map((genre) => (
+                      <GenreButton key={genre} genre={genre} />
                     ))}
                   </div>
                 </div>
@@ -122,7 +117,7 @@ export default function Carousel({
       </div>
 
       <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-        {animes.map((_, index) => (
+        {animes?.map((_, index) => (
           <button
             key={index}
             type="button"

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/require-default-props */
 import { Link } from 'react-router-dom';
 import EpisodesDisplay from './EpisodesDisplay';
@@ -6,8 +7,9 @@ type RequiredAnimeCardProps = {
   id?: number;
   meanScore?: number | null;
   coverImage?: {
-    medium?: string | null;
     extraLarge?: string | null;
+    large?: string | null;
+    medium?: string | null;
     color?: string | null;
   } | null;
   title?: {
@@ -26,7 +28,6 @@ type RequiredAnimeCardProps = {
 };
 
 type OptionalAnimeCardProps = {
-  score?: number | null;
   withTitle?: boolean;
   withScore?: boolean;
   withLink?: boolean;
@@ -48,7 +49,6 @@ export default function AnimeCard({
   withScore = true,
   withLink = true,
   size = 3,
-  ...rest
 }: AnimeCardPropsType) {
   const width = 46 * size;
   const height = 65 * size;
@@ -64,7 +64,13 @@ export default function AnimeCard({
           <div
             className={`relative bg-cover bg-center rounded-md overflow-hidden shadow-md `}
             style={{
-              backgroundImage: `url(${coverImage?.extraLarge})`,
+              backgroundImage: `url(${
+                size > 2
+                  ? size > 3
+                    ? coverImage?.extraLarge
+                    : coverImage?.large
+                  : coverImage?.medium
+              })`,
               height: `${height}px`,
               width: `${width}px`,
             }}
@@ -99,15 +105,13 @@ export default function AnimeCard({
             className="px-1 max-h-16 line-clamp-2"
             style={{ width: `${width}px`, lineHeight: `${fontSize + 1}px` }}
           >
-            {title?.english}
+            {title?.userPreferred}
           </div>
           <EpisodesDisplay
             episodes={{
-              watched: mediaListEntry?.progress || null,
-              released: nextAiringEpisode?.episode
-                ? nextAiringEpisode.episode - 1
-                : null,
-              planned: episodes || null,
+              watched: mediaListEntry?.progress,
+              nextAiring: nextAiringEpisode?.episode,
+              planned: episodes,
             }}
           />
         </>

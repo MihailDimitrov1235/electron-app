@@ -5,6 +5,7 @@ query getAnimeDetails($mediaId: Int) {
     popularity
     status
     episodes
+    duration
     chapters
     title {
       romaji
@@ -14,6 +15,8 @@ query getAnimeDetails($mediaId: Int) {
     }
     coverImage {
       extraLarge
+      large
+      medium
       color
     }
     meanScore

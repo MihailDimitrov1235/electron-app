@@ -10,12 +10,16 @@ query GET_SEASONAL_ANIME($season: MediaSeason, $year: Int) {
       meanScore
       bannerImage
       coverImage {
-        medium
         extraLarge
+        large
+        medium
         color
       }
       title {
+        romaji
         english
+        native
+        userPreferred
       }
       description
       genres

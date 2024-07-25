@@ -1,19 +1,26 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { IoPeople } from 'react-icons/io5';
 import { FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useAuth } from '../../Components/Contexts/AuthContext';
 import { useGetAnimeDetailsQuery } from '../../graphql/generated/operations';
 import AnimeCard from '../../Components/Anime/AnimeCard';
 import TruncatedText from '../../Components/TruncatedText';
 import Button from '../../Components/Button';
 import CounterInput from '../../Components/CounterInput';
+import Tooltip from '../../Components/Tooltip';
+import Tag from '../../Components/Tag';
+import GenreButton from '../../Components/GenreButton';
 
 export default function AnimeDetails() {
   const { id } = useParams();
   const { loading, error, data } = useGetAnimeDetailsQuery({
     variables: { mediaId: id },
   });
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
 
   const [favorite, setFavorite] = useState<boolean>(false);
   const [watchedEpisodes, setWatchedEpisodes] = useState<number>(0);
@@ -25,7 +32,27 @@ export default function AnimeDetails() {
   }, [data]);
 
   const handleFavoriteChange = () => {
-    setFavorite(!favorite);
+    if (isLoggedIn) {
+      setFavorite(!favorite);
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleStatusClick = () => {
+    if (isLoggedIn) {
+      console.log('to be implemented');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleApply = () => {
+    if (isLoggedIn) {
+      console.log('to be implemented');
+    } else {
+      navigate('/login');
+    }
   };
 
   if (!data) {
@@ -56,7 +83,11 @@ export default function AnimeDetails() {
             size={5}
           />
           <div className=" flex w-full justify-between gap-4 ">
-            <Button variant="gradient" className="flex-1">
+            <Button
+              variant="gradient"
+              className="flex-1"
+              onClick={handleStatusClick}
+            >
               {data.Media?.mediaListEntry?.status || 'Add to list'}
             </Button>
             <Button
@@ -73,7 +104,11 @@ export default function AnimeDetails() {
               count={watchedEpisodes}
               setCount={setWatchedEpisodes}
               min={0}
-              max={data.Media?.episodes || 99999}
+              max={
+                data.Media?.episodes ||
+                data.Media?.nextAiringEpisode?.episode ||
+                99999
+              }
               digitsAfterDecimal={0}
             />
           </div>
@@ -83,34 +118,80 @@ export default function AnimeDetails() {
               count={userScore}
               setCount={setUserScore}
               min={0}
-              max={data.Media?.episodes || 99999}
+              max={
+                data.Media?.episodes ||
+                data.Media?.nextAiringEpisode?.episode ||
+                99999
+              }
               digitsAfterDecimal={0}
             />
           </div>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" onClick={handleApply}>
             Apply
           </Button>
         </div>
 
         <div className="flex flex-col flex-1 justify-between">
           <div className="flex flex-col gap-4">
-            <div className="flex justify-between text-4xl">
-              <div className=" line-clamp-2 font-medium pb-1">
-                {data.Media?.title?.english}
-              </div>
-              {data.Media?.meanScore && (
-                <div className="flex gap-4 items-start">
-                  {(data.Media.meanScore / 10).toFixed(1)}{' '}
-                  <span className="text-yellow-400 mt-[2px]">
-                    <FaStar />
-                  </span>
+            <div className="flex flex-col">
+              <div className="flex justify-between text-4xl">
+                <div className=" line-clamp-2 font-medium pb-1">
+                  {data.Media?.title?.userPreferred}
                 </div>
-              )}
+                {data.Media?.meanScore && (
+                  <div className="flex gap-4 items-start">
+                    {(data.Media.meanScore / 10).toFixed(1)}{' '}
+                    <span className="text-yellow-400 mt-[2px]">
+                      <FaStar />
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="text-lg text-text-main font-semibold">
+                {data.Media?.format} {' - '} {data.Media?.status}
+              </div>
             </div>
-            <div className="text-lg text-text-main">{data.Media?.status}</div>
+            <div>
+              {data.Media?.nextAiringEpisode
+                ? `${data.Media.nextAiringEpisode.episode - 1} / ${
+                    data.Media.episodes
+                  } Episodes`
+                : `${data.Media?.episodes} Episodes`}
+              {' - '}
+              {data.Media?.duration} Min/Ep
+            </div>
           </div>
 
-          <div className=" flex justify-end"></div>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-2 justify-end">
+              {data.Media?.genres?.map((genre) => (
+                <GenreButton key={genre} genre={genre} />
+              ))}
+            </div>
+            <div className=" flex justify-between gap-4">
+              <div className="flex flex-wrap gap-2 justify-between">
+                {data.Media?.tags?.map((tag) => (
+                  <Tag key={tag?.name} tag={tag} />
+                ))}
+                <div className="flex-1" />
+              </div>
+              <div className="flex gap-2">
+                <Tooltip text="Popularity">
+                  <div className="flex flex-col justify-center items-center border border-primary/50 p-2 rounded-md text-xs">
+                    <IoPeople size={30} />
+                    {data.Media?.popularity}
+                  </div>
+                </Tooltip>
+
+                <Tooltip text="Favourites">
+                  <div className="flex flex-col justify-center items-center border border-primary/50 p-2 rounded-md text-xs">
+                    <FaHeart size={30} />
+                    {data.Media?.favourites}
+                  </div>
+                </Tooltip>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

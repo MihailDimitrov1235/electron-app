@@ -1,6 +1,5 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useRef, useEffect } from 'react';
-import Button from './Button';
 
 type TruncatedTextProps = {
   html: string;

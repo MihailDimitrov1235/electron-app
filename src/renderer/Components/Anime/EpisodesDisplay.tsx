@@ -5,9 +5,9 @@ export default function EpisodesDisplay({
   withWatched = true,
 }: {
   episodes: {
-    watched: number | null;
-    released: number | null;
-    planned: number | null;
+    watched?: number | null;
+    nextAiring?: number | null;
+    planned?: number | null;
   };
   className?: string;
   withWatched?: boolean;
@@ -20,8 +20,8 @@ export default function EpisodesDisplay({
         </span>
       )}{' '}
       |{' '}
-      {episodes.released
-        ? `${episodes.released ? episodes.released : '~'} | ${
+      {episodes.nextAiring
+        ? `${episodes.nextAiring ? episodes.nextAiring - 1 : '~'} | ${
             episodes.planned ? episodes.planned : '~'
           }`
         : `${episodes.planned ? episodes.planned : '~'}`}
