@@ -12,7 +12,13 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": ".erb/dll"
+    "outDir": ".erb/dll",
+    "baseUrl": ".",
+    "paths": {
+      "@Components/*": ["src/renderer/Components/*"],
+      "@graphql/*": ["src/renderer/graphql/*"],
+      "@Pages/*": ["src/renderer/Pages/*"],
+    }
   },
   "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
 }

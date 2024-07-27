@@ -47,7 +47,7 @@ query getAnimeDetails($mediaId: Int) {
     idMal
     nextAiringEpisode {
       episode
-      airingAt
+      timeUntilAiring
     }
     source
     countryOfOrigin

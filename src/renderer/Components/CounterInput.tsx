@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable react/require-default-props */
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
@@ -47,15 +48,15 @@ export default function CounterInput({
   const handleOnBlur = () => {
     if (!value) {
       setCount(min);
-    } else if (Number.isNaN(value)) {
+    } else if (isNaN(Number(value))) {
       setValue(count.toString());
     } else {
-      setCount(
-        Math.max(
-          min,
-          Math.min(Number(parseFloat(value).toFixed(digitsAfterDecimal)), max),
-        ),
+      const validVal = Math.max(
+        min,
+        Math.min(Number(parseFloat(value).toFixed(digitsAfterDecimal)), max),
       );
+      setCount(validVal);
+      setValue(validVal.toString());
     }
   };
 

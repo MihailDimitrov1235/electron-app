@@ -2,6 +2,7 @@
 /* eslint-disable react/require-default-props */
 import { Link } from 'react-router-dom';
 import EpisodesDisplay from './EpisodesDisplay';
+import Countdown from '@Components/Countdown';
 
 type RequiredAnimeCardProps = {
   id?: number;
@@ -24,6 +25,7 @@ type RequiredAnimeCardProps = {
   } | null;
   nextAiringEpisode?: {
     episode?: number | null;
+    timeUntilAiring?: number | null;
   } | null;
 };
 
@@ -31,6 +33,7 @@ type OptionalAnimeCardProps = {
   withTitle?: boolean;
   withScore?: boolean;
   withLink?: boolean;
+  withNextEpisode?: boolean;
   size?: number;
   [key: string]: any;
 };
@@ -48,6 +51,7 @@ export default function AnimeCard({
   withTitle = true,
   withScore = true,
   withLink = true,
+  withNextEpisode = false,
   size = 3,
 }: AnimeCardPropsType) {
   const width = 46 * size;
@@ -96,6 +100,19 @@ export default function AnimeCard({
               {(meanScore / 10).toFixed(1)}
             </div>
           )}
+          {withNextEpisode &&
+            nextAiringEpisode?.timeUntilAiring &&
+            nextAiringEpisode?.episode && (
+              <div className="w-full absolute flex flex-col gap-2 bg-background-main/60 text-text-main justify-center text-center py-2">
+                <div>
+                  Ep{' '}
+                  <span className=" font-semibold">
+                    {nextAiringEpisode.episode}
+                  </span>
+                </div>
+                <Countdown secondsUntil={nextAiringEpisode.timeUntilAiring} />
+              </div>
+            )}
         </div>
       )}
 

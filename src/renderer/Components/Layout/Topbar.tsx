@@ -8,7 +8,7 @@ import Button from '../Button';
 import TextField from '../TextField';
 
 export default function Topbar() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, userAvatar } = useAuth();
   const [search, setSearch] = useState('');
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
@@ -80,7 +80,7 @@ export default function Topbar() {
               variant="icon"
               className=""
               style={{
-                backgroundImage: `url("https://thicc-af.mywaifulist.moe/waifus/529/0d27a9349dc47118e62557db533e6cbe48f9bac289b656c921374566ef0f5496_thumb.jpg")`,
+                backgroundImage: `url("${userAvatar}")`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}

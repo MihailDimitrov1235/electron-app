@@ -3,9 +3,9 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 
-import AnimeCard from '../../Components/Anime/AnimeCard';
-import { useGet_Seasonal_AnimeQuery } from '../../graphql/generated/operations';
-import Carousel from '../../Components/Anime/Carousel';
+import AnimeCard from '@Components/Anime/AnimeCard';
+import { useGet_Seasonal_AnimeQuery } from '@graphql/generated/operations';
+import Carousel from '@Components/Anime/Carousel';
 
 export default function AnimeHome() {
   const now = new Date();

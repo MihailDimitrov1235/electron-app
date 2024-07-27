@@ -7,10 +7,10 @@ import {
   ApolloProvider,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
+import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
+import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
 import RouteHandler from './RouteHandler';
-import { ThemeProvider, useTheme } from './Components/Contexts/ThemeContext';
-import { AuthProvider, useAuth } from './Components/Contexts/AuthContext';
-import { MainUtilsProvider } from './Components/Contexts/MainUtilsContext';
 import './global.css';
 
 function App() {

@@ -1,11 +1,19 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useAuth } from '../Contexts/AuthContext';
 import Topbar from './Topbar';
 
 export default function Layout() {
   const { setToken } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.endsWith('/index.html')) {
+      navigate('/', { replace: true });
+    }
+  }, [location, navigate]);
   useEffect(() => {
     const removeListener = window.electronAPI.handleSetToken((message) => {
       setToken(message);

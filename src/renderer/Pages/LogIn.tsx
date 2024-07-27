@@ -1,8 +1,8 @@
 import React from 'react';
 // import bgImage from '../../../assets/img/login-bg.jpg';
 import { SiAnilist } from 'react-icons/si';
-import Button from '../Components/Button';
-import { useMainUtils } from '../Components/Contexts/MainUtilsContext';
+import Button from '@Components/Button';
+import { useMainUtils } from '@Components/Contexts/MainUtilsContext';
 
 export default function LogIn() {
   const { openUrl } = useMainUtils();

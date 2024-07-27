@@ -2,15 +2,14 @@ import {
   createBrowserRouter,
   RouterProvider,
   redirect,
-  Navigate,
 } from 'react-router-dom';
-import LogIn from './Pages/LogIn';
-import { useAuth } from './Components/Contexts/AuthContext';
-import Layout from './Components/Layout';
-import Home from './Pages/Home';
-import AnimeHome from './Pages/Anime';
-import Page404 from './Pages/Page404';
-import AnimeDetails from './Pages/Anime/AnimeDetails';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import Layout from '@Components/Layout';
+import LogIn from '@Pages/LogIn';
+import Home from '@Pages/Home';
+import AnimeHome from '@Pages/Anime';
+import Page404 from '@Pages/Page404';
+import AnimeDetails from '@Pages/Anime/AnimeDetails';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -34,16 +33,18 @@ export default function RouteHandler() {
         },
         {
           path: '/login',
+          loader: () => {
+            if (isLoggedIn) {
+              redirect('/');
+            }
+            return null;
+          },
           element: <LogIn />,
         },
         {
           path: '/user',
           loader: redirectIfNotLoggedIn,
           element: <Home />,
-        },
-        {
-          path: '/index.html',
-          element: <Navigate to="/" replace />,
         },
         {
           path: '/anime',

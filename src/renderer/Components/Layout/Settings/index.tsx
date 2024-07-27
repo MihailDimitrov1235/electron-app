@@ -16,7 +16,7 @@ export default function Settings({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [openTab, setOpenTab] = useState(0);
+  const [openTab, setOpenTab] = useState(settingTabs[0]);
   return (
     <div
       className={`${
@@ -48,12 +48,16 @@ export default function Settings({
               col
             />
             <div
-              className={`w-full h-full ${openTab === 0 ? 'block' : 'hidden'}`}
+              className={`w-full h-full ${
+                openTab === 'Profile' ? 'block' : 'hidden'
+              }`}
             >
               <ProfileTab />
             </div>
             <div
-              className={`w-full h-full ${openTab === 1 ? 'block' : 'hidden'}`}
+              className={`w-full h-full ${
+                openTab === 'Style' ? 'block' : 'hidden'
+              }`}
             >
               <StyleTab />
             </div>

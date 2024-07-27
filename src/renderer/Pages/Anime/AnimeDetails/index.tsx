@@ -3,16 +3,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoPeople } from 'react-icons/io5';
-import { FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useAuth } from '../../Components/Contexts/AuthContext';
-import { useGetAnimeDetailsQuery } from '../../graphql/generated/operations';
-import AnimeCard from '../../Components/Anime/AnimeCard';
-import TruncatedText from '../../Components/TruncatedText';
-import Button from '../../Components/Button';
-import CounterInput from '../../Components/CounterInput';
-import Tooltip from '../../Components/Tooltip';
-import Tag from '../../Components/Tag';
-import GenreButton from '../../Components/GenreButton';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import { useGetAnimeDetailsQuery } from '@graphql/generated/operations';
+import AnimeCard from '@Components/Anime/AnimeCard';
+import TruncatedText from '@Components/TruncatedText';
+import Button from '@Components/Button';
+import CounterInput from '@Components/CounterInput';
+import Tooltip from '@Components/Tooltip';
+import Tag from '@Components/Tag';
+import GenreButton from '@Components/GenreButton';
+import Tabs from '@Components/Tabs';
+import AnimeScore from '@Components/Anime/AnimeScore';
+
+const AnimeTabs = ['Overview', 'Characters', 'Staff'];
 
 export default function AnimeDetails() {
   const { id } = useParams();
@@ -25,6 +29,8 @@ export default function AnimeDetails() {
   const [favorite, setFavorite] = useState<boolean>(false);
   const [watchedEpisodes, setWatchedEpisodes] = useState<number>(0);
   const [userScore, setUserScore] = useState<number>(0);
+  const [openTab, setOpenTab] = useState<string>(AnimeTabs[0]);
+
   useEffect(() => {
     setFavorite(data?.Media?.isFavourite || false);
     setWatchedEpisodes(data?.Media?.mediaListEntry?.progress || 0);
@@ -80,6 +86,7 @@ export default function AnimeDetails() {
             withTitle={false}
             withScore={false}
             withLink={false}
+            withNextEpisode
             size={5}
           />
           <div className=" flex w-full justify-between gap-4 ">
@@ -118,12 +125,8 @@ export default function AnimeDetails() {
               count={userScore}
               setCount={setUserScore}
               min={0}
-              max={
-                data.Media?.episodes ||
-                data.Media?.nextAiringEpisode?.episode ||
-                99999
-              }
-              digitsAfterDecimal={0}
+              max={10}
+              digitsAfterDecimal={1}
             />
           </div>
           <Button variant="outline" className="w-full" onClick={handleApply}>
@@ -132,38 +135,57 @@ export default function AnimeDetails() {
         </div>
 
         <div className="flex flex-col flex-1 justify-between">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col">
-              <div className="flex justify-between text-4xl">
-                <div className=" line-clamp-2 font-medium pb-1">
-                  {data.Media?.title?.userPreferred}
-                </div>
-                {data.Media?.meanScore && (
-                  <div className="flex gap-4 items-start">
-                    {(data.Media.meanScore / 10).toFixed(1)}{' '}
-                    <span className="text-yellow-400 mt-[2px]">
-                      <FaStar />
-                    </span>
+          <div className="flex justify-between">
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col">
+                <div className="flex justify-between text-4xl">
+                  <div className=" line-clamp-2 font-medium pb-1">
+                    {data.Media?.title?.userPreferred}
                   </div>
-                )}
+                </div>
+                <div className="text-lg text-text-main font-semibold">
+                  {data.Media?.format} {' - '} {data.Media?.status}
+                </div>
               </div>
-              <div className="text-lg text-text-main font-semibold">
-                {data.Media?.format} {' - '} {data.Media?.status}
+              <div>
+                {data.Media?.nextAiringEpisode
+                  ? `${data.Media.nextAiringEpisode.episode - 1} / ${
+                      data.Media.episodes
+                    } Episodes`
+                  : `${data.Media?.episodes} Episodes`}
+                {' - '}
+                {data.Media?.duration} Min/Ep
               </div>
             </div>
-            <div>
-              {data.Media?.nextAiringEpisode
-                ? `${data.Media.nextAiringEpisode.episode - 1} / ${
-                    data.Media.episodes
-                  } Episodes`
-                : `${data.Media?.episodes} Episodes`}
-              {' - '}
-              {data.Media?.duration} Min/Ep
+            <div className="flex flex-col gap-3">
+              {data.Media?.meanScore && (
+                <AnimeScore score={data.Media.meanScore} />
+              )}
+
+              <div className="flex flex-col gap-1 items-end">
+                <Tooltip text="Popularity" direction="left">
+                  <div className="flex gap-2 items-center bg-background-dark/30 border border-primary/30 py-1 px-2 rounded-full text-md">
+                    {data.Media?.popularity}
+                    <span className="text-blue-500">
+                      <IoPeople size={20} />
+                    </span>
+                  </div>
+                </Tooltip>
+
+                <Tooltip text="Favourites" direction="left">
+                  <div className="flex gap-2 items-center bg-background-dark/30 border border-primary/30 py-1 px-2 rounded-full text-md">
+                    {data.Media?.favourites}
+                    <span className="text-secondary/80">
+                      <FaHeart size={20} />
+                    </span>
+                  </div>
+                </Tooltip>
+              </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="flex gap-2 justify-end">
+            <div className="flex gap-2 justify-start">
               {data.Media?.genres?.map((genre) => (
                 <GenreButton key={genre} genre={genre} />
               ))}
@@ -175,21 +197,14 @@ export default function AnimeDetails() {
                 ))}
                 <div className="flex-1" />
               </div>
-              <div className="flex gap-2">
-                <Tooltip text="Popularity">
-                  <div className="flex flex-col justify-center items-center border border-primary/50 p-2 rounded-md text-xs">
-                    <IoPeople size={30} />
-                    {data.Media?.popularity}
-                  </div>
-                </Tooltip>
-
-                <Tooltip text="Favourites">
-                  <div className="flex flex-col justify-center items-center border border-primary/50 p-2 rounded-md text-xs">
-                    <FaHeart size={30} />
-                    {data.Media?.favourites}
-                  </div>
-                </Tooltip>
-              </div>
+            </div>
+            <div className="flex justify-center">
+              <Tabs
+                tabs={AnimeTabs}
+                openTab={openTab}
+                setOpenTab={setOpenTab}
+                col={false}
+              />
             </div>
           </div>
         </div>

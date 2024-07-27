@@ -1,8 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useGetCurrentAnimeQuery } from '../graphql/generated/operations';
-import { useAuth } from '../Components/Contexts/AuthContext';
-import AnimeCard from '../Components/Anime/AnimeCard';
+import { useGetCurrentAnimeQuery } from '@graphql/generated/operations';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import AnimeCard from '@Components/Anime/AnimeCard';
 
 export default function Home() {
   const { userId } = useAuth();
@@ -22,7 +22,7 @@ export default function Home() {
         {data.MediaListCollection?.lists &&
           data.MediaListCollection?.lists[0]?.entries?.map((entry) => (
             <div key={entry?.id} className="flex-grow-0 flex-shrink-0 pr-4">
-              <AnimeCard size={2.2} {...entry?.media} />
+              <AnimeCard size={2.1} {...entry?.media} />
             </div>
           ))}
       </div>

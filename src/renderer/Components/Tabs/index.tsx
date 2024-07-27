@@ -3,31 +3,29 @@ import Button from '../Button';
 
 type TabsPropType = {
   tabs: string[];
-  openTab: number;
-  setOpenTab: Dispatch<SetStateAction<number>>;
+  openTab: string;
+  setOpenTab: Dispatch<SetStateAction<string>>;
   col: boolean;
 };
 export default function Tabs({ tabs, openTab, setOpenTab, col }: TabsPropType) {
   return (
-    <ul
-      className={`${
-        col ? 'flex-col' : 'flex-row'
-      } flex list-none flex-wrap w-fit gap-4 `}
+    <div
+      className={`${col ? 'flex-col' : 'flex-row'} flex flex-wrap w-fit gap-4 `}
     >
       {tabs.map((tab, index) => (
-        <li key={tab} className=" flex-auto text-center w-full">
+        <div key={tab} className=" flex text-center">
           <Button
-            variant={openTab === index ? 'gradient' : 'default'}
+            variant={openTab === tabs[index] ? 'gradient' : 'default'}
             className="w-full"
             onClick={(e) => {
               e.preventDefault();
-              setOpenTab(index);
+              setOpenTab(tabs[index]);
             }}
           >
             {tab}
           </Button>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }

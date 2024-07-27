@@ -3,12 +3,12 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
-import { FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { Get_Seasonal_AnimeQuery } from '@graphql/generated/operations';
 import AnimeCard from './AnimeCard';
 import EpisodesDisplay from './EpisodesDisplay';
-import { Get_Seasonal_AnimeQuery } from '../../graphql/generated/operations';
 import GenreButton from '../GenreButton';
+import AnimeScore from './AnimeScore';
 
 type CarouselProps = {
   data: Get_Seasonal_AnimeQuery;
@@ -79,14 +79,7 @@ export default function Carousel({
                     >
                       {anime?.title?.userPreferred}
                     </Link>
-                    {anime?.meanScore && (
-                      <div className="flex gap-4 items-start">
-                        {(anime.meanScore / 10).toFixed(1)}{' '}
-                        <span className="text-yellow-400 mt-[2px]">
-                          <FaStar />
-                        </span>
-                      </div>
-                    )}
+                    {anime?.meanScore && <AnimeScore score={anime.meanScore} />}
                   </div>
                   <div
                     dangerouslySetInnerHTML={{
