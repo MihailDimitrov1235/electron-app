@@ -39,7 +39,7 @@ export default function AnimeHome() {
       </div>
       <div className="mx-10">
         <div className=" text-xl">Trending</div>
-        <div className="flex gap-6 overflow-x-scroll ">
+        <div className="flex gap-6 overflow-x-scroll pb-2">
           {data.Page.media.map((anime, index) => (
             <AnimeCard key={index} {...anime} />
           ))}

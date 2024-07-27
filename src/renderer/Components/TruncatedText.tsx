@@ -41,7 +41,7 @@ function TruncatedText({
         <button
           type="button"
           onClick={() => setIsTruncated(!isTruncated)}
-          className="mt-2"
+          className="text-sm text-text-light mb-2"
         >
           {isTruncated ? 'Read More' : 'Read Less'}
         </button>

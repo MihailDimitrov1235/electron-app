@@ -67,6 +67,7 @@ export default function Carousel({
               <AnimeCard
                 {...anime}
                 withTitle={false}
+                withEpisodes={false}
                 withScore={false}
                 size={5}
               />

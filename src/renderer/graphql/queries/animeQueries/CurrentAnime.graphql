@@ -6,6 +6,7 @@ query GetCurrentAnime($userId: Int) {
         id
         media {
           id
+          type
           meanScore
           bannerImage
           coverImage {

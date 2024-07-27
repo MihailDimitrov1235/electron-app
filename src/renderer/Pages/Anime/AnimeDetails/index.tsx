@@ -7,7 +7,6 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useAuth } from '@Components/Contexts/AuthContext';
 import { useGetAnimeDetailsQuery } from '@graphql/generated/operations';
 import AnimeCard from '@Components/Anime/AnimeCard';
-import TruncatedText from '@Components/TruncatedText';
 import Button from '@Components/Button';
 import CounterInput from '@Components/CounterInput';
 import Tooltip from '@Components/Tooltip';
@@ -15,8 +14,9 @@ import Tag from '@Components/Tag';
 import GenreButton from '@Components/GenreButton';
 import Tabs from '@Components/Tabs';
 import AnimeScore from '@Components/Anime/AnimeScore';
+import AnimeInfo from './AnimeInfo';
 
-const AnimeTabs = ['Overview', 'Characters', 'Staff'];
+const AnimeTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
 export default function AnimeDetails() {
   const { id } = useParams();
@@ -61,7 +61,11 @@ export default function AnimeDetails() {
     }
   };
 
-  if (!data) {
+  if (error) {
+    console.error(error);
+    return <div>error</div>;
+  }
+  if (loading || !data) {
     return <div>loading...</div>;
   }
 
@@ -84,6 +88,7 @@ export default function AnimeDetails() {
           <AnimeCard
             {...data.Media}
             withTitle={false}
+            withEpisodes={false}
             withScore={false}
             withLink={false}
             withNextEpisode
@@ -210,9 +215,18 @@ export default function AnimeDetails() {
         </div>
       </div>
 
-      <div className="px-8">
-        <TruncatedText html={data.Media?.description || ''} />
-      </div>
+      {(() => {
+        switch (openTab) {
+          case AnimeTabs[0]:
+            return <AnimeInfo id={id || ''} />;
+          case AnimeTabs[1]:
+            return <AnimeInfo id={id || ''} />;
+          case AnimeTabs[2]:
+            return <AnimeInfo id={id || ''} />;
+          default:
+            return <div>Unknown component type</div>;
+        }
+      })()}
     </div>
   );
 }

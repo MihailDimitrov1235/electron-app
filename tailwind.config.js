@@ -23,7 +23,7 @@ const lightThemeColors = {
   },
   text: {
     main: '#000000',
-    light: '#333333',
+    light: '#555555',
   },
   devider: '#aaaaaa',
 };
@@ -36,7 +36,7 @@ const darkThemeColors = {
   },
   text: {
     main: '#ffffff',
-    light: '#cccccc',
+    light: '#aaaaaa',
   },
   devider: '#415a77',
 };

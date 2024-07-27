@@ -48,19 +48,16 @@ function Countdown({ secondsUntil }: CountdownProps) {
   }, [secondsUntil]);
 
   return (
-    <div className="flex gap-4 items-center justify-center">
-      <span>
-        <span className="font-semibold">{timeLeft.days}</span> D
-      </span>
-      <span>
-        <span className="font-semibold">{timeLeft.hours}</span> H
-      </span>
-      <span>
-        <span className="font-semibold">{timeLeft.minutes}</span> M
-      </span>
-      <span>
-        <span className="font-semibold">{timeLeft.seconds}</span> S
-      </span>
+    <div className="flex gap-2 items-center justify-center">
+      {Object.entries(timeLeft).map(([key, value], index) => (
+        <React.Fragment key={key}>
+          <span className="flex flex-col">
+            <span className="font-semibold">{value}</span>
+            <span className="text-xs capitalize">{key}</span>
+          </span>
+          {index !== Object.entries(timeLeft).length - 1 && ':'}
+        </React.Fragment>
+      ))}
     </div>
   );
 }
