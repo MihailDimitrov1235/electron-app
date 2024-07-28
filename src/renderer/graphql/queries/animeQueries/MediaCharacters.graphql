@@ -1,0 +1,36 @@
+query GetMediaCharacters($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    characters(sort: [ROLE, FAVOURITES_DESC]) {
+      edges {
+        role
+        voiceActors {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            userPreferred
+          }
+          image {
+            large
+            medium
+          }
+          languageV2
+        }
+        node {
+          id
+          image {
+            large
+            medium
+          }
+          name {
+            userPreferred
+          }
+          isFavourite
+        }
+      }
+    }
+  }
+}

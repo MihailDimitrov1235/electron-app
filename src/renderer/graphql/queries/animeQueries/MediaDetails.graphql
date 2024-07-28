@@ -1,0 +1,111 @@
+query GetMediaDetails($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    id
+    favourites
+    popularity
+    status
+    episodes
+    duration
+    chapters
+    volumes
+    type
+    title {
+      romaji
+      english
+      native
+      userPreferred
+    }
+    coverImage {
+      extraLarge
+      large
+      medium
+      color
+    }
+    trailer {
+      site
+      id
+    }
+    meanScore
+    bannerImage
+    mediaListEntry {
+      id
+      status
+      score(format: POINT_100)
+      progress
+      private
+      notes
+      repeat
+      customLists
+      updatedAt
+      startedAt {
+        year
+        month
+        day
+      }
+      completedAt {
+        year
+        month
+        day
+      }
+    }
+    isFavourite
+    nextAiringEpisode {
+      episode
+      timeUntilAiring
+    }
+    source
+    format
+    genres
+    tags {
+      name
+      rank
+      isMediaSpoiler
+    }
+    countryOfOrigin
+    season
+    seasonYear
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    studios(isMain: true) {
+      nodes {
+        id
+        name
+        siteUrl
+      }
+    }
+    source
+    synonyms
+  }
+  Page(page: 1) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    mediaList(isFollowing: true, sort: [STATUS], mediaId: $mediaId) {
+      id
+      status
+      score(format: POINT_100)
+      progress
+      progressVolumes
+      user {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+      }
+    }
+  }
+}

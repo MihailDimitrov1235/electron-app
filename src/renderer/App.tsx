@@ -1,50 +1,59 @@
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import 'tailwindcss/tailwind.css';
+import { useMemo } from 'react';
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  ApolloProvider,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
+import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
+import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
+import RouteHandler from './RouteHandler';
+import './global.css';
 
-function Hello() {
+function App() {
+  const { theme } = useTheme();
+  const { token } = useAuth();
+
+  const client = useMemo(() => {
+    const httpLink = createHttpLink({
+      uri: 'https://graphql.anilist.co',
+    });
+
+    const authLink = setContext((_, { headers }) => {
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      };
+    });
+
+    return new ApolloClient({
+      link: authLink.concat(httpLink),
+      cache: new InMemoryCache(),
+    });
+  }, [token]);
+
   return (
-    <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
+    <ApolloProvider client={client}>
+      <MainUtilsProvider>
+        <div className={`${theme} w-[100vw] h-[100vh] text-text-main`}>
+          <RouteHandler />
+        </div>
+      </MainUtilsProvider>
+    </ApolloProvider>
   );
 }
 
-export default function App() {
+export default function RootApp() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

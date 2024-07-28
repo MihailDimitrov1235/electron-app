@@ -1,0 +1,72 @@
+query GetMediaInfo($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    id
+    description
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          id
+          idMal
+          mediaListEntry {
+            progress
+            private
+            score(format: POINT_100)
+            status
+          }
+          episodes
+          chapters
+          nextAiringEpisode {
+            episode
+          }
+          popularity
+          meanScore
+          isAdult
+          isFavourite
+          format
+          title {
+            english
+            romaji
+            userPreferred
+          }
+          type
+          status(version: 2)
+          bannerImage
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+        }
+      }
+    }
+    recommendations(sort: RATING_DESC) {
+      nodes {
+        mediaRecommendation {
+          id
+          episodes
+          chapters
+          meanScore
+          isAdult
+          format
+          title {
+            english
+            romaji
+            userPreferred
+          }
+          type
+          status(version: 2)
+          bannerImage
+          coverImage {
+            large
+          }
+          mediaListEntry {
+            progress
+            score(format: POINT_100)
+          }
+        }
+      }
+    }
+  }
+}
