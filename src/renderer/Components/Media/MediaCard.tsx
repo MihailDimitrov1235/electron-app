@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook } from 'react-icons/io5';
 import Countdown from '@Components/Countdown';
-import EpisodesDisplay from './Anime/EpisodesDisplay';
+import EpisodesDisplay from './EpisodesDisplay';
 
 type RequiredMediaCardProps = {
   id?: number;

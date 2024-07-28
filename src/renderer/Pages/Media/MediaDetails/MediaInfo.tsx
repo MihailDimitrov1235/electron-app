@@ -1,13 +1,19 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import TruncatedText from '@Components/TruncatedText';
-import { useGetAnimeInfoQuery } from '@graphql/generated/operations';
-import MediaCard from '@Components/MediaCard';
+import { useGetMediaInfoQuery } from '@graphql/generated/operations';
+import MediaCard from '@Components/Media/MediaCard';
 
 // eslint-disable-next-line react/require-default-props
-export default function AnimeInfo({ id }: { id: string }) {
-  const { loading, error, data } = useGetAnimeInfoQuery({
-    variables: { mediaId: id },
+export default function MediaInfo({
+  id,
+  mediaType,
+}: {
+  id: string;
+  mediaType: 'ANIME' | 'MANGA';
+}) {
+  const { loading, error, data } = useGetMediaInfoQuery({
+    variables: { mediaId: id, mediaType },
   });
   if (error) {
     console.error(error);

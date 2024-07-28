@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import MediaCard from '@Components/MediaCard';
-import AnimeScore from '@Components/Anime/AnimeScore';
+import MediaCard from '@Components/Media/MediaCard';
+import MediaScore from '@Components/Media/MediaScore';
 import Button from '@Components/Button';
 import { useAuth } from '@Components/Contexts/AuthContext';
 import CounterInput from '@Components/CounterInput';
@@ -8,25 +8,25 @@ import GenreButton from '@Components/GenreButton';
 import Tabs from '@Components/Tabs';
 import Tag from '@Components/Tag';
 import Tooltip from '@Components/Tooltip';
-import { GetAnimeDetailsQuery } from '@graphql/generated/operations';
+import { GetMediaDetailsQuery } from '@graphql/generated/operations';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-type AnimeMainDataPropsType = {
-  data: GetAnimeDetailsQuery;
+type MediaMainDataPropsType = {
+  data: GetMediaDetailsQuery;
   openTab: string;
   setOpenTab: React.Dispatch<React.SetStateAction<string>>;
-  AnimeTabs: string[];
+  MediaTabs: string[];
 };
 
-export default function AnimeMainData({
+export default function MediaMainData({
   data,
   openTab,
   setOpenTab,
-  AnimeTabs,
-}: AnimeMainDataPropsType) {
+  MediaTabs,
+}: MediaMainDataPropsType) {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
@@ -99,9 +99,11 @@ export default function AnimeMainData({
             setCount={setWatchedEpisodes}
             min={0}
             max={
-              data.Media?.episodes ||
-              data.Media?.nextAiringEpisode?.episode ||
-              99999
+              data.Media?.type === 'ANIME'
+                ? data.Media?.episodes ||
+                  data.Media?.nextAiringEpisode?.episode ||
+                  99999
+                : data.Media?.chapters || 99999
             }
             digitsAfterDecimal={0}
           />
@@ -135,18 +137,29 @@ export default function AnimeMainData({
               </div>
             </div>
             <div>
-              {data.Media?.nextAiringEpisode
-                ? `${data.Media.nextAiringEpisode.episode - 1} / ${
-                    data.Media.episodes
-                  } Episodes`
-                : `${data.Media?.episodes} Episodes`}
-              {' - '}
-              {data.Media?.duration} Min/Ep
+              {data.Media?.type === 'ANIME' ? (
+                <div>
+                  {data.Media?.nextAiringEpisode
+                    ? `${data.Media.nextAiringEpisode.episode - 1} / ${
+                        data.Media.episodes
+                      } Episodes`
+                    : `${data.Media?.episodes} Episodes`}
+                  {' - '}
+                  {data.Media?.duration} Min/Ep
+                </div>
+              ) : (
+                <div>
+                  {data.Media?.chapters && (
+                    <div>data.Media.chapters Chapters</div>
+                  )}{' '}
+                  {data.Media?.volumes && <div>data.Media.volumes Volumes</div>}
+                </div>
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-3">
             {data.Media?.meanScore && (
-              <AnimeScore score={data.Media.meanScore} />
+              <MediaScore score={data.Media.meanScore} />
             )}
 
             <div className="flex flex-col gap-1 items-end">
@@ -187,7 +200,7 @@ export default function AnimeMainData({
           </div>
           <div className="flex justify-center">
             <Tabs
-              tabs={AnimeTabs}
+              tabs={MediaTabs}
               openTab={openTab}
               setOpenTab={setOpenTab}
               col={false}

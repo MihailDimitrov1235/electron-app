@@ -1,13 +1,16 @@
-/* eslint-disable camelcase */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 
-import MediaCard from '@Components/MediaCard';
-import { useGet_Seasonal_AnimeQuery } from '@graphql/generated/operations';
-import Carousel from '@Components/Anime/Carousel';
+import MediaCard from '@Components/Media/MediaCard';
+import { useGetSeasonalMediaQuery } from '@graphql/generated/operations';
+import Carousel from '@Components/Media/Carousel';
 
-export default function AnimeHome() {
+export default function MediaHome({
+  mediaType,
+}: {
+  mediaType: 'ANIME' | 'MANGA';
+}) {
   const now = new Date();
   const month = now.getMonth(); // 0-11
   const year = now.getFullYear();
@@ -23,8 +26,8 @@ export default function AnimeHome() {
     season = 'FALL';
   }
 
-  const { loading, error, data } = useGet_Seasonal_AnimeQuery({
-    variables: { season, year },
+  const { loading, error, data } = useGetSeasonalMediaQuery({
+    variables: { season, year, mediaType },
   });
   if (error) {
     return <p>No data available</p>;

@@ -4,14 +4,14 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Get_Seasonal_AnimeQuery } from '@graphql/generated/operations';
-import MediaCard from '../MediaCard';
+import { Get_Seasonal_MediaQuery } from '@graphql/generated/operations';
+import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
-import AnimeScore from './AnimeScore';
+import MediaScore from './MediaScore';
 
 type CarouselProps = {
-  data: Get_Seasonal_AnimeQuery;
+  data: Get_Seasonal_MediaQuery;
   autoSlideInterval?: number;
 };
 
@@ -80,7 +80,7 @@ export default function Carousel({
                     >
                       {anime?.title?.userPreferred}
                     </Link>
-                    {anime?.meanScore && <AnimeScore score={anime.meanScore} />}
+                    {anime?.meanScore && <MediaScore score={anime.meanScore} />}
                   </div>
                   <div
                     dangerouslySetInnerHTML={{

@@ -7,9 +7,9 @@ import { useAuth } from '@Components/Contexts/AuthContext';
 import Layout from '@Components/Layout';
 import LogIn from '@Pages/LogIn';
 import Home from '@Pages/Home';
-import AnimeHome from '@Pages/Anime';
+import MediaHome from '@Pages/Media';
 import Page404 from '@Pages/Page404';
-import AnimeDetails from '@Pages/Anime/AnimeDetails';
+import MediaDetails from '@Pages/Media/MediaDetails';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -49,8 +49,15 @@ export default function RouteHandler() {
         {
           path: '/anime',
           children: [
-            { path: '', element: <AnimeHome /> },
-            { path: ':id', element: <AnimeDetails /> },
+            { path: '', element: <MediaHome mediaType="ANIME" /> },
+            { path: ':id', element: <MediaDetails mediaType="ANIME" /> },
+          ],
+        },
+        {
+          path: '/manga',
+          children: [
+            { path: '', element: <MediaHome mediaType="MANGA" /> },
+            { path: ':id', element: <MediaDetails mediaType="MANGA" /> },
           ],
         },
         {

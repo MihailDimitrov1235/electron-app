@@ -1,13 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useGetCurrentAnimeQuery } from '@graphql/generated/operations';
+import { useGetCurrentMediaQuery } from '@graphql/generated/operations';
 import { useAuth } from '@Components/Contexts/AuthContext';
-import MediaCard from '@Components/MediaCard';
+import MediaCard from '@Components/Media/MediaCard';
 
 export default function Home() {
   const { userId } = useAuth();
-  const { loading, error, data } = useGetCurrentAnimeQuery({
-    variables: { userId },
+  const { loading, error, data } = useGetCurrentMediaQuery({
+    variables: { userId, mediaType: 'ANIME' },
   });
   if (error) {
     return <p>No data available</p>;

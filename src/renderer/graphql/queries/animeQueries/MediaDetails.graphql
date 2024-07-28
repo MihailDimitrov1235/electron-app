@@ -1,5 +1,5 @@
-query getAnimeDetails($mediaId: Int) {
-  Media(id: $mediaId, type: ANIME) {
+query GetMediaDetails($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
     id
     favourites
     popularity
@@ -7,6 +7,8 @@ query getAnimeDetails($mediaId: Int) {
     episodes
     duration
     chapters
+    volumes
+    type
     title {
       romaji
       english

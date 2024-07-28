@@ -1,5 +1,5 @@
-query GetCurrentAnime($userId: Int) {
-  MediaListCollection(userId: $userId, type: ANIME, status: CURRENT) {
+query GetCurrentMedia($userId: Int, $mediaType: MediaType) {
+  MediaListCollection(userId: $userId, type: $mediaType, status: CURRENT) {
     lists {
       name
       entries {

@@ -1,5 +1,5 @@
-query getAnimeInfo($mediaId: Int) {
-  Media(id: $mediaId, type: ANIME) {
+query GetMediaInfo($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
     id
     description
     relations {

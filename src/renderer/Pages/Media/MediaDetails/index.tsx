@@ -2,20 +2,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetAnimeDetailsQuery } from '@graphql/generated/operations';
-import AnimeInfo from './AnimeInfo';
-import AnimeShortInfo from './AnimeShortInfo';
-import AnimeMainData from './AnimeMainData';
+import { useGetMediaDetailsQuery } from '@graphql/generated/operations';
+import MediaInfo from './MediaInfo';
+import MediaShortInfo from './MediaShortInfo';
+import MediaMainData from './MediaMainData';
+import Characters from './MediaCharacters';
 
-const AnimeTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
+const MediaTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
-export default function AnimeDetails() {
+export default function MediaDetails({
+  mediaType,
+}: {
+  mediaType: 'ANIME' | 'MANGA';
+}) {
   const { id } = useParams();
-  const { loading, error, data } = useGetAnimeDetailsQuery({
-    variables: { mediaId: id },
+  const { loading, error, data } = useGetMediaDetailsQuery({
+    variables: { mediaId: id, mediaType },
   });
 
-  const [openTab, setOpenTab] = useState<string>(AnimeTabs[0]);
+  const [openTab, setOpenTab] = useState<string>(MediaTabs[0]);
 
   if (error) {
     console.error(error);
@@ -39,22 +44,22 @@ export default function AnimeDetails() {
           <div className="w-full h-full bg-gradient-to-b from-background-light/55 to-background-dark" />
         </div>
       )}
-      <AnimeMainData
+      <MediaMainData
         data={data}
         openTab={openTab}
         setOpenTab={setOpenTab}
-        AnimeTabs={AnimeTabs}
+        MediaTabs={MediaTabs}
       />
       <div className="px-8 flex gap-10">
-        <AnimeShortInfo data={data} />
+        <MediaShortInfo data={data} />
         {(() => {
           switch (openTab) {
-            case AnimeTabs[0]:
-              return <AnimeInfo id={id || ''} />;
-            case AnimeTabs[1]:
-              return <AnimeInfo id={id || ''} />;
-            case AnimeTabs[2]:
-              return <AnimeInfo id={id || ''} />;
+            case MediaTabs[0]:
+              return <MediaInfo id={id || ''} mediaType={mediaType} />;
+            case MediaTabs[1]:
+              return <Characters id={id || ''} mediaType={mediaType} />;
+            case MediaTabs[2]:
+              return <MediaInfo id={id || ''} mediaType={mediaType} />;
             default:
               return <div>Unknown component type</div>;
           }
