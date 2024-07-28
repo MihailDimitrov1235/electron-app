@@ -19,6 +19,10 @@ query getAnimeDetails($mediaId: Int) {
       medium
       color
     }
+    trailer {
+      site
+      id
+    }
     meanScore
     bannerImage
     mediaListEntry {
@@ -54,6 +58,52 @@ query getAnimeDetails($mediaId: Int) {
       name
       rank
       isMediaSpoiler
+    }
+    countryOfOrigin
+    season
+    seasonYear
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    studios(isMain: true) {
+      nodes {
+        id
+        name
+        siteUrl
+      }
+    }
+    source
+    synonyms
+  }
+  Page(page: 1) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    mediaList(isFollowing: true, sort: [STATUS], mediaId: $mediaId) {
+      id
+      status
+      score(format: POINT_100)
+      progress
+      progressVolumes
+      user {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+      }
     }
   }
 }

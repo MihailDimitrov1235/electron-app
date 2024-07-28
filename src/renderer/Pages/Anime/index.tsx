@@ -3,7 +3,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 
-import AnimeCard from '@Components/Anime/AnimeCard';
+import MediaCard from '@Components/MediaCard';
 import { useGet_Seasonal_AnimeQuery } from '@graphql/generated/operations';
 import Carousel from '@Components/Anime/Carousel';
 
@@ -41,7 +41,7 @@ export default function AnimeHome() {
         <div className=" text-xl">Trending</div>
         <div className="flex gap-6 overflow-x-scroll pb-2">
           {data.Page.media.map((anime, index) => (
-            <AnimeCard key={index} {...anime} />
+            <MediaCard key={index} {...anime} />
           ))}
         </div>
       </div>

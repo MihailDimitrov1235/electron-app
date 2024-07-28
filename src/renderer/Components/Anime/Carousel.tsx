@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Get_Seasonal_AnimeQuery } from '@graphql/generated/operations';
-import AnimeCard from './AnimeCard';
+import MediaCard from '../MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import AnimeScore from './AnimeScore';
@@ -64,7 +64,7 @@ export default function Carousel({
               alt={`Carousel item ${index + 1}`}
             />
             <div className="absolute flex w-full gap-8 z-20 px-10 top-7">
-              <AnimeCard
+              <MediaCard
                 {...anime}
                 withTitle={false}
                 withEpisodes={false}

@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook } from 'react-icons/io5';
 import Countdown from '@Components/Countdown';
-import EpisodesDisplay from './EpisodesDisplay';
+import EpisodesDisplay from './Anime/EpisodesDisplay';
 
-type RequiredAnimeCardProps = {
+type RequiredMediaCardProps = {
   id?: number;
   meanScore?: number | null;
   coverImage?: {
@@ -32,7 +32,7 @@ type RequiredAnimeCardProps = {
   type?: any;
 };
 
-type OptionalAnimeCardProps = {
+type OptionalMediaCardProps = {
   withTitle?: boolean;
   withEpisodes?: boolean;
   withScore?: boolean;
@@ -44,9 +44,9 @@ type OptionalAnimeCardProps = {
   [key: string]: any;
 };
 
-type AnimeCardPropsType = RequiredAnimeCardProps & OptionalAnimeCardProps;
+type MediaCardPropsType = RequiredMediaCardProps & OptionalMediaCardProps;
 
-export default function AnimeCard({
+export default function MediaCard({
   id,
   meanScore,
   coverImage,
@@ -63,7 +63,7 @@ export default function AnimeCard({
   withType = false,
   size = 3,
   relationship,
-}: AnimeCardPropsType) {
+}: MediaCardPropsType) {
   const width = 46 * size;
   const height = 65 * size;
   const fontSize = Math.min(6.5 * size, 16);

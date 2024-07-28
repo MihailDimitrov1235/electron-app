@@ -52,7 +52,7 @@ function Countdown({ secondsUntil }: CountdownProps) {
       {Object.entries(timeLeft).map(([key, value], index) => (
         <React.Fragment key={key}>
           <span className="flex flex-col">
-            <span className="font-semibold">{value}</span>
+            <span className="font-semibold text-xl">{value}</span>
             <span className="text-xs capitalize">{key}</span>
           </span>
           {index !== Object.entries(timeLeft).length - 1 && ':'}
