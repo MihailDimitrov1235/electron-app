@@ -1,4 +1,5 @@
 const { createThemes } = require('tw-colors');
+const colors = require('tailwindcss/colors');
 
 const defaultColors = {
   watching: '#338543',
@@ -6,6 +7,7 @@ const defaultColors = {
   onHold: '#C9A31F',
   dropped: '#832F30',
   planToWatch: '#747474',
+  score: colors.yellow[400],
 };
 
 const primaryThemeColors = {

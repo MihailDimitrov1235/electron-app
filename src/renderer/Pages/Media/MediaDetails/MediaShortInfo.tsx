@@ -75,7 +75,7 @@ export default function MediaShortInfo({
                 </div>
                 <div className="flex items-center gap-2">
                   {mediaList?.score ? (mediaList.score / 10).toFixed(1) : 0}
-                  <span className="text-yellow-400">
+                  <span className="text-score">
                     <FaStar />
                   </span>
                 </div>

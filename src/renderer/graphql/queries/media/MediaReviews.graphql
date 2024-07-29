@@ -1,0 +1,25 @@
+query GetMediaReviews($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    reviews(page: 1, perPage: 10, sort: [RATING_DESC]) {
+      edges {
+        node {
+          id
+          score
+          rating
+          ratingAmount
+          userRating
+          summary
+          createdAt
+          user {
+            id
+            name
+            avatar {
+              medium
+            }
+          }
+          body
+        }
+      }
+    }
+  }
+}

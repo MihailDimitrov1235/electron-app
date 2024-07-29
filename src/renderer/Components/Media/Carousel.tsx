@@ -9,6 +9,7 @@ import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
+import DOMPurify from 'dompurify';
 
 type CarouselProps = {
   data: GetSeasonalMediaQuery;
@@ -83,8 +84,11 @@ export default function Carousel({
                     {anime?.meanScore && <MediaScore score={anime.meanScore} />}
                   </div>
                   <div
+                    // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
-                      __html: anime?.description || '',
+                      __html: DOMPurify.sanitize(anime?.description || '', {
+                        USE_PROFILES: { html: true },
+                      }),
                     }}
                     className=" text-md line-clamp-6 text-ellipsis"
                   />

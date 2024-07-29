@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   useGetMediaDetailsQuery,
@@ -11,6 +11,7 @@ import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';
 import Characters from './MediaCharacters';
 import MediaStaff from './MediaStaff';
+import MediaReviews from './MediaReviews';
 
 const MediaTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
@@ -20,7 +21,14 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
     variables: { mediaId: Number(id), mediaType },
   });
 
-  const [openTab, setOpenTab] = useState<string>(MediaTabs[0]);
+  const openTabSessionKey = `${mediaType}${id}openTab`;
+  const [openTab, setOpenTab] = useState<string>(
+    sessionStorage.getItem(openTabSessionKey) || MediaTabs[0],
+  );
+
+  useEffect(() => {
+    sessionStorage.setItem(openTabSessionKey, openTab);
+  }, [openTab, openTabSessionKey]);
 
   if (error) {
     console.error(error);
@@ -60,6 +68,8 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
               return <Characters id={id || ''} mediaType={mediaType} />;
             case MediaTabs[2]:
               return <MediaStaff id={id || ''} mediaType={mediaType} />;
+            case MediaTabs[3]:
+              return <MediaReviews id={id || ''} mediaType={mediaType} />;
             default:
               return <div>Unknown component type</div>;
           }

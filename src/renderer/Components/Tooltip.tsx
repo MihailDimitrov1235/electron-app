@@ -6,10 +6,16 @@ type Direction = 'top' | 'right' | 'bottom' | 'left';
 type TooltipProps = {
   text: string;
   direction?: Direction;
+  className?: string;
   children: React.ReactNode;
 };
 
-function Tooltip({ text, direction = 'top', children }: TooltipProps) {
+function Tooltip({
+  text,
+  direction = 'top',
+  className = '',
+  children,
+}: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   const getPositionClasses = (): string => {
@@ -28,7 +34,7 @@ function Tooltip({ text, direction = 'top', children }: TooltipProps) {
   return (
     <div className="relative inline-block">
       <div
-        className="inline-block"
+        className={`flex ${className}`}
         onMouseEnter={() => setIsVisible(true)}
         onMouseLeave={() => setIsVisible(false)}
       >

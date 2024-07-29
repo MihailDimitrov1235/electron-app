@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 
 type TruncatedTextProps = {
   html: string;
@@ -35,7 +36,10 @@ function TruncatedText({
           lineHeight: `${lineHeight}rem`,
           maxHeight: isTruncated ? maxHeightStyle : 'none',
         }}
-        dangerouslySetInnerHTML={{ __html: html }}
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(html, { USE_PROFILES: { html: true } }),
+        }}
       />
       {showButton && (
         <button
