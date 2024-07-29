@@ -2,8 +2,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetMediaDetailsQuery } from '@graphql/generated/operations';
-import { MediaType } from '@graphql/generated/types';
+import { useGetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
+import { MediaType } from '@graphql/generated/types-and-hooks';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';

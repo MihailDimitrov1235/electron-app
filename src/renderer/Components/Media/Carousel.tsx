@@ -4,7 +4,7 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { GetSeasonalMediaQuery } from '@graphql/generated/operations';
+import { GetSeasonalMediaQuery } from '@graphql/generated/types-and-hooks';
 import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';

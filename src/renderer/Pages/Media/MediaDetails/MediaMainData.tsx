@@ -8,7 +8,7 @@ import GenreButton from '@Components/GenreButton';
 import Tabs from '@Components/Tabs';
 import Tag from '@Components/Tag';
 import Tooltip from '@Components/Tooltip';
-import { GetMediaDetailsQuery } from '@graphql/generated/operations';
+import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';

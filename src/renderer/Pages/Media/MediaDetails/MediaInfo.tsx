@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import TruncatedText from '@Components/TruncatedText';
-import { useGetMediaInfoQuery } from '@graphql/generated/operations';
+import { useGetMediaInfoQuery } from '@graphql/generated/types-and-hooks';
 import MediaCard from '@Components/Media/MediaCard';
-import { MediaType } from '@graphql/generated/types';
+import { MediaType } from '@graphql/generated/types-and-hooks';
 
 // eslint-disable-next-line react/require-default-props
 export default function MediaInfo({

@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useGetCurrentMediaQuery } from '@graphql/generated/operations';
+import { useGetCurrentMediaQuery } from '@graphql/generated/types-and-hooks';
 import { useAuth } from '@Components/Contexts/AuthContext';
 import MediaCard from '@Components/Media/MediaCard';
-import { MediaType } from '@graphql/generated/types';
+import { MediaType } from '@graphql/generated/types-and-hooks';
 
 export default function Home() {
   const { userId } = useAuth();

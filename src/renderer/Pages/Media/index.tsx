@@ -3,9 +3,9 @@
 import React from 'react';
 
 import MediaCard from '@Components/Media/MediaCard';
-import { useGetSeasonalMediaQuery } from '@graphql/generated/operations';
+import { useGetSeasonalMediaQuery } from '@graphql/generated/types-and-hooks';
 import Carousel from '@Components/Media/Carousel';
-import { MediaSeason, MediaType } from '@graphql/generated/types';
+import { MediaSeason, MediaType } from '@graphql/generated/types-and-hooks';
 
 export default function MediaHome({ mediaType }: { mediaType: MediaType }) {
   const now = new Date();

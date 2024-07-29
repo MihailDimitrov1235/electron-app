@@ -10,7 +10,7 @@ import Home from '@Pages/Home';
 import MediaHome from '@Pages/Media';
 import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
-import { MediaType } from '@graphql/generated/types';
+import { MediaType } from '@graphql/generated/types-and-hooks';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();

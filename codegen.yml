@@ -2,10 +2,8 @@ overwrite: true
 schema: 'https://graphql.anilist.co'
 documents: 'src/**/*.graphql'
 generates:
-  src/renderer/graphql/generated/types.ts:
+  src/renderer/graphql/generated/types-and-hooks-and-hooks.tsx:
     plugins:
       - 'typescript'
-  src/renderer/graphql/generated/operations.tsx:
-    plugins:
       - 'typescript-operations'
       - 'typescript-react-apollo'

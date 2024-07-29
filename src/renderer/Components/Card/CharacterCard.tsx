@@ -1,5 +1,8 @@
 /* eslint-disable react/require-default-props */
-import { CharacterImage, CharacterName } from '@graphql/generated/types';
+import {
+  CharacterImage,
+  CharacterName,
+} from '@graphql/generated/types-and-hooks';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

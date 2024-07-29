@@ -1,4 +1,4 @@
-import { GetMediaDetailsQuery } from '@graphql/generated/operations';
+import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
 import { useMainUtils } from '@Components/Contexts/MainUtilsContext';
 import { FaStar, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
