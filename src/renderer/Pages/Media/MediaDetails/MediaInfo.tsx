@@ -3,6 +3,7 @@ import React from 'react';
 import TruncatedText from '@Components/TruncatedText';
 import { useGetMediaInfoQuery } from '@graphql/generated/operations';
 import MediaCard from '@Components/Media/MediaCard';
+import { MediaType } from '@graphql/generated/types';
 
 // eslint-disable-next-line react/require-default-props
 export default function MediaInfo({
@@ -10,10 +11,10 @@ export default function MediaInfo({
   mediaType,
 }: {
   id: string;
-  mediaType: 'ANIME' | 'MANGA';
+  mediaType: MediaType;
 }) {
   const { loading, error, data } = useGetMediaInfoQuery({
-    variables: { mediaId: id, mediaType },
+    variables: { mediaId: Number(id), mediaType },
   });
   if (error) {
     console.error(error);
@@ -32,7 +33,7 @@ export default function MediaInfo({
           {data.Media?.relations?.edges?.map((edge) => (
             <MediaCard
               key={edge?.node?.id}
-              relationship={edge?.relationType}
+              relationship={edge?.relationType?.toString()}
               withEpisodes={false}
               withType
               {...edge?.node}

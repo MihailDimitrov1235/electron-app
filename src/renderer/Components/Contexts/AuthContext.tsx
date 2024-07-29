@@ -18,6 +18,7 @@ type AuthContextType = {
   setToken: (token: string | null) => void;
   isLoggedIn: boolean;
   userId: number | null;
+  userAvatar: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

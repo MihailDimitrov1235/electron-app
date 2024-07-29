@@ -3,11 +3,12 @@
 import { useGetCurrentMediaQuery } from '@graphql/generated/operations';
 import { useAuth } from '@Components/Contexts/AuthContext';
 import MediaCard from '@Components/Media/MediaCard';
+import { MediaType } from '@graphql/generated/types';
 
 export default function Home() {
   const { userId } = useAuth();
   const { loading, error, data } = useGetCurrentMediaQuery({
-    variables: { userId, mediaType: 'ANIME' },
+    variables: { userId, mediaType: MediaType.Anime },
   });
   if (error) {
     return <p>No data available</p>;

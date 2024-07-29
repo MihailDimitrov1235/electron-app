@@ -2,16 +2,17 @@
 import React from 'react';
 import { useGetMediaCharactersQuery } from '@graphql/generated/operations';
 import CharacterCard from '@Components/Card/CharacterCard';
+import { MediaType } from '@graphql/generated/types';
 
 export default function Characters({
   id,
   mediaType,
 }: {
   id: string;
-  mediaType: 'ANIME' | 'MANGA';
+  mediaType: MediaType;
 }) {
   const { loading, error, data } = useGetMediaCharactersQuery({
-    variables: { mediaId: id, mediaType },
+    variables: { mediaId: Number(id), mediaType },
   });
   if (error) {
     console.error(error);

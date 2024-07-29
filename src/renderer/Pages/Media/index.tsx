@@ -5,25 +5,22 @@ import React from 'react';
 import MediaCard from '@Components/Media/MediaCard';
 import { useGetSeasonalMediaQuery } from '@graphql/generated/operations';
 import Carousel from '@Components/Media/Carousel';
+import { MediaSeason, MediaType } from '@graphql/generated/types';
 
-export default function MediaHome({
-  mediaType,
-}: {
-  mediaType: 'ANIME' | 'MANGA';
-}) {
+export default function MediaHome({ mediaType }: { mediaType: MediaType }) {
   const now = new Date();
   const month = now.getMonth(); // 0-11
   const year = now.getFullYear();
 
   let season;
   if (month >= 0 && month <= 2) {
-    season = 'WINTER';
+    season = MediaSeason.Winter;
   } else if (month >= 3 && month <= 5) {
-    season = 'SPRING';
+    season = MediaSeason.Spring;
   } else if (month >= 6 && month <= 8) {
-    season = 'SUMMER';
+    season = MediaSeason.Summer;
   } else {
-    season = 'FALL';
+    season = MediaSeason.Fall;
   }
 
   const { loading, error, data } = useGetSeasonalMediaQuery({

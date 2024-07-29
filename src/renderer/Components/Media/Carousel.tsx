@@ -4,14 +4,14 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Get_Seasonal_MediaQuery } from '@graphql/generated/operations';
+import { GetSeasonalMediaQuery } from '@graphql/generated/operations';
 import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
 
 type CarouselProps = {
-  data: Get_Seasonal_MediaQuery;
+  data: GetSeasonalMediaQuery;
   autoSlideInterval?: number;
 };
 

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetMediaDetailsQuery } from '@graphql/generated/operations';
+import { MediaType } from '@graphql/generated/types';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';
@@ -10,14 +11,10 @@ import Characters from './MediaCharacters';
 
 const MediaTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
-export default function MediaDetails({
-  mediaType,
-}: {
-  mediaType: 'ANIME' | 'MANGA';
-}) {
+export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
   const { id } = useParams();
   const { loading, error, data } = useGetMediaDetailsQuery({
-    variables: { mediaId: id, mediaType },
+    variables: { mediaId: Number(id), mediaType },
   });
 
   const [openTab, setOpenTab] = useState<string>(MediaTabs[0]);

@@ -10,6 +10,7 @@ import Home from '@Pages/Home';
 import MediaHome from '@Pages/Media';
 import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
+import { MediaType } from '@graphql/generated/types';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -49,15 +50,21 @@ export default function RouteHandler() {
         {
           path: '/anime',
           children: [
-            { path: '', element: <MediaHome mediaType="ANIME" /> },
-            { path: ':id', element: <MediaDetails mediaType="ANIME" /> },
+            { path: '', element: <MediaHome mediaType={MediaType.Anime} /> },
+            {
+              path: ':id',
+              element: <MediaDetails mediaType={MediaType.Anime} />,
+            },
           ],
         },
         {
           path: '/manga',
           children: [
-            { path: '', element: <MediaHome mediaType="MANGA" /> },
-            { path: ':id', element: <MediaDetails mediaType="MANGA" /> },
+            { path: '', element: <MediaHome mediaType={MediaType.Manga} /> },
+            {
+              path: ':id',
+              element: <MediaDetails mediaType={MediaType.Manga} />,
+            },
           ],
         },
         {
