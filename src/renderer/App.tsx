@@ -7,7 +7,6 @@ import {
   ApolloProvider,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import fetch from 'cross-fetch';
 import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
 import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
 import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
@@ -21,14 +20,20 @@ function App() {
   const client = useMemo(() => {
     const httpLink = createHttpLink({
       uri: 'https://graphql.anilist.co',
-      fetch,
     });
 
     const authLink = setContext((_, { headers }) => {
+      if (token) {
+        return {
+          headers: {
+            ...headers,
+            authorization: `Bearer ${token}`,
+          },
+        };
+      }
       return {
         headers: {
           ...headers,
-          authorization: token ? `Bearer ${token}` : '',
         },
       };
     });

@@ -1,0 +1,20 @@
+query GetMediaStaff($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    id
+    staff {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
+  }
+}

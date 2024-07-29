@@ -1,0 +1,8 @@
+query GetViewerShortData {
+  Viewer {
+    id
+    avatar {
+      large
+    }
+  }
+}

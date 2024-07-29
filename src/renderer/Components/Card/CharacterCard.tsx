@@ -38,8 +38,6 @@ export default function CharacterCard({
   name,
   voiceActors,
 }: CharacterCardPropsType) {
-  console.log(image?.large);
-
   const japaneseVoiceActor = voiceActors?.find(
     (obj) => obj?.languageV2 === 'Japanese',
   );
@@ -54,7 +52,7 @@ export default function CharacterCard({
             aspectRatio: '2/3',
           }}
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 py-1">
           <Link
             to={`/character/${id}`}
             className=" line-clamp-5 overflow-ellipsis hover:text-primary"

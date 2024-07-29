@@ -4705,6 +4705,14 @@ export type GetMediaInfoQueryVariables = Exact<{
 
 export type GetMediaInfoQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, description?: string | null, relations?: { __typename?: 'MediaConnection', edges?: Array<{ __typename?: 'MediaEdge', relationType?: MediaRelation | null, node?: { __typename?: 'Media', id: number, idMal?: number | null, episodes?: number | null, chapters?: number | null, popularity?: number | null, meanScore?: number | null, isAdult?: boolean | null, isFavourite: boolean, format?: MediaFormat | null, type?: MediaType | null, status?: MediaStatus | null, bannerImage?: string | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null, private?: boolean | null, score?: number | null, status?: MediaListStatus | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null, title?: { __typename?: 'MediaTitle', english?: string | null, romaji?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null> | null } | null, recommendations?: { __typename?: 'RecommendationConnection', nodes?: Array<{ __typename?: 'Recommendation', mediaRecommendation?: { __typename?: 'Media', id: number, episodes?: number | null, chapters?: number | null, meanScore?: number | null, isAdult?: boolean | null, format?: MediaFormat | null, type?: MediaType | null, status?: MediaStatus | null, bannerImage?: string | null, title?: { __typename?: 'MediaTitle', english?: string | null, romaji?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', large?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null, score?: number | null } | null } | null } | null> | null } | null } | null };
 
+export type GetMediaStaffQueryVariables = Exact<{
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
+  mediaType?: InputMaybe<MediaType>;
+}>;
+
+
+export type GetMediaStaffQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, staff?: { __typename?: 'StaffConnection', edges?: Array<{ __typename?: 'StaffEdge', id?: number | null, role?: string | null, node?: { __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null } | null> | null } | null } | null };
+
 export type GetSeasonalMediaQueryVariables = Exact<{
   season?: InputMaybe<MediaSeason>;
   year?: InputMaybe<Scalars['Int']['input']>;
@@ -4713,6 +4721,11 @@ export type GetSeasonalMediaQueryVariables = Exact<{
 
 
 export type GetSeasonalMediaQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null };
+
+export type GetViewerShortDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetViewerShortDataQuery = { __typename?: 'Query', Viewer?: { __typename?: 'User', id: number, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null };
 
 
 export const GetCurrentMediaDocument = gql`
@@ -5118,6 +5131,62 @@ export type GetMediaInfoQueryHookResult = ReturnType<typeof useGetMediaInfoQuery
 export type GetMediaInfoLazyQueryHookResult = ReturnType<typeof useGetMediaInfoLazyQuery>;
 export type GetMediaInfoSuspenseQueryHookResult = ReturnType<typeof useGetMediaInfoSuspenseQuery>;
 export type GetMediaInfoQueryResult = Apollo.QueryResult<GetMediaInfoQuery, GetMediaInfoQueryVariables>;
+export const GetMediaStaffDocument = gql`
+    query GetMediaStaff($mediaId: Int, $mediaType: MediaType) {
+  Media(id: $mediaId, type: $mediaType) {
+    id
+    staff {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMediaStaffQuery__
+ *
+ * To run a query within a React component, call `useGetMediaStaffQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMediaStaffQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMediaStaffQuery({
+ *   variables: {
+ *      mediaId: // value for 'mediaId'
+ *      mediaType: // value for 'mediaType'
+ *   },
+ * });
+ */
+export function useGetMediaStaffQuery(baseOptions?: Apollo.QueryHookOptions<GetMediaStaffQuery, GetMediaStaffQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMediaStaffQuery, GetMediaStaffQueryVariables>(GetMediaStaffDocument, options);
+      }
+export function useGetMediaStaffLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMediaStaffQuery, GetMediaStaffQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMediaStaffQuery, GetMediaStaffQueryVariables>(GetMediaStaffDocument, options);
+        }
+export function useGetMediaStaffSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMediaStaffQuery, GetMediaStaffQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMediaStaffQuery, GetMediaStaffQueryVariables>(GetMediaStaffDocument, options);
+        }
+export type GetMediaStaffQueryHookResult = ReturnType<typeof useGetMediaStaffQuery>;
+export type GetMediaStaffLazyQueryHookResult = ReturnType<typeof useGetMediaStaffLazyQuery>;
+export type GetMediaStaffSuspenseQueryHookResult = ReturnType<typeof useGetMediaStaffSuspenseQuery>;
+export type GetMediaStaffQueryResult = Apollo.QueryResult<GetMediaStaffQuery, GetMediaStaffQueryVariables>;
 export const GetSeasonalMediaDocument = gql`
     query GetSeasonalMedia($season: MediaSeason, $year: Int, $mediaType: MediaType) {
   Page(page: 1, perPage: 20) {
@@ -5192,3 +5261,45 @@ export type GetSeasonalMediaQueryHookResult = ReturnType<typeof useGetSeasonalMe
 export type GetSeasonalMediaLazyQueryHookResult = ReturnType<typeof useGetSeasonalMediaLazyQuery>;
 export type GetSeasonalMediaSuspenseQueryHookResult = ReturnType<typeof useGetSeasonalMediaSuspenseQuery>;
 export type GetSeasonalMediaQueryResult = Apollo.QueryResult<GetSeasonalMediaQuery, GetSeasonalMediaQueryVariables>;
+export const GetViewerShortDataDocument = gql`
+    query GetViewerShortData {
+  Viewer {
+    id
+    avatar {
+      large
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetViewerShortDataQuery__
+ *
+ * To run a query within a React component, call `useGetViewerShortDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetViewerShortDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetViewerShortDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetViewerShortDataQuery(baseOptions?: Apollo.QueryHookOptions<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>(GetViewerShortDataDocument, options);
+      }
+export function useGetViewerShortDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>(GetViewerShortDataDocument, options);
+        }
+export function useGetViewerShortDataSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>(GetViewerShortDataDocument, options);
+        }
+export type GetViewerShortDataQueryHookResult = ReturnType<typeof useGetViewerShortDataQuery>;
+export type GetViewerShortDataLazyQueryHookResult = ReturnType<typeof useGetViewerShortDataLazyQuery>;
+export type GetViewerShortDataSuspenseQueryHookResult = ReturnType<typeof useGetViewerShortDataSuspenseQuery>;
+export type GetViewerShortDataQueryResult = Apollo.QueryResult<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>;

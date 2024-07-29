@@ -22,6 +22,13 @@ export default function RouteHandler() {
     return null;
   }
 
+  async function redirectIfLoggedIn() {
+    if (isLoggedIn) {
+      return redirect('/');
+    }
+    return null;
+  }
+
   const router = createBrowserRouter([
     {
       path: '',
@@ -34,12 +41,7 @@ export default function RouteHandler() {
         },
         {
           path: '/login',
-          loader: () => {
-            if (isLoggedIn) {
-              redirect('/');
-            }
-            return null;
-          },
+          loader: redirectIfLoggedIn,
           element: <LogIn />,
         },
         {

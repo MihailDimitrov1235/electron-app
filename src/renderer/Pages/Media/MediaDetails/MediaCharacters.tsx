@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { useGetMediaCharactersQuery } from '@graphql/generated/types-and-hooks';
+import {
+  useGetMediaCharactersQuery,
+  MediaType,
+} from '@graphql/generated/types-and-hooks';
 import CharacterCard from '@Components/Card/CharacterCard';
-import { MediaType } from '@graphql/generated/types-and-hooks';
 
 export default function Characters({
   id,

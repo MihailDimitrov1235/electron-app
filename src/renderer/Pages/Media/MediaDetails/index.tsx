@@ -2,12 +2,15 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
-import { MediaType } from '@graphql/generated/types-and-hooks';
+import {
+  useGetMediaDetailsQuery,
+  MediaType,
+} from '@graphql/generated/types-and-hooks';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';
 import Characters from './MediaCharacters';
+import MediaStaff from './MediaStaff';
 
 const MediaTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
@@ -56,7 +59,7 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
             case MediaTabs[1]:
               return <Characters id={id || ''} mediaType={mediaType} />;
             case MediaTabs[2]:
-              return <MediaInfo id={id || ''} mediaType={mediaType} />;
+              return <MediaStaff id={id || ''} mediaType={mediaType} />;
             default:
               return <div>Unknown component type</div>;
           }
