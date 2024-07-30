@@ -1,6 +1,14 @@
-query GetMediaCharacters($mediaId: Int, $mediaType: MediaType) {
+query GetMediaCharacters(
+  $mediaId: Int
+  $mediaType: MediaType
+  $page: Int
+  $perPage: Int
+) {
   Media(id: $mediaId, type: $mediaType) {
-    characters(sort: [ROLE, FAVOURITES_DESC]) {
+    characters(page: $page, perPage: $perPage, sort: [ROLE, FAVOURITES_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         role
         voiceActors {

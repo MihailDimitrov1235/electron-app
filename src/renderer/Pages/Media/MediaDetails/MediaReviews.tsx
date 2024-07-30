@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import ReviewCard from '@Components/Card/ReviewCard';
+import Pagination from '@Components/Pagination';
 import {
   MediaType,
   useGetMediaReviewsQuery,
 } from '@graphql/generated/types-and-hooks';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function MediaReviews({
   id,
@@ -13,8 +14,14 @@ export default function MediaReviews({
   id: string;
   mediaType: MediaType;
 }) {
+  const [currentPage, setCurrentPage] = useState(1);
   const { loading, error, data } = useGetMediaReviewsQuery({
-    variables: { mediaId: Number(id), mediaType },
+    variables: {
+      mediaId: Number(id),
+      mediaType,
+      page: currentPage,
+      perPage: 8,
+    },
   });
   if (error) {
     console.error(error);
@@ -30,6 +37,14 @@ export default function MediaReviews({
         {data.Media?.reviews?.edges?.map((edge) => (
           <ReviewCard key={edge?.node?.id} {...edge?.node} />
         ))}
+      </div>
+      <div className="mx-auto">
+        <Pagination
+          pages={-1}
+          hasNextPage={!!data.Media?.reviews?.pageInfo?.hasNextPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </div>
   );

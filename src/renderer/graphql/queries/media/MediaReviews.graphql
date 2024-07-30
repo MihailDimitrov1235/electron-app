@@ -1,6 +1,14 @@
-query GetMediaReviews($mediaId: Int, $mediaType: MediaType) {
+query GetMediaReviews(
+  $mediaId: Int
+  $mediaType: MediaType
+  $page: Int
+  $perPage: Int
+) {
   Media(id: $mediaId, type: $mediaType) {
-    reviews(page: 1, perPage: 10, sort: [RATING_DESC]) {
+    reviews(page: $page, perPage: $perPage, sort: [RATING_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         node {
           id
@@ -17,7 +25,6 @@ query GetMediaReviews($mediaId: Int, $mediaType: MediaType) {
               medium
             }
           }
-          body
         }
       }
     }

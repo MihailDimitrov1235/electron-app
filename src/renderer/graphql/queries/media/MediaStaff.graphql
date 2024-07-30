@@ -1,7 +1,15 @@
-query GetMediaStaff($mediaId: Int, $mediaType: MediaType) {
+query GetMediaStaff(
+  $mediaId: Int
+  $mediaType: MediaType
+  $page: Int
+  $perPage: Int
+) {
   Media(id: $mediaId, type: $mediaType) {
     id
-    staff {
+    staff(page: $page, perPage: $perPage) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         id
         role

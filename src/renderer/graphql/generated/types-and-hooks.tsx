@@ -4684,10 +4684,12 @@ export type GetCurrentMediaQuery = { __typename?: 'Query', MediaListCollection?:
 export type GetMediaCharactersQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   mediaType?: InputMaybe<MediaType>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetMediaCharactersQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', characters?: { __typename?: 'CharacterConnection', edges?: Array<{ __typename?: 'CharacterEdge', role?: CharacterRole | null, voiceActors?: Array<{ __typename?: 'Staff', id: number, languageV2?: string | null, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null } | null> | null } | null } | null };
+export type GetMediaCharactersQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', characters?: { __typename?: 'CharacterConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'CharacterEdge', role?: CharacterRole | null, voiceActors?: Array<{ __typename?: 'Staff', id: number, languageV2?: string | null, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type GetMediaDetailsQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
@@ -4708,18 +4710,22 @@ export type GetMediaInfoQuery = { __typename?: 'Query', Media?: { __typename?: '
 export type GetMediaReviewsQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   mediaType?: InputMaybe<MediaType>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetMediaReviewsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', reviews?: { __typename?: 'ReviewConnection', edges?: Array<{ __typename?: 'ReviewEdge', node?: { __typename?: 'Review', id: number, score?: number | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, summary?: string | null, createdAt: number, body?: string | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null } | null } | null> | null } | null } | null };
+export type GetMediaReviewsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', reviews?: { __typename?: 'ReviewConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'ReviewEdge', node?: { __typename?: 'Review', id: number, score?: number | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, summary?: string | null, createdAt: number, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null } | null } | null> | null } | null } | null };
 
 export type GetMediaStaffQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   mediaType?: InputMaybe<MediaType>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetMediaStaffQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, staff?: { __typename?: 'StaffConnection', edges?: Array<{ __typename?: 'StaffEdge', id?: number | null, role?: string | null, node?: { __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null } | null> | null } | null } | null };
+export type GetMediaStaffQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, staff?: { __typename?: 'StaffConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'StaffEdge', id?: number | null, role?: string | null, node?: { __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null } | null> | null } | null } | null };
 
 export type GetSeasonalMediaQueryVariables = Exact<{
   season?: InputMaybe<MediaSeason>;
@@ -4813,9 +4819,12 @@ export type GetCurrentMediaLazyQueryHookResult = ReturnType<typeof useGetCurrent
 export type GetCurrentMediaSuspenseQueryHookResult = ReturnType<typeof useGetCurrentMediaSuspenseQuery>;
 export type GetCurrentMediaQueryResult = Apollo.QueryResult<GetCurrentMediaQuery, GetCurrentMediaQueryVariables>;
 export const GetMediaCharactersDocument = gql`
-    query GetMediaCharacters($mediaId: Int, $mediaType: MediaType) {
+    query GetMediaCharacters($mediaId: Int, $mediaType: MediaType, $page: Int, $perPage: Int) {
   Media(id: $mediaId, type: $mediaType) {
-    characters(sort: [ROLE, FAVOURITES_DESC]) {
+    characters(page: $page, perPage: $perPage, sort: [ROLE, FAVOURITES_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         role
         voiceActors {
@@ -4865,6 +4874,8 @@ export const GetMediaCharactersDocument = gql`
  *   variables: {
  *      mediaId: // value for 'mediaId'
  *      mediaType: // value for 'mediaType'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
  *   },
  * });
  */
@@ -5140,9 +5151,12 @@ export type GetMediaInfoLazyQueryHookResult = ReturnType<typeof useGetMediaInfoL
 export type GetMediaInfoSuspenseQueryHookResult = ReturnType<typeof useGetMediaInfoSuspenseQuery>;
 export type GetMediaInfoQueryResult = Apollo.QueryResult<GetMediaInfoQuery, GetMediaInfoQueryVariables>;
 export const GetMediaReviewsDocument = gql`
-    query GetMediaReviews($mediaId: Int, $mediaType: MediaType) {
+    query GetMediaReviews($mediaId: Int, $mediaType: MediaType, $page: Int, $perPage: Int) {
   Media(id: $mediaId, type: $mediaType) {
-    reviews(page: 1, perPage: 10, sort: [RATING_DESC]) {
+    reviews(page: $page, perPage: $perPage, sort: [RATING_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         node {
           id
@@ -5159,7 +5173,6 @@ export const GetMediaReviewsDocument = gql`
               medium
             }
           }
-          body
         }
       }
     }
@@ -5181,6 +5194,8 @@ export const GetMediaReviewsDocument = gql`
  *   variables: {
  *      mediaId: // value for 'mediaId'
  *      mediaType: // value for 'mediaType'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
  *   },
  * });
  */
@@ -5201,10 +5216,13 @@ export type GetMediaReviewsLazyQueryHookResult = ReturnType<typeof useGetMediaRe
 export type GetMediaReviewsSuspenseQueryHookResult = ReturnType<typeof useGetMediaReviewsSuspenseQuery>;
 export type GetMediaReviewsQueryResult = Apollo.QueryResult<GetMediaReviewsQuery, GetMediaReviewsQueryVariables>;
 export const GetMediaStaffDocument = gql`
-    query GetMediaStaff($mediaId: Int, $mediaType: MediaType) {
+    query GetMediaStaff($mediaId: Int, $mediaType: MediaType, $page: Int, $perPage: Int) {
   Media(id: $mediaId, type: $mediaType) {
     id
-    staff {
+    staff(page: $page, perPage: $perPage) {
+      pageInfo {
+        hasNextPage
+      }
       edges {
         id
         role
@@ -5237,6 +5255,8 @@ export const GetMediaStaffDocument = gql`
  *   variables: {
  *      mediaId: // value for 'mediaId'
  *      mediaType: // value for 'mediaType'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
  *   },
  * });
  */

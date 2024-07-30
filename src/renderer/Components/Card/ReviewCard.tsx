@@ -1,9 +1,6 @@
 /* eslint-disable react/require-default-props */
 import MediaScore from '@Components/Media/MediaScore';
-import Tooltip from '@Components/Tooltip';
-import { ReviewRating } from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
-import { IoMdThumbsUp, IoMdThumbsDown } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 type ReviewCardPropsType = {
@@ -11,7 +8,6 @@ type ReviewCardPropsType = {
   score?: number | null;
   rating?: number | null;
   ratingAmount?: number | null;
-  userRating?: ReviewRating | null;
   summary?: string | null;
   createdAt?: number | null;
   user?: {
@@ -30,7 +26,6 @@ export default function ReviewCard({
   score,
   rating,
   ratingAmount,
-  userRating,
   summary,
   createdAt,
   user,
@@ -42,7 +37,7 @@ export default function ReviewCard({
     >
       <div className="flex gap-2">
         <div
-          className=" aspect-square h-[68px] bg-cover rounded-md"
+          className=" aspect-square h-[64px] bg-cover rounded-md"
           style={{ backgroundImage: `url(${user?.avatar?.medium})` }}
         />
         <div className="flex flex-col justify-between">
@@ -60,7 +55,9 @@ export default function ReviewCard({
           {rating && ratingAmount && (
             <div className="flex flex-col justify-end items-center gap-1">
               <div className="flex gap-1 items-center">
-                <span>{`${rating} / ${ratingAmount}`}</span>
+                <span className=" text-text-light text-sm">{`${rating} / ${
+                  ratingAmount - rating
+                }`}</span>
               </div>
               <div className="w-full bg-red-500 rounded-full overflow-hidden h-2.5">
                 <div
