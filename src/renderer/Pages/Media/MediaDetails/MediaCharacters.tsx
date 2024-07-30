@@ -20,7 +20,7 @@ export default function Characters({
       mediaId: Number(id),
       mediaType,
       page: currentPage,
-      perPage: 6,
+      perPage: mediaType === MediaType.Anime ? 6 : 12,
     },
   });
   if (error) {
@@ -31,9 +31,13 @@ export default function Characters({
     return <div>loading...</div>;
   }
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <div className="text-lg font-semibold">Characters</div>
-      <div className="grid grid-cols-3 gap-4">
+      <div
+        className={`grid grid-cols-${
+          mediaType === MediaType.Manga ? 6 : 3
+        } gap-4`}
+      >
         {data.Media?.characters?.edges?.map((edge) => (
           <CharacterCard
             key={edge?.node?.id}

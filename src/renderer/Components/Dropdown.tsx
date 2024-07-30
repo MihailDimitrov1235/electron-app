@@ -10,7 +10,7 @@ type DropdownProps = {
   // eslint-disable-next-line react/require-default-props
   closeOnSelect?: boolean | undefined;
   // eslint-disable-next-line react/require-default-props
-  classes?: String;
+  className?: String;
 };
 
 export default function Dropdown({
@@ -18,7 +18,7 @@ export default function Dropdown({
   options,
   onSelect,
   closeOnSelect = true,
-  classes = '',
+  className = '',
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,11 +51,12 @@ export default function Dropdown({
   return (
     <div
       ref={dropdownRef}
-      className={`${classes} w-fit h-fit text-text-main text-sm font-small gap-2 shadow-md relative`}
+      className={`${className} w-fit h-fit text-text-main text-sm font-small gap-2 relative `}
     >
       <Button
+        uppercase={false}
         onClick={handleDropdownClick}
-        className={`w-full flex items-center justify-between gap-2 ${
+        className={`w-full flex items-center justify-between gap-2 focus:border-text-main ${
           open ? 'rounded-b-none' : ''
         }`}
       >
@@ -72,7 +73,7 @@ export default function Dropdown({
       <div
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-md`}
+        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full `}
       >
         {options.map((option, index) => (
           <button
@@ -81,7 +82,7 @@ export default function Dropdown({
             type="button"
             className={`${
               index === options.length - 1 && 'rounded-b-md'
-            } text-start px-5 py-2 w-full border border-transparent hover:border-background-dark`}
+            } text-start px-3 py-2 w-full border border-transparent hover:border-background-dark`}
             onClick={() => handleOptionSelect(option)}
           >
             {option}

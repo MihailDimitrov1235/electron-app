@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import TextField from '../../TextField';
-import Button from '../../Button';
-import { useAuth } from '../../Contexts/AuthContext';
+import Button from '@Components/Button';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import TextField from '@Components/TextField';
 
 export default function ProfileTab() {
   const { token, setToken } = useAuth();
   const [authToken, setAuthToken] = useState(token || undefined);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthToken(event.target.value);
+  const handleChange = (newValue: string) => {
+    setAuthToken(newValue);
   };
 
   const handleApplyToken = () => {
@@ -17,7 +17,11 @@ export default function ProfileTab() {
   return (
     <div className="flex gap-2">
       <span>Manually set Anilist token</span>
-      <TextField title="Token" value={authToken} onChange={handleChange} />
+      <TextField
+        title="Token"
+        value={authToken || ''}
+        onChange={handleChange}
+      />
       <Button onClick={handleApplyToken} variant="gradient">
         Apply
       </Button>

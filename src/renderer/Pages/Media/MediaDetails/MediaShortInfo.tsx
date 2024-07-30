@@ -12,14 +12,19 @@ export default function MediaShortInfo({
   const { openUrl } = useMainUtils();
   return (
     <div className="w-[230px] h-full flex flex-col gap-2 shrink-0">
-      <div className="flex justify-between w-full">
-        <div className="text-text-light">Season</div>
-        <div>{data.Media?.season}</div>
-      </div>
-      <div className="flex justify-between w-full">
-        <div className="text-text-light">Season Year</div>
-        <div>{data.Media?.seasonYear}</div>
-      </div>
+      {data.Media?.season && (
+        <div className="flex justify-between w-full">
+          <div className="text-text-light">Season</div>
+          <div>{data.Media.season}</div>
+        </div>
+      )}
+
+      {data.Media?.seasonYear && (
+        <div className="flex justify-between w-full">
+          <div className="text-text-light">Season Year</div>
+          <div>{data.Media.seasonYear}</div>
+        </div>
+      )}
       <div className="flex justify-between w-full">
         <div className="text-text-light">Start date</div>
         {data.Media?.startDate?.day ? (
@@ -42,18 +47,18 @@ export default function MediaShortInfo({
           <div>~</div>
         )}
       </div>
-      <div className="flex justify-between w-full">
-        <div className="text-text-light">Source</div>
-        <div>
-          {data.Media?.source
-            ? String(data.Media.source).replace('_', ' ')
-            : ''}
+      {data.Media?.source && (
+        <div className="flex justify-between w-full">
+          <div className="text-text-light">Source</div>
+          <div>{String(data.Media.source).replace('_', ' ')}</div>
         </div>
-      </div>
-      <div className="flex justify-between w-full">
-        <div className="text-text-light">Country of origin</div>
-        <div>{data.Media?.countryOfOrigin}</div>
-      </div>
+      )}
+      {data.Media?.countryOfOrigin && (
+        <div className="flex justify-between w-full">
+          <div className="text-text-light">Country of origin</div>
+          <div>{data.Media?.countryOfOrigin}</div>
+        </div>
+      )}
       {data.Page?.mediaList && data.Page?.mediaList.length > 0 && (
         <div className="flex flex-col w-full">
           <div className="text-text-light">Following</div>

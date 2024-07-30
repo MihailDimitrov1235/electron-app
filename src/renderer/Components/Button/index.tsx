@@ -6,6 +6,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'gradient' | 'outline' | 'icon' | 'icon-square';
   className?: string;
   Icon?: IconType | null;
+  uppercase?: boolean;
 }
 
 function Button({
@@ -13,10 +14,12 @@ function Button({
   variant = 'default',
   className = '',
   Icon = null,
+  uppercase = true,
   ...buttonProps
 }: ButtonProps) {
-  const commonClassess =
-    ' shadow-md text-center flex items-center justify-center gap-2 uppercase';
+  const commonClassess = `shadow-md text-center flex items-center justify-center gap-2 ${
+    uppercase && 'uppercase'
+  }`;
 
   const iconProps = `w-10 p-0 aspect-square border-background-dark border ring-text-main ${
     buttonProps.disabled ? '!text-devider' : 'hover:ring-1'

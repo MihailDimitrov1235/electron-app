@@ -2,6 +2,7 @@
 /* eslint-disable react/require-default-props */
 import React, { useEffect, useState } from 'react';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import setValueIfNumber from '@Utils/setValueIfNumber';
 import Button from './Button';
 
 type CounterInputProps = {
@@ -45,27 +46,12 @@ export default function CounterInput({
     setValue(eventValue);
   };
 
-  const handleOnBlur = () => {
-    if (!value) {
-      setCount(min);
-    } else if (isNaN(Number(value))) {
-      setValue(count.toString());
-    } else {
-      const validVal = Math.max(
-        min,
-        Math.min(Number(parseFloat(value).toFixed(digitsAfterDecimal)), max),
-      );
-      setCount(validVal);
-      setValue(validVal.toString());
-    }
-  };
-
   return (
     <div className="relative flex items-center gap-[1px]">
       <Button
         onClick={handleDecrement}
         variant="icon-square"
-        className="text-xs p-1 m-0 w-auto h-auto rounded-r-none"
+        className="text-xs p-1 m-0 w-auto h-auto bg-background-main rounded-r-none"
       >
         <FaMinus />
       </Button>
@@ -73,13 +59,23 @@ export default function CounterInput({
         type="text"
         value={value}
         onChange={handleInputChange}
-        onBlur={handleOnBlur}
-        className=" border-background-dark border bg-background-dark hover:ring-1 ring-text-main shadow-md text-sm font-normal max-w-[3rem] text-center outline-none text-primary"
+        onBlur={() =>
+          setValueIfNumber({
+            newValue: value,
+            setInput: setValue,
+            validValue: count.toString(),
+            setValidValue: (newValidValue) => setCount(Number(newValidValue)),
+            min,
+            max,
+            digitsAfterDecimal,
+          })
+        }
+        className=" border-background-dark border bg-background-main hover:ring-1 ring-text-main shadow-md text-sm font-normal max-w-[3rem] text-center outline-none text-primary"
       />
       <Button
         onClick={handleIncrement}
         variant="icon-square"
-        className="text-xs p-1 m-0 w-auto h-auto rounded-l-none"
+        className="text-xs p-1 m-0 w-auto h-auto rounded-l-none bg-background-main"
       >
         <FaPlus />
       </Button>

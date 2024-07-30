@@ -30,8 +30,8 @@ export default function Topbar() {
   const handleGoForward = () => {
     window.electronAPI.goForward();
   };
-  const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
+  const onSearchChange = (newValue: string) => {
+    setSearch(newValue);
   };
   return (
     <div className="w-full bg-background-main p-2 flex justify-between relative items-center">

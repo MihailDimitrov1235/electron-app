@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import MediaListEntryPopover from './MediaListEntryPopover';
 
 type MediaMainDataPropsType = {
   data: GetMediaDetailsQuery;
@@ -33,6 +34,8 @@ export default function MediaMainData({
   const [favorite, setFavorite] = useState<boolean>(false);
   const [watchedEpisodes, setWatchedEpisodes] = useState<number>(0);
   const [userScore, setUserScore] = useState<number>(0);
+  const [openMediaListEntryPopover, setOpenMediaListEntryPopover] =
+    useState(false);
 
   useEffect(() => {
     setFavorite(data?.Media?.isFavourite || false);
@@ -50,7 +53,7 @@ export default function MediaMainData({
 
   const handleStatusClick = () => {
     if (isLoggedIn) {
-      console.log('to be implemented');
+      setOpenMediaListEntryPopover(true);
     } else {
       navigate('/login');
     }
@@ -66,6 +69,11 @@ export default function MediaMainData({
 
   return (
     <div className="relative z-10 p-8 flex gap-8">
+      <MediaListEntryPopover
+        open={openMediaListEntryPopover}
+        setOpen={setOpenMediaListEntryPopover}
+        data={data}
+      />
       <div className="flex flex-col gap-4">
         <MediaCard
           {...data.Media}
@@ -150,9 +158,11 @@ export default function MediaMainData({
               ) : (
                 <div>
                   {data.Media?.chapters && (
-                    <div>data.Media.chapters Chapters</div>
+                    <div>{data.Media.chapters} Chapters</div>
                   )}{' '}
-                  {data.Media?.volumes && <div>data.Media.volumes Volumes</div>}
+                  {data.Media?.volumes && (
+                    <div>{data.Media.volumes} Volumes</div>
+                  )}
                 </div>
               )}
             </div>

@@ -36,7 +36,6 @@ query GetMediaDetails($mediaId: Int, $mediaType: MediaType) {
       notes
       repeat
       customLists
-      updatedAt
       startedAt {
         year
         month
