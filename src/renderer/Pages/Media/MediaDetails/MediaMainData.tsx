@@ -17,6 +17,7 @@ import MediaListEntryPopover from './MediaListEntryPopover';
 
 type MediaMainDataPropsType = {
   data: GetMediaDetailsQuery;
+  setData: React.Dispatch<React.SetStateAction<GetMediaDetailsQuery | null>>;
   openTab: string;
   setOpenTab: React.Dispatch<React.SetStateAction<string>>;
   MediaTabs: string[];
@@ -24,6 +25,7 @@ type MediaMainDataPropsType = {
 
 export default function MediaMainData({
   data,
+  setData,
   openTab,
   setOpenTab,
   MediaTabs,
@@ -77,6 +79,7 @@ export default function MediaMainData({
         open={openMediaListEntryPopover}
         setOpen={setOpenMediaListEntryPopover}
         data={data}
+        setData={setData}
       />
       <div className="flex flex-col gap-4">
         <MediaCard

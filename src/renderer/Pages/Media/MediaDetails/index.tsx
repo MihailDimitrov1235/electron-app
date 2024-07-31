@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import {
   useGetMediaDetailsQuery,
   MediaType,
+  GetMediaDetailsQuery,
 } from '@graphql/generated/types-and-hooks';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
@@ -20,6 +21,14 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
   const { loading, error, data } = useGetMediaDetailsQuery({
     variables: { mediaId: Number(id), mediaType },
   });
+  const [displayData, setDisplayData] = useState<GetMediaDetailsQuery | null>(
+    null,
+  );
+  useEffect(() => {
+    if (data) {
+      setDisplayData(data);
+    }
+  }, [data]);
 
   const openTabSessionKey = `${mediaType}${id}openTab`;
   const [openTab, setOpenTab] = useState<string>(
@@ -34,18 +43,19 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
     console.error(error);
     return <div>error</div>;
   }
-  if (loading || !data) {
+  if (loading || !displayData) {
     return <div>loading...</div>;
   }
 
   return (
     <div className="relative w-full pb-8">
-      {data.Media?.bannerImage && (
+      {displayData.Media?.bannerImage && (
         <div
           className="w-full h-[450px] blur-sm absolute z-0 bg-cover"
           style={{
             backgroundImage: `url(${
-              data.Media?.bannerImage || data.Media.coverImage?.extraLarge
+              displayData.Media?.bannerImage ||
+              displayData.Media.coverImage?.extraLarge
             })`,
           }}
         >
@@ -53,13 +63,14 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
         </div>
       )}
       <MediaMainData
-        data={data}
+        data={displayData}
+        setData={setDisplayData}
         openTab={openTab}
         setOpenTab={setOpenTab}
         MediaTabs={MediaTabs}
       />
       <div className="px-8 flex gap-10">
-        <MediaShortInfo data={data} />
+        <MediaShortInfo data={displayData} />
         {(() => {
           switch (openTab) {
             case MediaTabs[0]:

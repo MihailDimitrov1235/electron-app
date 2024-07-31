@@ -1,0 +1,42 @@
+mutation SaveMediaListEntry(
+  $mediaId: Int
+  $status: MediaListStatus
+  $scoreRaw: Int
+  $progress: Int
+  $private: Boolean
+  $notes: String
+  $repeats: Int
+  $startedAt: FuzzyDateInput
+  $completedAt: FuzzyDateInput
+) {
+  SaveMediaListEntry(
+    mediaId: $mediaId
+    status: $status
+    scoreRaw: $scoreRaw
+    progress: $progress
+    private: $private
+    notes: $notes
+    repeat: $repeats
+    startedAt: $startedAt
+    completedAt: $completedAt
+  ) {
+    id
+    status
+    score(format: POINT_100)
+    progress
+    private
+    notes
+    repeat
+    customLists
+    startedAt {
+      year
+      month
+      day
+    }
+    completedAt {
+      year
+      month
+      day
+    }
+  }
+}

@@ -4673,6 +4673,43 @@ export type YearStats = {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type DeleteMediaListEntryMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteMediaListEntryMutation = { __typename?: 'Mutation', DeleteMediaListEntry?: { __typename?: 'Deleted', deleted?: boolean | null } | null };
+
+export type SaveMediaListEntryMutationVariables = Exact<{
+  mediaId?: InputMaybe<Scalars['Int']['input']>;
+  status?: InputMaybe<MediaListStatus>;
+  scoreRaw?: InputMaybe<Scalars['Int']['input']>;
+  progress?: InputMaybe<Scalars['Int']['input']>;
+  private?: InputMaybe<Scalars['Boolean']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  repeats?: InputMaybe<Scalars['Int']['input']>;
+  startedAt?: InputMaybe<FuzzyDateInput>;
+  completedAt?: InputMaybe<FuzzyDateInput>;
+}>;
+
+
+export type SaveMediaListEntryMutation = { __typename?: 'Mutation', SaveMediaListEntry?: { __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null };
+
+export type UpdateMediaListEntriesMutationVariables = Exact<{
+  ids?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>> | InputMaybe<Scalars['Int']['input']>>;
+  status?: InputMaybe<MediaListStatus>;
+  scoreRaw?: InputMaybe<Scalars['Int']['input']>;
+  progress?: InputMaybe<Scalars['Int']['input']>;
+  private?: InputMaybe<Scalars['Boolean']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  repeats?: InputMaybe<Scalars['Int']['input']>;
+  startedAt?: InputMaybe<FuzzyDateInput>;
+  completedAt?: InputMaybe<FuzzyDateInput>;
+}>;
+
+
+export type UpdateMediaListEntriesMutation = { __typename?: 'Mutation', UpdateMediaListEntries?: Array<{ __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null> | null };
+
 export type GetCurrentMediaQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['Int']['input']>;
   mediaType?: InputMaybe<MediaType>;
@@ -4697,7 +4734,7 @@ export type GetMediaDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetMediaDetailsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, favourites?: number | null, popularity?: number | null, status?: MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, source?: MediaSource | null, format?: MediaFormat | null, genres?: Array<string | null> | null, countryOfOrigin?: any | null, season?: MediaSeason | null, seasonYear?: number | null, synonyms?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, trailer?: { __typename?: 'MediaTrailer', site?: string | null, id?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, isMediaSpoiler?: boolean | null } | null> | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, endDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, studios?: { __typename?: 'StudioConnection', nodes?: Array<{ __typename?: 'Studio', id: number, name: string, siteUrl?: string | null } | null> | null } | null } | null, Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaList?: Array<{ __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null } | null> | null } | null };
+export type GetMediaDetailsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, favourites?: number | null, popularity?: number | null, status?: MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, source?: MediaSource | null, format?: MediaFormat | null, genres?: Array<string | null> | null, countryOfOrigin?: any | null, season?: MediaSeason | null, seasonYear?: number | null, synonyms?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, trailer?: { __typename?: 'MediaTrailer', site?: string | null, id?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, isMediaSpoiler?: boolean | null } | null> | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, endDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, studios?: { __typename?: 'StudioConnection', nodes?: Array<{ __typename?: 'Studio', id: number, name: string, siteUrl?: string | null } | null> | null } | null } | null, Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaList?: Array<{ __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null } | null> | null } | null };
 
 export type GetMediaInfoQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
@@ -4742,6 +4779,175 @@ export type GetViewerShortDataQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetViewerShortDataQuery = { __typename?: 'Query', Viewer?: { __typename?: 'User', id: number, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null };
 
 
+export const DeleteMediaListEntryDocument = gql`
+    mutation DeleteMediaListEntry($id: Int) {
+  DeleteMediaListEntry(id: $id) {
+    deleted
+  }
+}
+    `;
+export type DeleteMediaListEntryMutationFn = Apollo.MutationFunction<DeleteMediaListEntryMutation, DeleteMediaListEntryMutationVariables>;
+
+/**
+ * __useDeleteMediaListEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteMediaListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMediaListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMediaListEntryMutation, { data, loading, error }] = useDeleteMediaListEntryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteMediaListEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMediaListEntryMutation, DeleteMediaListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMediaListEntryMutation, DeleteMediaListEntryMutationVariables>(DeleteMediaListEntryDocument, options);
+      }
+export type DeleteMediaListEntryMutationHookResult = ReturnType<typeof useDeleteMediaListEntryMutation>;
+export type DeleteMediaListEntryMutationResult = Apollo.MutationResult<DeleteMediaListEntryMutation>;
+export type DeleteMediaListEntryMutationOptions = Apollo.BaseMutationOptions<DeleteMediaListEntryMutation, DeleteMediaListEntryMutationVariables>;
+export const SaveMediaListEntryDocument = gql`
+    mutation SaveMediaListEntry($mediaId: Int, $status: MediaListStatus, $scoreRaw: Int, $progress: Int, $private: Boolean, $notes: String, $repeats: Int, $startedAt: FuzzyDateInput, $completedAt: FuzzyDateInput) {
+  SaveMediaListEntry(
+    mediaId: $mediaId
+    status: $status
+    scoreRaw: $scoreRaw
+    progress: $progress
+    private: $private
+    notes: $notes
+    repeat: $repeats
+    startedAt: $startedAt
+    completedAt: $completedAt
+  ) {
+    id
+    status
+    score(format: POINT_100)
+    progress
+    private
+    notes
+    repeat
+    customLists
+    startedAt {
+      year
+      month
+      day
+    }
+    completedAt {
+      year
+      month
+      day
+    }
+  }
+}
+    `;
+export type SaveMediaListEntryMutationFn = Apollo.MutationFunction<SaveMediaListEntryMutation, SaveMediaListEntryMutationVariables>;
+
+/**
+ * __useSaveMediaListEntryMutation__
+ *
+ * To run a mutation, you first call `useSaveMediaListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveMediaListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveMediaListEntryMutation, { data, loading, error }] = useSaveMediaListEntryMutation({
+ *   variables: {
+ *      mediaId: // value for 'mediaId'
+ *      status: // value for 'status'
+ *      scoreRaw: // value for 'scoreRaw'
+ *      progress: // value for 'progress'
+ *      private: // value for 'private'
+ *      notes: // value for 'notes'
+ *      repeats: // value for 'repeats'
+ *      startedAt: // value for 'startedAt'
+ *      completedAt: // value for 'completedAt'
+ *   },
+ * });
+ */
+export function useSaveMediaListEntryMutation(baseOptions?: Apollo.MutationHookOptions<SaveMediaListEntryMutation, SaveMediaListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveMediaListEntryMutation, SaveMediaListEntryMutationVariables>(SaveMediaListEntryDocument, options);
+      }
+export type SaveMediaListEntryMutationHookResult = ReturnType<typeof useSaveMediaListEntryMutation>;
+export type SaveMediaListEntryMutationResult = Apollo.MutationResult<SaveMediaListEntryMutation>;
+export type SaveMediaListEntryMutationOptions = Apollo.BaseMutationOptions<SaveMediaListEntryMutation, SaveMediaListEntryMutationVariables>;
+export const UpdateMediaListEntriesDocument = gql`
+    mutation UpdateMediaListEntries($ids: [Int], $status: MediaListStatus, $scoreRaw: Int, $progress: Int, $private: Boolean, $notes: String, $repeats: Int, $startedAt: FuzzyDateInput, $completedAt: FuzzyDateInput) {
+  UpdateMediaListEntries(
+    ids: $ids
+    status: $status
+    scoreRaw: $scoreRaw
+    progress: $progress
+    private: $private
+    notes: $notes
+    repeat: $repeats
+    startedAt: $startedAt
+    completedAt: $completedAt
+  ) {
+    id
+    status
+    score(format: POINT_100)
+    progress
+    private
+    notes
+    repeat
+    customLists
+    startedAt {
+      year
+      month
+      day
+    }
+    completedAt {
+      year
+      month
+      day
+    }
+  }
+}
+    `;
+export type UpdateMediaListEntriesMutationFn = Apollo.MutationFunction<UpdateMediaListEntriesMutation, UpdateMediaListEntriesMutationVariables>;
+
+/**
+ * __useUpdateMediaListEntriesMutation__
+ *
+ * To run a mutation, you first call `useUpdateMediaListEntriesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMediaListEntriesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMediaListEntriesMutation, { data, loading, error }] = useUpdateMediaListEntriesMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *      status: // value for 'status'
+ *      scoreRaw: // value for 'scoreRaw'
+ *      progress: // value for 'progress'
+ *      private: // value for 'private'
+ *      notes: // value for 'notes'
+ *      repeats: // value for 'repeats'
+ *      startedAt: // value for 'startedAt'
+ *      completedAt: // value for 'completedAt'
+ *   },
+ * });
+ */
+export function useUpdateMediaListEntriesMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMediaListEntriesMutation, UpdateMediaListEntriesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMediaListEntriesMutation, UpdateMediaListEntriesMutationVariables>(UpdateMediaListEntriesDocument, options);
+      }
+export type UpdateMediaListEntriesMutationHookResult = ReturnType<typeof useUpdateMediaListEntriesMutation>;
+export type UpdateMediaListEntriesMutationResult = Apollo.MutationResult<UpdateMediaListEntriesMutation>;
+export type UpdateMediaListEntriesMutationOptions = Apollo.BaseMutationOptions<UpdateMediaListEntriesMutation, UpdateMediaListEntriesMutationVariables>;
 export const GetCurrentMediaDocument = gql`
     query GetCurrentMedia($userId: Int, $mediaType: MediaType) {
   MediaListCollection(userId: $userId, type: $mediaType, status: CURRENT) {
@@ -4934,7 +5140,6 @@ export const GetMediaDetailsDocument = gql`
       notes
       repeat
       customLists
-      updatedAt
       startedAt {
         year
         month

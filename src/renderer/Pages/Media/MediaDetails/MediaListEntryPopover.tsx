@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/require-default-props */
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { FaRepeat } from 'react-icons/fa6';
@@ -7,9 +8,12 @@ import TextField from '@Components/TextField';
 import {
   GetMediaDetailsQuery,
   MediaListStatus,
+  useSaveMediaListEntryMutation,
+  useUpdateMediaListEntriesMutation,
+  useDeleteMediaListEntryMutation,
 } from '@graphql/generated/types-and-hooks';
 import getDateFromDateType from '@Utils/getDateFromDateType';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Button from '@Components/Button';
 
@@ -17,27 +21,92 @@ type MediaListEntryPopoverPropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: GetMediaDetailsQuery;
+  setData: React.Dispatch<React.SetStateAction<GetMediaDetailsQuery | null>>;
 };
 
 export default function MediaListEntryPopover({
   open,
   setOpen,
   data,
+  setData,
 }: MediaListEntryPopoverPropsType) {
   const [moreOptions, setMoreOptions] = useState(false);
+  const [saveMediaListEntry, { data: saveMutationData }] =
+    useSaveMediaListEntryMutation();
+  const [updateMediaListEntries, { data: updateMutationData }] =
+    useUpdateMediaListEntriesMutation();
+  const [deleteMediaListEntry, { data: deleteMutationData }] =
+    useDeleteMediaListEntryMutation();
+  const defaultFormData = {
+    id: data.Media?.mediaListEntry?.id ?? null,
+    mediaId: data.Media?.id,
+    status: MediaListStatus.Current,
+    score: 0,
+    progress: 0,
+    private: false,
+    notes: '',
+    repeat: 0,
+    startedAt: null,
+    completedAt: null,
+  };
   const [formData, setFormData] = useState(
-    data.Media?.mediaListEntry || {
-      id: data.Media?.id ?? 0,
-      status: MediaListStatus.Current,
-      score: 0,
-      progress: 0,
-      private: false,
-      notes: '',
-      repeat: 0,
-      startedAt: null,
-      completedAt: null,
-    },
+    data.Media?.mediaListEntry ?? defaultFormData,
   );
+
+  function changeMediaListEntry(
+    mediaListEntry?: {
+      id: number;
+      status?: MediaListStatus | null;
+      score?: number | null;
+      progress?: number | null;
+      private?: boolean | null;
+      notes?: string | null;
+      repeat?: number | null;
+      customLists?: any | null;
+      startedAt?: {
+        year?: number | null;
+        month?: number | null;
+        day?: number | null;
+      } | null;
+      completedAt?: {
+        year?: number | null;
+        month?: number | null;
+        day?: number | null;
+      } | null;
+    } | null,
+  ) {
+    setData((prev) => ({
+      ...prev,
+      Media: {
+        id: prev?.Media?.id ?? 0,
+        isFavourite: prev?.Media?.isFavourite ?? false,
+        ...prev?.Media,
+        mediaListEntry,
+      },
+    }));
+  }
+  useEffect(() => {
+    if (saveMutationData?.SaveMediaListEntry) {
+      changeMediaListEntry(saveMutationData.SaveMediaListEntry);
+      console.log('snackbar');
+      setOpen(false);
+    }
+  }, [saveMutationData]);
+  useEffect(() => {
+    if (updateMutationData?.UpdateMediaListEntries) {
+      changeMediaListEntry(updateMutationData.UpdateMediaListEntries[0]);
+      console.log('snackbar');
+      setOpen(false);
+    }
+  }, [updateMutationData]);
+  useEffect(() => {
+    if (deleteMutationData?.DeleteMediaListEntry?.deleted) {
+      changeMediaListEntry(null);
+      console.log('snackbar');
+      setOpen(false);
+    }
+  }, [deleteMutationData]);
+
   const statusDropdownOptions = {
     Watching: MediaListStatus.Current,
     Completed: MediaListStatus.Completed,
@@ -49,15 +118,16 @@ export default function MediaListEntryPopover({
 
   const handleApply = () => {
     if (data.Media?.mediaListEntry) {
-      console.log('update');
+      updateMediaListEntries({
+        variables: { ids: [data.Media.mediaListEntry.id], ...formData },
+      });
     } else {
-      console.log('create');
+      saveMediaListEntry({ variables: { ...formData } });
     }
-    console.log(formData);
   };
   const handleDelete = () => {
     if (data.Media?.mediaListEntry) {
-      console.log('delete ', data.Media.mediaListEntry.id);
+      deleteMediaListEntry({ variables: { id: data.Media.mediaListEntry.id } });
     }
   };
 
@@ -95,7 +165,7 @@ export default function MediaListEntryPopover({
                           statusDropdownOptions[
                             key as keyof typeof statusDropdownOptions
                           ] === formData.status,
-                      ) || ''
+                      ) ?? ''
                     }
                     options={Object.keys(statusDropdownOptions)}
                     onSelect={(option) =>
@@ -120,7 +190,7 @@ export default function MediaListEntryPopover({
                       max: 10,
                       digitsAfterDecimal: 1,
                     }}
-                    value={formData.score?.toString() || '0'}
+                    value={formData.score?.toString() ?? '0'}
                     onChange={(val) => {
                       setFormData((prev) => ({
                         ...prev,
@@ -136,15 +206,23 @@ export default function MediaListEntryPopover({
                   title="Progress"
                   endElement={
                     <div className="flex">
-                      / {data.Media?.chapters || data.Media?.episodes || 99999}
+                      /{' '}
+                      {data.Media?.chapters ??
+                        data.Media?.episodes ??
+                        data.Media?.nextAiringEpisode?.episode ??
+                        '~'}
                     </div>
                   }
                   number={{
                     min: 0,
-                    max: data.Media?.chapters || data.Media?.episodes || 99999,
+                    max:
+                      data.Media?.chapters ??
+                      data.Media?.episodes ??
+                      (data.Media?.nextAiringEpisode?.episode ?? 0) - 1 ??
+                      99999,
                     digitsAfterDecimal: 0,
                   }}
-                  value={formData.progress?.toString() || '0'}
+                  value={formData.progress?.toString() ?? '0'}
                   onChange={(val) => {
                     setFormData((prev) => ({
                       ...prev,
@@ -166,22 +244,23 @@ export default function MediaListEntryPopover({
                     value={{
                       startDate: formData.startedAt
                         ? new Date(
-                            formData.startedAt.year || new Date().getFullYear(),
-                            formData.startedAt.month || new Date().getMonth(),
-                            formData.startedAt.day || new Date().getDate(),
+                            formData.startedAt.year ?? new Date().getFullYear(),
+                            formData.startedAt.month ?? new Date().getMonth(),
+                            formData.startedAt.day ?? new Date().getDate(),
                           )
                         : null,
                       endDate: formData.startedAt
                         ? new Date(
-                            formData.startedAt.year || new Date().getFullYear(),
-                            formData.startedAt.month || new Date().getMonth(),
-                            formData.startedAt.day || new Date().getDate(),
+                            formData.startedAt.year ?? new Date().getFullYear(),
+                            formData.startedAt.month ?? new Date().getMonth(),
+                            formData.startedAt.day ?? new Date().getDate(),
                           )
                         : null,
                     }}
                     onChange={(newValue) => {
                       setFormData((prev) => ({
                         ...prev,
+                        id: prev.id ?? 0,
                         startedAt: newValue?.startDate
                           ? getDateFromDateType(newValue.startDate)
                           : null,
@@ -201,24 +280,25 @@ export default function MediaListEntryPopover({
                     value={{
                       startDate: formData.completedAt
                         ? new Date(
-                            formData.completedAt.year ||
+                            formData.completedAt.year ??
                               new Date().getFullYear(),
-                            formData.completedAt.month || new Date().getMonth(),
-                            formData.completedAt.day || new Date().getDate(),
+                            formData.completedAt.month ?? new Date().getMonth(),
+                            formData.completedAt.day ?? new Date().getDate(),
                           )
                         : null,
                       endDate: formData.completedAt
                         ? new Date(
-                            formData.completedAt.year ||
+                            formData.completedAt.year ??
                               new Date().getFullYear(),
-                            formData.completedAt.month || new Date().getMonth(),
-                            formData.completedAt.day || new Date().getDate(),
+                            formData.completedAt.month ?? new Date().getMonth(),
+                            formData.completedAt.day ?? new Date().getDate(),
                           )
                         : null,
                     }}
                     onChange={(newValue) => {
                       setFormData((prev) => ({
                         ...prev,
+                        id: prev.id ?? 0,
                         completedAt: newValue?.endDate
                           ? getDateFromDateType(newValue.endDate)
                           : null,
@@ -242,7 +322,7 @@ export default function MediaListEntryPopover({
                 <TextField
                   title="Repeats"
                   endElement={<FaRepeat />}
-                  value={formData.repeat?.toString() || '0'}
+                  value={formData.repeat?.toString() ?? '0'}
                   onChange={(newValue) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -273,7 +353,7 @@ export default function MediaListEntryPopover({
                 textarea={{ rows: 4 }}
                 className="w-full"
                 title="Notes"
-                value={formData.notes || ''}
+                value={formData.notes ?? ''}
                 onChange={(newValue) =>
                   setFormData((prev) => ({
                     ...prev,

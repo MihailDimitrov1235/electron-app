@@ -5,7 +5,7 @@
 import React from 'react';
 import NumberTextfield from './NumberTextField';
 import StringTextfield from './StringTextField';
-import TextArea from './Textarea';
+import TextArea from './TextArea';
 
 export type TextFieldPropsType = {
   title: string;
