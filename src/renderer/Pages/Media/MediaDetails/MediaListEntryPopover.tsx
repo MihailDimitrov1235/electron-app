@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Button from '@Components/Button';
 import changeMediaListEntry from '@Utils/changeMediaListEntry';
+import { enqueueSnackbar } from 'notistack';
 
 type MediaListEntryPopoverPropsType = {
   open: boolean;
@@ -72,7 +73,7 @@ export default function MediaListEntryPopover({
         setData,
         mediaListEntry: saveMutationData.SaveMediaListEntry,
       });
-      console.log('snackbar');
+      enqueueSnackbar({ variant: 'success', message: 'Added to list' });
       setOpen(false);
     }
   }, [saveMutationData]);
@@ -82,7 +83,7 @@ export default function MediaListEntryPopover({
         setData,
         mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
       });
-      console.log('snackbar');
+      enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
       setOpen(false);
     }
   }, [updateMutationData]);
@@ -95,7 +96,7 @@ export default function MediaListEntryPopover({
         setData,
         mediaListEntry: null,
       });
-      console.log('snackbar');
+      enqueueSnackbar({ variant: 'success', message: 'Deleted entry' });
       setOpen(false);
     }
   }, [deleteMutationData]);

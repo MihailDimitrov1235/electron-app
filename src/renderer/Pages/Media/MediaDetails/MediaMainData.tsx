@@ -24,6 +24,7 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import changeMediaListEntry from '@Utils/changeMediaListEntry';
+import { enqueueSnackbar } from 'notistack';
 import MediaListEntryPopover from './MediaListEntryPopover';
 
 type MediaMainDataPropsType = {
@@ -64,7 +65,7 @@ export default function MediaMainData({
         setData,
         mediaListEntry: saveMutationData.SaveMediaListEntry,
       });
-      console.log('snackbar');
+      enqueueSnackbar({ variant: 'success', message: 'Added to list' });
     }
   }, [saveMutationData]);
   useEffect(() => {
@@ -73,12 +74,13 @@ export default function MediaMainData({
         setData,
         mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
       });
-      console.log('snackbar');
+      enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
     }
   }, [updateMutationData]);
 
   useEffect(() => {
     const handleToggleSuccess = () => {
+      enqueueSnackbar({ variant: 'success', message: 'Updated favourites' });
       setData((prev) => ({
         ...prev,
         Media: {
