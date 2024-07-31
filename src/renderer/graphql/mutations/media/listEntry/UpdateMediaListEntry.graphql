@@ -3,9 +3,10 @@ mutation UpdateMediaListEntries(
   $status: MediaListStatus
   $scoreRaw: Int
   $progress: Int
+  $progressVolumes: Int
   $private: Boolean
   $notes: String
-  $repeats: Int
+  $repeat: Int
   $startedAt: FuzzyDateInput
   $completedAt: FuzzyDateInput
 ) {
@@ -14,9 +15,10 @@ mutation UpdateMediaListEntries(
     status: $status
     scoreRaw: $scoreRaw
     progress: $progress
+    progressVolumes: $progressVolumes
     private: $private
     notes: $notes
-    repeat: $repeats
+    repeat: $repeat
     startedAt: $startedAt
     completedAt: $completedAt
   ) {
@@ -24,6 +26,7 @@ mutation UpdateMediaListEntries(
     status
     score(format: POINT_100)
     progress
+    progressVolumes
     private
     notes
     repeat

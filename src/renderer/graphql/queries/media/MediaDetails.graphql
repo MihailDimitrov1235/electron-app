@@ -32,6 +32,7 @@ query GetMediaDetails($mediaId: Int, $mediaType: MediaType) {
       status
       score(format: POINT_100)
       progress
+      progressVolumes
       private
       notes
       repeat

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import MediaCard from '@Components/Media/MediaCard';
 import MediaScore from '@Components/Media/MediaScore';
@@ -8,7 +9,12 @@ import GenreButton from '@Components/GenreButton';
 import Tabs from '@Components/Tabs';
 import Tag from '@Components/Tag';
 import Tooltip from '@Components/Tooltip';
-import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
+import {
+  GetMediaDetailsQuery,
+  MediaType,
+  useToggleFavouriteAnimeMutation,
+  useToggleFavouriteMangaMutation,
+} from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
@@ -33,15 +39,39 @@ export default function MediaMainData({
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const [favorite, setFavorite] = useState<boolean>(false);
-  const [watchedEpisodes, setWatchedEpisodes] = useState<number>(0);
+  const [toggleFavouriteAnime, { data: toggleFavouriteAnimeData }] =
+    useToggleFavouriteAnimeMutation();
+  const [toggleFavouriteManga, { data: toggleFavouriteMangaData }] =
+    useToggleFavouriteMangaMutation();
+
+  useEffect(() => {
+    const handleToggleSuccess = () => {
+      setData((prev) => ({
+        ...prev,
+        Media: {
+          ...prev?.Media,
+          id: prev?.Media?.id || 1,
+          isFavourite: !prev?.Media?.isFavourite,
+        },
+      }));
+    };
+
+    if (toggleFavouriteMangaData) {
+      handleToggleSuccess();
+    } else if (toggleFavouriteAnimeData) {
+      handleToggleSuccess();
+    }
+  }, [toggleFavouriteMangaData, toggleFavouriteAnimeData]);
+
+  const [progress, setProgress] = useState<number>(0);
+  const [progressVolumes, setProgressVolumes] = useState<number>(0);
   const [userScore, setUserScore] = useState<number>(0);
   const [openMediaListEntryPopover, setOpenMediaListEntryPopover] =
     useState(false);
 
   useEffect(() => {
-    setFavorite(data?.Media?.isFavourite || false);
-    setWatchedEpisodes(data?.Media?.mediaListEntry?.progress || 0);
+    setProgress(data?.Media?.mediaListEntry?.progress || 0);
+    setProgressVolumes(data.Media?.mediaListEntry?.progressVolumes || 0);
     setUserScore(
       data?.Media?.mediaListEntry?.score
         ? data.Media.mediaListEntry.score / 10
@@ -50,10 +80,10 @@ export default function MediaMainData({
   }, [data]);
 
   const handleFavoriteChange = () => {
-    if (isLoggedIn) {
-      setFavorite(!favorite);
-    } else {
-      navigate('/login');
+    if (data.Media?.type === MediaType.Anime) {
+      toggleFavouriteAnime({ variables: { animeId: data.Media.id } });
+    } else if (data.Media?.type === MediaType.Manga) {
+      toggleFavouriteManga({ variables: { mangaId: data.Media.id } });
     }
   };
 
@@ -99,22 +129,34 @@ export default function MediaMainData({
           >
             {data.Media?.mediaListEntry?.status || 'Add to list'}
           </Button>
-          <Button
-            onClick={handleFavoriteChange}
-            variant="icon-square"
-            className="bg-secondary ring-primary text-primary-background"
+          <Tooltip
+            text={
+              data.Media?.isFavourite
+                ? 'Remove From Favourites'
+                : 'Add To Favourites'
+            }
+            direction="right"
           >
-            {favorite ? <FaHeart /> : <FaRegHeart />}
-          </Button>
+            <Button
+              onClick={handleFavoriteChange}
+              variant="icon-square"
+              className="bg-secondary ring-primary text-primary-background"
+            >
+              {data.Media?.isFavourite ? <FaHeart /> : <FaRegHeart />}
+            </Button>
+          </Tooltip>
         </div>
         <div className=" flex justify-between">
-          <div>Progress</div>
+          <div>
+            {data.Media?.type === MediaType.Anime ? 'Episode' : 'Chapter'}{' '}
+            Progress
+          </div>
           <CounterInput
-            count={watchedEpisodes}
-            setCount={setWatchedEpisodes}
+            count={progress}
+            setCount={setProgress}
             min={0}
             max={
-              data.Media?.type === 'ANIME'
+              data.Media?.type === MediaType.Anime
                 ? data.Media?.episodes ||
                   data.Media?.nextAiringEpisode?.episode ||
                   99999
@@ -123,6 +165,18 @@ export default function MediaMainData({
             digitsAfterDecimal={0}
           />
         </div>
+        {data.Media?.type === MediaType.Manga && (
+          <div className=" flex justify-between">
+            <div>Volume Progress</div>
+            <CounterInput
+              count={progressVolumes}
+              setCount={setProgressVolumes}
+              min={0}
+              max={data.Media.volumes || 99999}
+              digitsAfterDecimal={0}
+            />
+          </div>
+        )}
         <div className=" flex justify-between">
           <div>Score</div>
           <CounterInput

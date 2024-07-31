@@ -8,11 +8,12 @@ type PopoverPropsType = {
 };
 
 export default function Popover({ open, setOpen, children }: PopoverPropsType) {
+  if (!open) {
+    return <div className="absolute" />;
+  }
   return (
     <div
-      className={`${
-        open ? 'visible' : 'hidden'
-      }  fixed top-0 right-0 left-0 z-40 justify-center items-center w-full h-full text-text-main`}
+      className={` fixed top-0 right-0 left-0 z-40 justify-center items-center w-full h-full text-text-main`}
     >
       <button
         type="button"

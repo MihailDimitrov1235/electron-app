@@ -7,7 +7,7 @@ import Button from './Button';
 
 type CounterInputProps = {
   count: number;
-  setCount: React.Dispatch<React.SetStateAction<number>>;
+  setCount: (newValue: number) => void;
   min?: number;
   max?: number;
   digitsAfterDecimal?: number;
@@ -28,17 +28,11 @@ export default function CounterInput({
     setValue(count.toString());
   }, [count]);
   const handleIncrement = () => {
-    setCount((prevCount) => {
-      const newCount = Math.min(prevCount + step, max);
-      return Number(newCount.toFixed(digitsAfterDecimal));
-    });
+    setCount(Number(Math.min(count + step, max).toFixed(digitsAfterDecimal)));
   };
 
   const handleDecrement = () => {
-    setCount((prevCount) => {
-      const newCount = Math.max(prevCount - step, min);
-      return Number(newCount.toFixed(digitsAfterDecimal));
-    });
+    setCount(Number(Math.min(count - step, max).toFixed(digitsAfterDecimal)));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/require-default-props */
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
@@ -11,6 +12,7 @@ import {
   useSaveMediaListEntryMutation,
   useUpdateMediaListEntriesMutation,
   useDeleteMediaListEntryMutation,
+  MediaType,
 } from '@graphql/generated/types-and-hooks';
 import getDateFromDateType from '@Utils/getDateFromDateType';
 import React, { useEffect, useState } from 'react';
@@ -31,18 +33,25 @@ export default function MediaListEntryPopover({
   setData,
 }: MediaListEntryPopoverPropsType) {
   const [moreOptions, setMoreOptions] = useState(false);
-  const [saveMediaListEntry, { data: saveMutationData }] =
-    useSaveMediaListEntryMutation();
-  const [updateMediaListEntries, { data: updateMutationData }] =
-    useUpdateMediaListEntriesMutation();
-  const [deleteMediaListEntry, { data: deleteMutationData }] =
-    useDeleteMediaListEntryMutation();
+  const [
+    saveMediaListEntry,
+    { data: saveMutationData, error: saveMutationError },
+  ] = useSaveMediaListEntryMutation();
+  const [
+    updateMediaListEntries,
+    { data: updateMutationData, error: updateMutationError },
+  ] = useUpdateMediaListEntriesMutation();
+  const [
+    deleteMediaListEntry,
+    { data: deleteMutationData, error: deleteMutationError },
+  ] = useDeleteMediaListEntryMutation();
   const defaultFormData = {
-    id: data.Media?.mediaListEntry?.id ?? null,
+    id: data.Media?.mediaListEntry?.id || null,
     mediaId: data.Media?.id,
     status: MediaListStatus.Current,
     score: 0,
     progress: 0,
+    progressVolumes: 0,
     private: false,
     notes: '',
     repeat: 0,
@@ -52,6 +61,9 @@ export default function MediaListEntryPopover({
   const [formData, setFormData] = useState(
     data.Media?.mediaListEntry ?? defaultFormData,
   );
+  useEffect(() => {
+    setFormData(data.Media?.mediaListEntry ?? defaultFormData);
+  }, [data]);
 
   function changeMediaListEntry(
     mediaListEntry?: {
@@ -59,6 +71,7 @@ export default function MediaListEntryPopover({
       status?: MediaListStatus | null;
       score?: number | null;
       progress?: number | null;
+      progressVolumes?: number | null;
       private?: boolean | null;
       notes?: string | null;
       repeat?: number | null;
@@ -78,37 +91,43 @@ export default function MediaListEntryPopover({
     setData((prev) => ({
       ...prev,
       Media: {
-        id: prev?.Media?.id ?? 0,
-        isFavourite: prev?.Media?.isFavourite ?? false,
+        id: prev?.Media?.id || 0,
+        isFavourite: prev?.Media?.isFavourite || false,
         ...prev?.Media,
         mediaListEntry,
       },
     }));
   }
   useEffect(() => {
-    if (saveMutationData?.SaveMediaListEntry) {
+    if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
       changeMediaListEntry(saveMutationData.SaveMediaListEntry);
       console.log('snackbar');
       setOpen(false);
     }
   }, [saveMutationData]);
   useEffect(() => {
-    if (updateMutationData?.UpdateMediaListEntries) {
+    if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
       changeMediaListEntry(updateMutationData.UpdateMediaListEntries[0]);
       console.log('snackbar');
       setOpen(false);
     }
   }, [updateMutationData]);
   useEffect(() => {
-    if (deleteMutationData?.DeleteMediaListEntry?.deleted) {
+    if (
+      !deleteMutationError &&
+      deleteMutationData?.DeleteMediaListEntry?.deleted
+    ) {
       changeMediaListEntry(null);
       console.log('snackbar');
       setOpen(false);
     }
   }, [deleteMutationData]);
 
+  const currentKey =
+    data.Media?.type === MediaType.Anime ? 'Watching' : 'Reading';
+
   const statusDropdownOptions = {
-    Watching: MediaListStatus.Current,
+    [currentKey]: MediaListStatus.Current,
     Completed: MediaListStatus.Completed,
     Paused: MediaListStatus.Paused,
     Dropped: MediaListStatus.Dropped,
@@ -119,10 +138,50 @@ export default function MediaListEntryPopover({
   const handleApply = () => {
     if (data.Media?.mediaListEntry) {
       updateMediaListEntries({
-        variables: { ids: [data.Media.mediaListEntry.id], ...formData },
+        variables: {
+          ids: [data.Media.mediaListEntry.id],
+          status: formData.status,
+          scoreRaw: formData.score || 0,
+          progress: formData.progress,
+          progressVolumes: formData.progressVolumes || 0,
+          private: formData.private,
+          notes: formData.notes,
+          repeat: formData.repeat,
+          startedAt: {
+            year: formData.startedAt?.year,
+            month: formData.startedAt?.month,
+            day: formData.startedAt?.day,
+          },
+          completedAt: {
+            year: formData.completedAt?.year,
+            month: formData.completedAt?.month,
+            day: formData.completedAt?.day,
+          },
+        },
       });
     } else {
-      saveMediaListEntry({ variables: { ...formData } });
+      saveMediaListEntry({
+        variables: {
+          mediaId: data.Media?.id,
+          status: formData.status,
+          scoreRaw: formData.score || 0,
+          progress: formData.progress,
+          progressVolumes: formData.progressVolumes || 0,
+          private: formData.private,
+          notes: formData.notes,
+          repeat: formData.repeat,
+          startedAt: {
+            year: formData.startedAt?.year,
+            month: formData.startedAt?.month,
+            day: formData.startedAt?.day,
+          },
+          completedAt: {
+            year: formData.completedAt?.year,
+            month: formData.completedAt?.month,
+            day: formData.completedAt?.day,
+          },
+        },
+      });
     }
   };
   const handleDelete = () => {
@@ -165,7 +224,7 @@ export default function MediaListEntryPopover({
                           statusDropdownOptions[
                             key as keyof typeof statusDropdownOptions
                           ] === formData.status,
-                      ) ?? ''
+                      ) || ''
                     }
                     options={Object.keys(statusDropdownOptions)}
                     onSelect={(option) =>
@@ -190,46 +249,84 @@ export default function MediaListEntryPopover({
                       max: 10,
                       digitsAfterDecimal: 1,
                     }}
-                    value={formData.score?.toString() ?? '0'}
+                    value={
+                      formData.score ? (formData.score / 10).toString() : '0'
+                    }
                     onChange={(val) => {
                       setFormData((prev) => ({
                         ...prev,
-                        score: Number(val),
+                        score: Number(val) * 10,
                       }));
                     }}
                   />
                 </div>
               </div>
-              <div className="flex-1 flex flex-col gap-1">
-                <div>Progress</div>
-                <TextField
-                  title="Progress"
-                  endElement={
-                    <div className="flex">
-                      /{' '}
-                      {data.Media?.chapters ??
-                        data.Media?.episodes ??
-                        data.Media?.nextAiringEpisode?.episode ??
-                        '~'}
-                    </div>
-                  }
-                  number={{
-                    min: 0,
-                    max:
-                      data.Media?.chapters ??
-                      data.Media?.episodes ??
-                      (data.Media?.nextAiringEpisode?.episode ?? 0) - 1 ??
-                      99999,
-                    digitsAfterDecimal: 0,
-                  }}
-                  value={formData.progress?.toString() ?? '0'}
-                  onChange={(val) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      progress: Number(val),
-                    }));
-                  }}
-                />
+              <div className="flex gap-4">
+                <div className="flex-1 flex flex-col gap-1">
+                  <div>
+                    {data.Media?.type === MediaType.Anime
+                      ? 'Episodes'
+                      : 'Chapters'}
+                  </div>
+                  <TextField
+                    title={
+                      data.Media?.type === MediaType.Anime
+                        ? 'Episodes'
+                        : 'Chapters'
+                    }
+                    endElement={
+                      <div className="flex">
+                        /{' '}
+                        {data.Media?.type === MediaType.Anime
+                          ? data.Media?.nextAiringEpisode?.episode
+                            ? data.Media.nextAiringEpisode.episode - 1
+                            : data.Media.episodes || '~'
+                          : data.Media?.chapters}
+                      </div>
+                    }
+                    number={{
+                      min: 0,
+                      max:
+                        data.Media?.chapters ||
+                        data.Media?.episodes ||
+                        (data.Media?.nextAiringEpisode?.episode || 0) - 1 ||
+                        99999,
+                      digitsAfterDecimal: 0,
+                    }}
+                    value={formData.progress?.toString() || '0'}
+                    onChange={(val) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        progress: Number(val),
+                      }));
+                    }}
+                  />
+                </div>
+                {data.Media?.type === MediaType.Manga && (
+                  <div className="flex-1 flex flex-col gap-1">
+                    <div>Volumes</div>
+                    <TextField
+                      title="Volumes"
+                      endElement={
+                        <div className="flex">
+                          / {data.Media.volumes || '~'}
+                        </div>
+                      }
+                      number={{
+                        min: 0,
+                        max: data.Media?.volumes || 99999,
+                        digitsAfterDecimal: 0,
+                      }}
+                      value={formData.progressVolumes?.toString() || '0'}
+                      onChange={(val) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          progressVolumes: Number(val),
+                        }));
+                      }}
+                    />
+                  </div>
+                )}
               </div>
               <div className="flex w-full gap-4">
                 <div className="flex flex-col gap-1 flex-1">
@@ -244,23 +341,23 @@ export default function MediaListEntryPopover({
                     value={{
                       startDate: formData.startedAt
                         ? new Date(
-                            formData.startedAt.year ?? new Date().getFullYear(),
-                            formData.startedAt.month ?? new Date().getMonth(),
-                            formData.startedAt.day ?? new Date().getDate(),
+                            formData.startedAt.year || new Date().getFullYear(),
+                            formData.startedAt.month || new Date().getMonth(),
+                            formData.startedAt.day || new Date().getDate(),
                           )
                         : null,
                       endDate: formData.startedAt
                         ? new Date(
-                            formData.startedAt.year ?? new Date().getFullYear(),
-                            formData.startedAt.month ?? new Date().getMonth(),
-                            formData.startedAt.day ?? new Date().getDate(),
+                            formData.startedAt.year || new Date().getFullYear(),
+                            formData.startedAt.month || new Date().getMonth(),
+                            formData.startedAt.day || new Date().getDate(),
                           )
                         : null,
                     }}
                     onChange={(newValue) => {
                       setFormData((prev) => ({
                         ...prev,
-                        id: prev.id ?? 0,
+                        id: prev.id || 0,
                         startedAt: newValue?.startDate
                           ? getDateFromDateType(newValue.startDate)
                           : null,
@@ -280,25 +377,25 @@ export default function MediaListEntryPopover({
                     value={{
                       startDate: formData.completedAt
                         ? new Date(
-                            formData.completedAt.year ??
+                            formData.completedAt.year ||
                               new Date().getFullYear(),
-                            formData.completedAt.month ?? new Date().getMonth(),
-                            formData.completedAt.day ?? new Date().getDate(),
+                            formData.completedAt.month || new Date().getMonth(),
+                            formData.completedAt.day || new Date().getDate(),
                           )
                         : null,
                       endDate: formData.completedAt
                         ? new Date(
-                            formData.completedAt.year ??
+                            formData.completedAt.year ||
                               new Date().getFullYear(),
-                            formData.completedAt.month ?? new Date().getMonth(),
-                            formData.completedAt.day ?? new Date().getDate(),
+                            formData.completedAt.month || new Date().getMonth(),
+                            formData.completedAt.day || new Date().getDate(),
                           )
                         : null,
                     }}
                     onChange={(newValue) => {
                       setFormData((prev) => ({
                         ...prev,
-                        id: prev.id ?? 0,
+                        id: prev.id || 0,
                         completedAt: newValue?.endDate
                           ? getDateFromDateType(newValue.endDate)
                           : null,
@@ -322,7 +419,7 @@ export default function MediaListEntryPopover({
                 <TextField
                   title="Repeats"
                   endElement={<FaRepeat />}
-                  value={formData.repeat?.toString() ?? '0'}
+                  value={formData.repeat?.toString() || '0'}
                   onChange={(newValue) =>
                     setFormData((prev) => ({
                       ...prev,
@@ -353,7 +450,7 @@ export default function MediaListEntryPopover({
                 textarea={{ rows: 4 }}
                 className="w-full"
                 title="Notes"
-                value={formData.notes ?? ''}
+                value={formData.notes || ''}
                 onChange={(newValue) =>
                   setFormData((prev) => ({
                     ...prev,
