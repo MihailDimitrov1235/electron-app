@@ -44,7 +44,10 @@ const darkThemeColors = {
 };
 
 module.exports = {
-  content: ['./src/renderer/**/*.{js,jsx,ts,tsx,ejs}'],
+  content: [
+    './src/renderer/**/*.{js,jsx,ts,tsx,ejs}',
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
+  ],
   theme: {
     extend: {},
   },

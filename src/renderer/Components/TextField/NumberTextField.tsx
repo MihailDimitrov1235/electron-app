@@ -18,7 +18,7 @@ export default function NumberTextfield({
   };
   return (
     <div
-      className={`w-full flex justify-between rounded-md p-2 text-text-main bg-background-main border border-background-dark shadow-md ring-text-main group focus-within:ring-1 ${className}`}
+      className={`w-full flex justify-between items-center rounded-md p-2 text-text-main bg-background-main border border-background-dark shadow-md ring-text-main group focus-within:ring-1 ${className}`}
     >
       <input
         className="bg-background-main flex-1 ring-0 outline-0"

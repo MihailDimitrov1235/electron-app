@@ -40,7 +40,11 @@ export default function MediaMainData({
   useEffect(() => {
     setFavorite(data?.Media?.isFavourite || false);
     setWatchedEpisodes(data?.Media?.mediaListEntry?.progress || 0);
-    setUserScore(data?.Media?.mediaListEntry?.score || 0);
+    setUserScore(
+      data?.Media?.mediaListEntry?.score
+        ? data.Media.mediaListEntry.score / 10
+        : 0,
+    );
   }, [data]);
 
   const handleFavoriteChange = () => {
@@ -149,7 +153,7 @@ export default function MediaMainData({
                 <div>
                   {data.Media?.nextAiringEpisode
                     ? `${data.Media.nextAiringEpisode.episode - 1} / ${
-                        data.Media.episodes
+                        data.Media.episodes || '~'
                       } Episodes`
                     : `${data.Media?.episodes} Episodes`}
                   {' - '}

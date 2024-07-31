@@ -5,6 +5,7 @@
 import React from 'react';
 import NumberTextfield from './NumberTextField';
 import StringTextfield from './StringTextField';
+import TextArea from './Textarea';
 
 export type TextFieldPropsType = {
   title: string;
@@ -15,6 +16,9 @@ export type TextFieldPropsType = {
     max: number;
     digitsAfterDecimal: number;
   };
+  textarea?: {
+    rows: number;
+  };
   className?: string;
   endElement?: React.JSX.Element;
 };
@@ -22,6 +26,9 @@ export type TextFieldPropsType = {
 function TextField(props: TextFieldPropsType) {
   if (props.number) {
     return <NumberTextfield {...props} />;
+  }
+  if (props.textarea) {
+    return <TextArea {...props} />;
   }
   return <StringTextfield {...props} />;
 }

@@ -34,8 +34,8 @@ export default function Characters({
     <div className="flex flex-col gap-4 w-full">
       <div className="text-lg font-semibold">Characters</div>
       <div
-        className={`grid grid-cols-${
-          mediaType === MediaType.Manga ? 6 : 3
+        className={`grid ${
+          mediaType === MediaType.Manga ? 'grid-cols-6' : 'grid-cols-3'
         } gap-4`}
       >
         {data.Media?.characters?.edges?.map((edge) => (
