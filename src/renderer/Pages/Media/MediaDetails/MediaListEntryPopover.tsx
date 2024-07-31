@@ -18,6 +18,7 @@ import getDateFromDateType from '@Utils/getDateFromDateType';
 import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Button from '@Components/Button';
+import changeMediaListEntry from '@Utils/changeMediaListEntry';
 
 type MediaListEntryPopoverPropsType = {
   open: boolean;
@@ -65,49 +66,22 @@ export default function MediaListEntryPopover({
     setFormData(data.Media?.mediaListEntry ?? defaultFormData);
   }, [data]);
 
-  function changeMediaListEntry(
-    mediaListEntry?: {
-      id: number;
-      status?: MediaListStatus | null;
-      score?: number | null;
-      progress?: number | null;
-      progressVolumes?: number | null;
-      private?: boolean | null;
-      notes?: string | null;
-      repeat?: number | null;
-      customLists?: any | null;
-      startedAt?: {
-        year?: number | null;
-        month?: number | null;
-        day?: number | null;
-      } | null;
-      completedAt?: {
-        year?: number | null;
-        month?: number | null;
-        day?: number | null;
-      } | null;
-    } | null,
-  ) {
-    setData((prev) => ({
-      ...prev,
-      Media: {
-        id: prev?.Media?.id || 0,
-        isFavourite: prev?.Media?.isFavourite || false,
-        ...prev?.Media,
-        mediaListEntry,
-      },
-    }));
-  }
   useEffect(() => {
     if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
-      changeMediaListEntry(saveMutationData.SaveMediaListEntry);
+      changeMediaListEntry({
+        setData,
+        mediaListEntry: saveMutationData.SaveMediaListEntry,
+      });
       console.log('snackbar');
       setOpen(false);
     }
   }, [saveMutationData]);
   useEffect(() => {
     if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
-      changeMediaListEntry(updateMutationData.UpdateMediaListEntries[0]);
+      changeMediaListEntry({
+        setData,
+        mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
+      });
       console.log('snackbar');
       setOpen(false);
     }
@@ -117,7 +91,10 @@ export default function MediaListEntryPopover({
       !deleteMutationError &&
       deleteMutationData?.DeleteMediaListEntry?.deleted
     ) {
-      changeMediaListEntry(null);
+      changeMediaListEntry({
+        setData,
+        mediaListEntry: null,
+      });
       console.log('snackbar');
       setOpen(false);
     }

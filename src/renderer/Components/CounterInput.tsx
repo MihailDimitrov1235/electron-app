@@ -32,7 +32,7 @@ export default function CounterInput({
   };
 
   const handleDecrement = () => {
-    setCount(Number(Math.min(count - step, max).toFixed(digitsAfterDecimal)));
+    setCount(Number(Math.max(count - step, min).toFixed(digitsAfterDecimal)));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

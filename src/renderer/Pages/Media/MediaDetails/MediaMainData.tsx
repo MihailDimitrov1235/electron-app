@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import MediaCard from '@Components/Media/MediaCard';
@@ -11,14 +12,18 @@ import Tag from '@Components/Tag';
 import Tooltip from '@Components/Tooltip';
 import {
   GetMediaDetailsQuery,
+  MediaListStatus,
   MediaType,
+  useSaveMediaListEntryMutation,
   useToggleFavouriteAnimeMutation,
   useToggleFavouriteMangaMutation,
+  useUpdateMediaListEntriesMutation,
 } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
+import changeMediaListEntry from '@Utils/changeMediaListEntry';
 import MediaListEntryPopover from './MediaListEntryPopover';
 
 type MediaMainDataPropsType = {
@@ -43,6 +48,34 @@ export default function MediaMainData({
     useToggleFavouriteAnimeMutation();
   const [toggleFavouriteManga, { data: toggleFavouriteMangaData }] =
     useToggleFavouriteMangaMutation();
+
+  const [
+    saveMediaListEntry,
+    { data: saveMutationData, error: saveMutationError },
+  ] = useSaveMediaListEntryMutation();
+  const [
+    updateMediaListEntries,
+    { data: updateMutationData, error: updateMutationError },
+  ] = useUpdateMediaListEntriesMutation();
+
+  useEffect(() => {
+    if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
+      changeMediaListEntry({
+        setData,
+        mediaListEntry: saveMutationData.SaveMediaListEntry,
+      });
+      console.log('snackbar');
+    }
+  }, [saveMutationData]);
+  useEffect(() => {
+    if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
+      changeMediaListEntry({
+        setData,
+        mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
+      });
+      console.log('snackbar');
+    }
+  }, [updateMutationData]);
 
   useEffect(() => {
     const handleToggleSuccess = () => {
@@ -97,7 +130,59 @@ export default function MediaMainData({
 
   const handleApply = () => {
     if (isLoggedIn) {
-      console.log('to be implemented');
+      if (progress !== 0 || userScore !== 0 || progressVolumes !== 0) {
+        if (data.Media?.mediaListEntry) {
+          updateMediaListEntries({
+            variables: {
+              ids: [data.Media.mediaListEntry.id],
+              status:
+                data.Media?.episodes === progress ||
+                data.Media?.chapters === progress
+                  ? MediaListStatus.Completed
+                  : data.Media.mediaListEntry.status,
+              scoreRaw: userScore * 10,
+              progress,
+              progressVolumes,
+              private: data.Media.mediaListEntry.private,
+              notes: data.Media.mediaListEntry.notes,
+              repeat: data.Media.mediaListEntry.repeat,
+              startedAt: {
+                year: data.Media.mediaListEntry.startedAt?.year,
+                month: data.Media.mediaListEntry.startedAt?.month,
+                day: data.Media.mediaListEntry.startedAt?.day,
+              },
+              completedAt: {
+                year: data.Media.mediaListEntry.completedAt?.year,
+                month: data.Media.mediaListEntry.completedAt?.month,
+                day: data.Media.mediaListEntry.completedAt?.day,
+              },
+            },
+          });
+        } else {
+          saveMediaListEntry({
+            variables: {
+              mediaId: data.Media?.id,
+              status:
+                data.Media?.episodes === progress ||
+                data.Media?.chapters === progress
+                  ? MediaListStatus.Completed
+                  : MediaListStatus.Current,
+              scoreRaw: userScore * 10,
+              progress,
+              progressVolumes,
+              private: false,
+              notes: '',
+              repeat: 0,
+              startedAt: {
+                year: new Date().getFullYear(),
+                month: new Date().getMonth(),
+                day: new Date().getDate(),
+              },
+              completedAt: null,
+            },
+          });
+        }
+      }
     } else {
       navigate('/login');
     }
@@ -127,7 +212,11 @@ export default function MediaMainData({
             className="flex-1"
             onClick={handleStatusClick}
           >
-            {data.Media?.mediaListEntry?.status || 'Add to list'}
+            {data.Media?.mediaListEntry?.status === MediaListStatus.Current
+              ? data.Media.type === MediaType.Anime
+                ? 'Watching'
+                : 'Reading'
+              : data.Media?.mediaListEntry?.status || 'Add to list'}
           </Button>
           <Tooltip
             text={
