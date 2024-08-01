@@ -8,6 +8,7 @@ const defaultColors = {
   dropped: '#832F30',
   planToWatch: '#747474',
   score: colors.yellow[400],
+  skeleton: colors.gray[300],
 };
 
 const primaryThemeColors = {

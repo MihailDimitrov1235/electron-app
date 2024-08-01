@@ -132,7 +132,12 @@ export default function MediaMainData({
 
   const handleApply = () => {
     if (isLoggedIn) {
-      if (progress !== 0 || userScore !== 0 || progressVolumes !== 0) {
+      if (
+        progress !== 0 ||
+        userScore !== 0 ||
+        progressVolumes !== 0 ||
+        data.Media?.mediaListEntry
+      ) {
         if (data.Media?.mediaListEntry) {
           updateMediaListEntries({
             variables: {

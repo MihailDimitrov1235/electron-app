@@ -4,15 +4,22 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { GetSeasonalMediaQuery } from '@graphql/generated/types-and-hooks';
+import {
+  GetMediaQuery,
+  MediaSeason,
+  MediaSort,
+  MediaStatus,
+  MediaType,
+  useGetMediaQuery,
+} from '@graphql/generated/types-and-hooks';
+import DOMPurify from 'dompurify';
 import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
-import DOMPurify from 'dompurify';
 
 type CarouselProps = {
-  data: GetSeasonalMediaQuery;
+  data: GetMediaQuery;
   autoSlideInterval?: number;
 };
 
@@ -21,15 +28,15 @@ export default function Carousel({
   autoSlideInterval = 5000,
 }: CarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const animes = data?.Page?.media;
-  const aniLength = animes?.length || 1;
+  const medias = data?.Page?.media;
+  const mediasLength = medias?.length || 1;
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % aniLength);
+    setCurrentSlide((prev) => (prev + 1) % mediasLength);
   };
 
   // const prevSlide = () => {
-  //   setCurrentSlide((prev) => (prev - 1 + aniLength) % aniLength);
+  //   setCurrentSlide((prev) => (prev - 1 + mediasLength) % mediasLength);
   // };
 
   const goToSlide = (index: number) => {
@@ -47,7 +54,7 @@ export default function Carousel({
   return (
     <div className="relative w-full h-fit">
       <div className="relative h-[450px] overflow-hidden w-full">
-        {animes?.map((anime, index) => (
+        {medias?.map((media, index) => (
           <div
             key={index}
             className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
@@ -57,16 +64,16 @@ export default function Carousel({
             <div className="absolute w-full z-10 inset-0 bg-gradient-to-b from-background-main/50 to-background-dark" />
             <img
               src={
-                anime?.bannerImage
-                  ? anime.bannerImage
-                  : anime?.coverImage?.extraLarge || ''
+                media?.bannerImage
+                  ? media.bannerImage
+                  : media?.coverImage?.extraLarge || ''
               }
               className="absolute block w-full cover blur-sm select-none"
               alt={`Carousel item ${index + 1}`}
             />
             <div className="absolute flex w-full gap-8 z-20 px-10 top-7">
               <MediaCard
-                {...anime}
+                {...media}
                 withTitle={false}
                 withEpisodes={false}
                 withScore={false}
@@ -76,17 +83,17 @@ export default function Carousel({
                 <div className="flex w-full flex-col gap-6">
                   <div className=" text-4xl font-semibold flex justify-between">
                     <Link
-                      to={`/anime/${anime?.id}`}
+                      to={`/${media?.type}/${media?.id}`}
                       className=" line-clamp-2 text-ellipsis pb-2"
                     >
-                      {anime?.title?.userPreferred}
+                      {media?.title?.userPreferred}
                     </Link>
-                    {anime?.meanScore && <MediaScore score={anime.meanScore} />}
+                    {media?.meanScore && <MediaScore score={media.meanScore} />}
                   </div>
                   <div
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(anime?.description || '', {
+                      __html: DOMPurify.sanitize(media?.description || '', {
                         USE_PROFILES: { html: true },
                       }),
                     }}
@@ -96,14 +103,14 @@ export default function Carousel({
                 <div className="flex justify-between">
                   <EpisodesDisplay
                     episodes={{
-                      watched: anime?.mediaListEntry?.progress,
-                      nextAiring: anime?.nextAiringEpisode?.episode,
-                      planned: anime?.episodes,
+                      watched: media?.mediaListEntry?.progress,
+                      nextAiring: media?.nextAiringEpisode?.episode,
+                      planned: media?.episodes || media?.chapters,
                     }}
                     className="text-xl"
                   />
                   <div className="flex gap-2">
-                    {anime?.genres?.map((genre) => (
+                    {media?.genres?.map((genre) => (
                       <GenreButton key={genre} genre={genre} />
                     ))}
                   </div>
@@ -115,7 +122,7 @@ export default function Carousel({
       </div>
 
       <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-        {animes?.map((_, index) => (
+        {medias?.map((_, index) => (
           <button
             key={index}
             type="button"
@@ -146,4 +153,54 @@ export default function Carousel({
       </Button> */}
     </div>
   );
+}
+
+export function AnimeCarousel() {
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+
+  let season;
+  if (month >= 0 && month <= 2) {
+    season = MediaSeason.Winter;
+  } else if (month >= 3 && month <= 5) {
+    season = MediaSeason.Spring;
+  } else if (month >= 6 && month <= 8) {
+    season = MediaSeason.Summer;
+  } else {
+    season = MediaSeason.Fall;
+  }
+  const { loading, error, data } = useGetMediaQuery({
+    variables: {
+      season,
+      year,
+      mediaType: MediaType.Anime,
+      sort: [MediaSort.PopularityDesc],
+    },
+  });
+  if (error) {
+    return <p>No data available</p>;
+  }
+  if (loading || !data || !data.Page || !data.Page.media) {
+    return <p>loading</p>;
+  }
+  return <Carousel data={data} />;
+}
+
+export function MangaCarousel() {
+  const { loading, error, data } = useGetMediaQuery({
+    variables: {
+      mediaType: MediaType.Manga,
+      sort: [MediaSort.PopularityDesc],
+      status: MediaStatus.Releasing,
+      onList: false,
+    },
+  });
+  if (error) {
+    return <p>No data available</p>;
+  }
+  if (loading || !data || !data.Page || !data.Page.media) {
+    return <p>loading</p>;
+  }
+  return <Carousel data={data} />;
 }

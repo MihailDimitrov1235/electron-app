@@ -37,7 +37,7 @@ const Snackbar = forwardRef<HTMLDivElement, SnackbarProps>(
     return (
       <SnackbarContent ref={ref}>
         <div
-          className={` flex justify-between w-full p-4 rounded-md items-center shadow-md ${variantClassName[variant]}`}
+          className={` flex justify-between w-full p-4 rounded-md items-center shadow-md text-white ${variantClassName[variant]}`}
         >
           <div className="flex gap-2 items-center">
             <span>{variantIcon[variant]}</span> <span>{message}</span>

@@ -12,6 +12,7 @@ import {
   gql,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { enqueueSnackbar } from 'notistack';
 
 type AuthContextType = {
   token: string | null;
@@ -80,22 +81,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       client
         .query({ query: GET_USER_ID })
         .then(({ data, error }) => {
-          if (error) {
+          if (error?.message === 'Unauthorized.') {
             removeAuth();
-          }
-          const fetchedUserId = data.Viewer.id;
-          setUserId(fetchedUserId);
-          localStorage.setItem('userId', fetchedUserId.toString());
+          } else if (data) {
+            const fetchedUserId = data.Viewer.id;
+            setUserId(fetchedUserId);
+            localStorage.setItem('userId', fetchedUserId.toString());
 
-          const fetchedUserAvatar = data.Viewer.avatar.large;
-          setUserAvatar(fetchedUserAvatar);
-          localStorage.setItem('userAvatar', fetchedUserAvatar);
+            const fetchedUserAvatar = data.Viewer.avatar.large;
+            setUserAvatar(fetchedUserAvatar);
+            localStorage.setItem('userAvatar', fetchedUserAvatar);
+            enqueueSnackbar({
+              variant: 'success',
+              message: 'Successfully Logged In',
+            });
+          }
 
           return 0;
         })
         .catch((error) => {
-          console.error('Error fetching user data:', error);
-          removeAuth();
+          enqueueSnackbar({ variant: 'error', message: error.message });
+          if (error?.message === 'Invalid token') {
+            removeAuth();
+          }
         });
     }
   }, [token]);

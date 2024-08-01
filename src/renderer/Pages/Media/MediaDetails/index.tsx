@@ -49,7 +49,8 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
 
   return (
     <div className="relative w-full pb-8">
-      {displayData.Media?.bannerImage && (
+      {(displayData.Media?.bannerImage ||
+        displayData.Media?.coverImage?.extraLarge) && (
         <div
           className="w-full h-[450px] blur-sm absolute z-0 bg-cover"
           style={{
