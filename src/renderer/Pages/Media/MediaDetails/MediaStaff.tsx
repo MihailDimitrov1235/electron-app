@@ -6,6 +6,7 @@ import {
 } from '@graphql/generated/types-and-hooks';
 import StaffCard from '@Components/Card/StaffCard';
 import Pagination from '@Components/Pagination';
+import { enqueueSnackbar } from 'notistack';
 
 export default function Characters({
   id,
@@ -24,7 +25,7 @@ export default function Characters({
     },
   });
   if (error) {
-    console.error(error);
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <div>error</div>;
   }
   if (loading || !data) {

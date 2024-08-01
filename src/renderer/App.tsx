@@ -5,9 +5,11 @@ import {
   createHttpLink,
   InMemoryCache,
   ApolloProvider,
+  from,
 } from '@apollo/client';
+import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import { SnackbarProvider } from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
 import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
 import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
@@ -20,6 +22,18 @@ function App() {
   const { token } = useAuth();
 
   const client = useMemo(() => {
+    const errorLink = onError(({ graphQLErrors, networkError }) => {
+      enqueueSnackbar({ variant: 'error', message: 'sdasdasdas' });
+      if (graphQLErrors)
+        graphQLErrors.forEach(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          ),
+        );
+
+      if (networkError) console.error(`[Network error]: ${networkError}`);
+    });
+
     const httpLink = createHttpLink({
       uri: 'https://graphql.anilist.co',
       // fetchOptions: {
@@ -44,7 +58,7 @@ function App() {
     });
 
     return new ApolloClient({
-      link: authLink.concat(httpLink),
+      link: from([authLink, httpLink, errorLink]),
       cache: new InMemoryCache(),
     });
   }, [token]);

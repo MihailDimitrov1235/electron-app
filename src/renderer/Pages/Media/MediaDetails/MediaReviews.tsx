@@ -5,6 +5,7 @@ import {
   MediaType,
   useGetMediaReviewsQuery,
 } from '@graphql/generated/types-and-hooks';
+import { enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react';
 
 export default function MediaReviews({
@@ -24,7 +25,7 @@ export default function MediaReviews({
     },
   });
   if (error) {
-    console.error(error);
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <div>error</div>;
   }
   if (loading || !data) {

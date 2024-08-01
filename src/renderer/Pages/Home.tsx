@@ -8,6 +8,7 @@ import {
 } from '@graphql/generated/types-and-hooks';
 import { useAuth } from '@Components/Contexts/AuthContext';
 import MediaCard from '@Components/Media/MediaCard';
+import { enqueueSnackbar } from 'notistack';
 
 export default function Home() {
   const { userId } = useAuth();
@@ -20,6 +21,7 @@ export default function Home() {
     },
   });
   if (error) {
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <p>No data available</p>;
   }
   if (loading || !data) {

@@ -1,9 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import TruncatedText from '@Components/TruncatedText';
-import { useGetMediaInfoQuery } from '@graphql/generated/types-and-hooks';
+import {
+  useGetMediaInfoQuery,
+  MediaType,
+} from '@graphql/generated/types-and-hooks';
 import MediaCard from '@Components/Media/MediaCard';
-import { MediaType } from '@graphql/generated/types-and-hooks';
+import { enqueueSnackbar } from 'notistack';
 
 // eslint-disable-next-line react/require-default-props
 export default function MediaInfo({
@@ -17,7 +20,7 @@ export default function MediaInfo({
     variables: { mediaId: Number(id), mediaType },
   });
   if (error) {
-    console.error(error);
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <div>error</div>;
   }
   if (loading || !data) {

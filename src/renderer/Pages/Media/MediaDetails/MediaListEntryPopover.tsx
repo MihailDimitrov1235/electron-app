@@ -67,6 +67,16 @@ export default function MediaListEntryPopover({
     setFormData(data.Media?.mediaListEntry ?? defaultFormData);
   }, [data]);
 
+  if (saveMutationError) {
+    enqueueSnackbar({ variant: 'error', message: saveMutationError.message });
+  }
+  if (updateMutationError) {
+    enqueueSnackbar({ variant: 'error', message: updateMutationError.message });
+  }
+  if (deleteMutationError) {
+    enqueueSnackbar({ variant: 'error', message: deleteMutationError.message });
+  }
+
   useEffect(() => {
     if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
       changeMediaListEntry({

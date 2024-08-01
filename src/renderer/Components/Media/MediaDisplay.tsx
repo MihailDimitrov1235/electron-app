@@ -9,6 +9,7 @@ import {
   useGetMediaQuery,
 } from '@graphql/generated/types-and-hooks';
 import React, { useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
 import Checkbox from '@Components/Checkbox';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
 import MediaCard from './MediaCard';
@@ -44,7 +45,7 @@ export default function MediaDisplay({
     },
   });
   if (error) {
-    console.error(error);
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <div>error</div>;
   }
   if (loading || !data) {

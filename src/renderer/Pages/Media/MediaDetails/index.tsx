@@ -7,6 +7,7 @@ import {
   MediaType,
   GetMediaDetailsQuery,
 } from '@graphql/generated/types-and-hooks';
+import { enqueueSnackbar } from 'notistack';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';
@@ -40,7 +41,7 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
   }, [openTab, openTabSessionKey]);
 
   if (error) {
-    console.error(error);
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <div>error</div>;
   }
   if (loading || !displayData) {

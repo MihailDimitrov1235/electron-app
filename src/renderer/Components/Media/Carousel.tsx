@@ -17,6 +17,7 @@ import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
+import { enqueueSnackbar } from 'notistack';
 
 type CarouselProps = {
   data: GetMediaQuery;
@@ -179,6 +180,7 @@ export function AnimeCarousel() {
     },
   });
   if (error) {
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <p>No data available</p>;
   }
   if (loading || !data || !data.Page || !data.Page.media) {
@@ -197,6 +199,7 @@ export function MangaCarousel() {
     },
   });
   if (error) {
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <p>No data available</p>;
   }
   if (loading || !data || !data.Page || !data.Page.media) {
