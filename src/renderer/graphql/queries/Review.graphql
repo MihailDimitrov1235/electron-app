@@ -1,0 +1,32 @@
+query GetReview($id: Int) {
+  Review(id: $id) {
+    score
+    body
+    rating
+    ratingAmount
+    userRating
+    user {
+      id
+      name
+      avatar {
+        large
+        medium
+      }
+    }
+    media {
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+    }
+  }
+}

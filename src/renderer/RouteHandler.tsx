@@ -11,6 +11,7 @@ import MediaHome from '@Pages/Media';
 import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
 import { MediaType } from '@graphql/generated/types-and-hooks';
+import Review from '@Pages/Review';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -68,6 +69,10 @@ export default function RouteHandler() {
               element: <MediaDetails mediaType={MediaType.Manga} />,
             },
           ],
+        },
+        {
+          path: '/review/:id',
+          element: <Review />,
         },
         {
           path: '*',

@@ -4726,6 +4726,21 @@ export type ToggleFavouriteMangaMutationVariables = Exact<{
 
 export type ToggleFavouriteMangaMutation = { __typename?: 'Mutation', ToggleFavourite?: { __typename?: 'Favourites', manga?: { __typename?: 'MediaConnection', edges?: Array<{ __typename?: 'MediaEdge', id?: number | null } | null> | null } | null } | null };
 
+export type RateReviewMutationVariables = Exact<{
+  reviewId?: InputMaybe<Scalars['Int']['input']>;
+  rating?: InputMaybe<ReviewRating>;
+}>;
+
+
+export type RateReviewMutation = { __typename?: 'Mutation', RateReview?: { __typename?: 'Review', rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null } | null };
+
+export type GetReviewQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetReviewQuery = { __typename?: 'Query', Review?: { __typename?: 'Review', score?: number | null, body?: string | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null, media?: { __typename?: 'Media', bannerImage?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null };
+
 export type GetMediaQueryVariables = Exact<{
   mediaType: MediaType;
   sort?: InputMaybe<Array<InputMaybe<MediaSort>> | InputMaybe<MediaSort>>;
@@ -5051,6 +5066,109 @@ export function useToggleFavouriteMangaMutation(baseOptions?: Apollo.MutationHoo
 export type ToggleFavouriteMangaMutationHookResult = ReturnType<typeof useToggleFavouriteMangaMutation>;
 export type ToggleFavouriteMangaMutationResult = Apollo.MutationResult<ToggleFavouriteMangaMutation>;
 export type ToggleFavouriteMangaMutationOptions = Apollo.BaseMutationOptions<ToggleFavouriteMangaMutation, ToggleFavouriteMangaMutationVariables>;
+export const RateReviewDocument = gql`
+    mutation RateReview($reviewId: Int, $rating: ReviewRating) {
+  RateReview(reviewId: $reviewId, rating: $rating) {
+    rating
+    ratingAmount
+    userRating
+  }
+}
+    `;
+export type RateReviewMutationFn = Apollo.MutationFunction<RateReviewMutation, RateReviewMutationVariables>;
+
+/**
+ * __useRateReviewMutation__
+ *
+ * To run a mutation, you first call `useRateReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRateReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [rateReviewMutation, { data, loading, error }] = useRateReviewMutation({
+ *   variables: {
+ *      reviewId: // value for 'reviewId'
+ *      rating: // value for 'rating'
+ *   },
+ * });
+ */
+export function useRateReviewMutation(baseOptions?: Apollo.MutationHookOptions<RateReviewMutation, RateReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RateReviewMutation, RateReviewMutationVariables>(RateReviewDocument, options);
+      }
+export type RateReviewMutationHookResult = ReturnType<typeof useRateReviewMutation>;
+export type RateReviewMutationResult = Apollo.MutationResult<RateReviewMutation>;
+export type RateReviewMutationOptions = Apollo.BaseMutationOptions<RateReviewMutation, RateReviewMutationVariables>;
+export const GetReviewDocument = gql`
+    query GetReview($id: Int) {
+  Review(id: $id) {
+    score
+    body
+    rating
+    ratingAmount
+    userRating
+    user {
+      id
+      name
+      avatar {
+        large
+        medium
+      }
+    }
+    media {
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetReviewQuery__
+ *
+ * To run a query within a React component, call `useGetReviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReviewQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetReviewQuery(baseOptions?: Apollo.QueryHookOptions<GetReviewQuery, GetReviewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReviewQuery, GetReviewQueryVariables>(GetReviewDocument, options);
+      }
+export function useGetReviewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReviewQuery, GetReviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReviewQuery, GetReviewQueryVariables>(GetReviewDocument, options);
+        }
+export function useGetReviewSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetReviewQuery, GetReviewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetReviewQuery, GetReviewQueryVariables>(GetReviewDocument, options);
+        }
+export type GetReviewQueryHookResult = ReturnType<typeof useGetReviewQuery>;
+export type GetReviewLazyQueryHookResult = ReturnType<typeof useGetReviewLazyQuery>;
+export type GetReviewSuspenseQueryHookResult = ReturnType<typeof useGetReviewSuspenseQuery>;
+export type GetReviewQueryResult = Apollo.QueryResult<GetReviewQuery, GetReviewQueryVariables>;
 export const GetMediaDocument = gql`
     query GetMedia($mediaType: MediaType!, $sort: [MediaSort], $status: MediaStatus, $onList: Boolean, $season: MediaSeason, $year: Int, $page: Int = 1, $perPage: Int = 20) {
   Page(page: $page, perPage: $perPage) {

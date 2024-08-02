@@ -251,8 +251,7 @@ export default function MediaMainData({
         </div>
         <div className=" flex justify-between">
           <div>
-            {data.Media?.type === MediaType.Anime ? 'Episode' : 'Chapter'}{' '}
-            Progress
+            {data.Media?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}
           </div>
           <CounterInput
             count={progress}
@@ -270,7 +269,7 @@ export default function MediaMainData({
         </div>
         {data.Media?.type === MediaType.Manga && (
           <div className=" flex justify-between">
-            <div>Volume Progress</div>
+            <div>Volumes</div>
             <CounterInput
               count={progressVolumes}
               setCount={setProgressVolumes}

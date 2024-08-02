@@ -11,7 +11,7 @@ export default function MediaScore({
 }) {
   return (
     <div
-      className={`flex w-fit gap-4 items-start font-bold text-${
+      className={`flex w-fit h-fit gap-4 items-start font-bold text-${
         small ? 'sm px-2' : '4xl pb-1 px-3'
       } bg-background-dark/60 border border-primary/50  rounded-full shadow-md`}
     >
