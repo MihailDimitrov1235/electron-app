@@ -4,8 +4,8 @@ import { IoIosNotifications } from 'react-icons/io';
 import { IoLogIn, IoSearchSharp } from 'react-icons/io5';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import { useAuth } from '../Contexts/AuthContext';
-import Button from '../Button';
-import TextField from '../TextField';
+import Button from '../Form/Button';
+import TextField from '../Form/TextField';
 
 export default function Topbar() {
   const { isLoggedIn, userAvatar } = useAuth();

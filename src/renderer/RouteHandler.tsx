@@ -12,6 +12,7 @@ import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
 import { MediaType } from '@graphql/generated/types-and-hooks';
 import Review from '@Pages/Review';
+import AnimeSearch from '@Pages/Media/AnimeSearch';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -69,6 +70,10 @@ export default function RouteHandler() {
               element: <MediaDetails mediaType={MediaType.Manga} />,
             },
           ],
+        },
+        {
+          path: '/search',
+          children: [{ path: '', element: <AnimeSearch /> }],
         },
         {
           path: '/review/:id',

@@ -11,7 +11,7 @@ import {
 } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
-import Checkbox from '@Components/Checkbox';
+import Checkbox from '@Components/Form/Checkbox';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
 import MediaCard from './MediaCard';
 

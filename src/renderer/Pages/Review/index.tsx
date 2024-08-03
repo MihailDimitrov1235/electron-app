@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 import {
   ReviewRating,
   useGetReviewQuery,

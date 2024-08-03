@@ -3,9 +3,9 @@
 /* eslint-disable react/require-default-props */
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { FaRepeat } from 'react-icons/fa6';
-import Dropdown from '@Components/Dropdown';
+import Dropdown from '@Components/Form/Dropdown';
 import Popover from '@Components/Popover';
-import TextField from '@Components/TextField';
+import TextField from '@Components/Form/TextField';
 import {
   GetMediaDetailsQuery,
   MediaListStatus,
@@ -17,7 +17,7 @@ import {
 import getDateFromDateType from '@Utils/getDateFromDateType';
 import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 import changeMediaListEntry from '@Utils/changeMediaListEntry';
 import { enqueueSnackbar } from 'notistack';
 

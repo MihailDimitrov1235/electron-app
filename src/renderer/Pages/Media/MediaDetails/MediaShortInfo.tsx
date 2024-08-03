@@ -2,7 +2,7 @@ import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
 import { useMainUtils } from '@Components/Contexts/MainUtilsContext';
 import { FaStar, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 
 export default function MediaShortInfo({
   data,

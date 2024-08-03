@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import Button from '../Button';
+import Button from '../Form/Button';
 
 type TabsPropType = {
   tabs: string[];

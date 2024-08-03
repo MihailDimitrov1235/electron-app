@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 import { useAuth } from '@Components/Contexts/AuthContext';
-import TextField from '@Components/TextField';
+import TextField from '@Components/Form/TextField';
 
 export default function ProfileTab() {
   const { token, setToken } = useAuth();

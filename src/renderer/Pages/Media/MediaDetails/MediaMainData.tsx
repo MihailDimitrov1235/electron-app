@@ -3,9 +3,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import MediaCard from '@Components/Media/MediaCard';
 import MediaScore from '@Components/Media/MediaScore';
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 import { useAuth } from '@Components/Contexts/AuthContext';
-import CounterInput from '@Components/CounterInput';
+import CounterInput from '@Components/Form/CounterInput';
 import GenreButton from '@Components/GenreButton';
 import Tabs from '@Components/Tabs';
 import Tag from '@Components/Tag';

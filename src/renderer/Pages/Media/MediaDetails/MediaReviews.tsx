@@ -13,12 +13,12 @@ export default function MediaReviews({
   id,
   mediaType,
   data,
-  staffPerPage,
+  reviewsPerPage,
 }: {
   id: string;
   mediaType: MediaType;
   data: GetMediaReviewsQuery['Media'] | null;
-  staffPerPage: number;
+  reviewsPerPage: number;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const {
@@ -30,7 +30,7 @@ export default function MediaReviews({
       mediaId: Number(id),
       mediaType,
       page: currentPage,
-      perPage: staffPerPage,
+      perPage: reviewsPerPage,
     },
     skip: currentPage === 1,
   });
