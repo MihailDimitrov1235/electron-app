@@ -20,6 +20,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
       ipcRenderer.removeListener('set-token', listener);
     };
   },
+  // handleSetPort: (callback: (message: number) => void) => {
+  //   const listener = (_: IpcRendererEvent, message: number) =>
+  //     callback(message);
+  //   ipcRenderer.on('set-port', listener);
+
+  //   return () => {
+  //     ipcRenderer.removeListener('set-port', listener);
+  //   };
+  // },
 });
 
 declare global {
@@ -31,6 +40,7 @@ declare global {
       canGoBack: () => Promise<boolean>;
       canGoForward: () => Promise<boolean>;
       handleSetToken: (callback: (message: string) => void) => () => void;
+      // handleSetPort: (callback: (message: number) => void) => () => void;
     };
   }
 }

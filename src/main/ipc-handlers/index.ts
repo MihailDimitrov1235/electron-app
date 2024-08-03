@@ -1,7 +1,7 @@
-import { ipcMain, shell, BrowserWindow } from 'electron';
+import { ipcMain, shell } from 'electron';
 import SetupPageNavigationHandlers from './pageNavigationHandlers';
 
-export default function SetupIPCHandlers(win: BrowserWindow | null) {
+export default function SetupIPCHandlers() {
   SetupPageNavigationHandlers();
   ipcMain.handle('open-url', async (_, url: string) => {
     await shell.openExternal(url);

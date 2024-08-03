@@ -2,19 +2,21 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/require-default-props */
 import {
+  GetMediaQuery,
   MediaSeason,
   MediaSort,
   MediaStatus,
   MediaType,
   useGetMediaQuery,
 } from '@graphql/generated/types-and-hooks';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import Checkbox from '@Components/Checkbox';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
 import MediaCard from './MediaCard';
 
 type MediaDisplayProps = {
+  data: GetMediaQuery['Page'];
   title: string;
   withCheckbox?: boolean;
   mediaType: MediaType;
@@ -25,6 +27,7 @@ type MediaDisplayProps = {
 };
 
 export default function MediaDisplay({
+  data,
   title,
   withCheckbox,
   mediaType,
@@ -34,7 +37,9 @@ export default function MediaDisplay({
   year,
 }: MediaDisplayProps) {
   const [notOnList, setNotOnList] = useState(!withCheckbox || false);
-  const { loading, error, data } = useGetMediaQuery({
+  const [displayData, setDisplayData] = useState(data);
+  const [shouldFetch, setShouldFetch] = useState(false);
+  const getMediaQuery = useGetMediaQuery({
     variables: {
       mediaType,
       sort,
@@ -43,12 +48,26 @@ export default function MediaDisplay({
       season,
       year,
     },
+    skip: !shouldFetch,
   });
-  if (error) {
-    enqueueSnackbar({ variant: 'error', message: error.message });
+
+  const handleCheck = () => {
+    setNotOnList((prev) => !prev);
+    setShouldFetch(true);
+  };
+
+  useEffect(() => {
+    if (getMediaQuery.data) {
+      setDisplayData(getMediaQuery.data.Page);
+      setShouldFetch(false);
+    }
+  }, [getMediaQuery.data]);
+
+  if (getMediaQuery.error) {
+    enqueueSnackbar({ variant: 'error', message: getMediaQuery.error.message });
     return <div>error</div>;
   }
-  if (loading || !data) {
+  if (getMediaQuery.loading || !displayData) {
     return (
       <div className="flex flex-col gap-4">
         <div className=" text-xl flex justify-between">
@@ -73,12 +92,12 @@ export default function MediaDisplay({
         <span>{title}</span>
         <Checkbox
           checked={notOnList}
-          onCheck={() => setNotOnList((prev) => !prev)}
+          onCheck={handleCheck}
           label="Not on list"
         />
       </div>
       <div className="flex gap-6 overflow-x-scroll pb-4">
-        {data.Page?.media?.map((media) => (
+        {displayData.media?.map((media) => (
           <MediaCard key={media?.id} {...media} />
         ))}
       </div>

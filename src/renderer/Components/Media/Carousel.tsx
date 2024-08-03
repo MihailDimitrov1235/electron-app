@@ -4,23 +4,16 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  GetMediaQuery,
-  MediaSeason,
-  MediaSort,
-  MediaStatus,
-  MediaType,
-  useGetMediaQuery,
-} from '@graphql/generated/types-and-hooks';
+import { GetMediaQuery } from '@graphql/generated/types-and-hooks';
 import DOMPurify from 'dompurify';
+// import { enqueueSnackbar } from 'notistack';
 import MediaCard from './MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
-import { enqueueSnackbar } from 'notistack';
 
 type CarouselProps = {
-  data: GetMediaQuery;
+  data: GetMediaQuery['Page'];
   autoSlideInterval?: number;
 };
 
@@ -29,8 +22,8 @@ export default function Carousel({
   autoSlideInterval = 5000,
 }: CarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const medias = data?.Page?.media;
-  const mediasLength = medias?.length || 1;
+  const medias = data?.media;
+  const mediasLength = medias?.length || 0;
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % mediasLength);
@@ -156,54 +149,54 @@ export default function Carousel({
   );
 }
 
-export function AnimeCarousel() {
-  const now = new Date();
-  const month = now.getMonth();
-  const year = now.getFullYear();
+// export function AnimeCarousel() {
+//   const now = new Date();
+//   const month = now.getMonth();
+//   const year = now.getFullYear();
 
-  let season;
-  if (month >= 0 && month <= 2) {
-    season = MediaSeason.Winter;
-  } else if (month >= 3 && month <= 5) {
-    season = MediaSeason.Spring;
-  } else if (month >= 6 && month <= 8) {
-    season = MediaSeason.Summer;
-  } else {
-    season = MediaSeason.Fall;
-  }
-  const { loading, error, data } = useGetMediaQuery({
-    variables: {
-      season,
-      year,
-      mediaType: MediaType.Anime,
-      sort: [MediaSort.PopularityDesc],
-    },
-  });
-  if (error) {
-    enqueueSnackbar({ variant: 'error', message: error.message });
-    return <p>No data available</p>;
-  }
-  if (loading || !data || !data.Page || !data.Page.media) {
-    return <p>loading</p>;
-  }
-  return <Carousel data={data} />;
-}
+//   let season;
+//   if (month >= 0 && month <= 2) {
+//     season = MediaSeason.Winter;
+//   } else if (month >= 3 && month <= 5) {
+//     season = MediaSeason.Spring;
+//   } else if (month >= 6 && month <= 8) {
+//     season = MediaSeason.Summer;
+//   } else {
+//     season = MediaSeason.Fall;
+//   }
+//   const { loading, error, data } = useGetMediaQuery({
+//     variables: {
+//       season,
+//       year,
+//       mediaType: MediaType.Anime,
+//       sort: [MediaSort.PopularityDesc],
+//     },
+//   });
+//   if (error) {
+//     enqueueSnackbar({ variant: 'error', message: error.message });
+//     return <p>No data available</p>;
+//   }
+//   if (loading || !data || !data.Page || !data.Page.media) {
+//     return <p>loading</p>;
+//   }
+//   return <Carousel data={data} />;
+// }
 
-export function MangaCarousel() {
-  const { loading, error, data } = useGetMediaQuery({
-    variables: {
-      mediaType: MediaType.Manga,
-      sort: [MediaSort.PopularityDesc],
-      status: MediaStatus.Releasing,
-      onList: false,
-    },
-  });
-  if (error) {
-    enqueueSnackbar({ variant: 'error', message: error.message });
-    return <p>No data available</p>;
-  }
-  if (loading || !data || !data.Page || !data.Page.media) {
-    return <p>loading</p>;
-  }
-  return <Carousel data={data} />;
-}
+// export function MangaCarousel() {
+//   const { loading, error, data } = useGetMediaQuery({
+//     variables: {
+//       mediaType: MediaType.Manga,
+//       sort: [MediaSort.PopularityDesc],
+//       status: MediaStatus.Releasing,
+//       onList: false,
+//     },
+//   });
+//   if (error) {
+//     enqueueSnackbar({ variant: 'error', message: error.message });
+//     return <p>No data available</p>;
+//   }
+//   if (loading || !data || !data.Page || !data.Page.media) {
+//     return <p>loading</p>;
+//   }
+//   return <Carousel data={data} />;
+// }

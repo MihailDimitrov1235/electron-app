@@ -17,7 +17,7 @@ class AppUpdater {
 const protocolName = 'electron-app';
 let mainWindow: BrowserWindow | null = null;
 
-SetupIPCHandlers(mainWindow);
+SetupIPCHandlers();
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -137,6 +137,8 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  // createInitialServer(mainWindow);
 };
 
 app.on('window-all-closed', () => {

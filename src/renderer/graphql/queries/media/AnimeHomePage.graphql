@@ -1,0 +1,135 @@
+query GetAnimeHomePage($season: MediaSeason, $year: Int) {
+  Carousel: Page(page: 1, perPage: 20) {
+    media(
+      type: ANIME
+      sort: [POPULARITY_DESC]
+      seasonYear: $year
+      season: $season
+    ) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Trending: Page(page: 1, perPage: 20) {
+    media(type: ANIME, sort: TRENDING_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  HighestRated: Page(page: 1, perPage: 20) {
+    media(type: ANIME, sort: SCORE_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Popular: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: POPULARITY_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+}

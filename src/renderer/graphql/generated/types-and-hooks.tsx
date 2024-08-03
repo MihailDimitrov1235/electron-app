@@ -4741,6 +4741,19 @@ export type GetReviewQueryVariables = Exact<{
 
 export type GetReviewQuery = { __typename?: 'Query', Review?: { __typename?: 'Review', score?: number | null, body?: string | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null, media?: { __typename?: 'Media', bannerImage?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null };
 
+export type GetAnimeHomePageQueryVariables = Exact<{
+  season?: InputMaybe<MediaSeason>;
+  year?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetAnimeHomePageQuery = { __typename?: 'Query', Carousel?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, Trending?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, HighestRated?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, Popular?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null };
+
+export type GetMangaHomePageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMangaHomePageQuery = { __typename?: 'Query', Carousel?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, Trending?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, HighestRated?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null, Popular?: { __typename?: 'Page', media?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, chapters?: number | null, volumes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null> | null } | null };
+
 export type GetMediaQueryVariables = Exact<{
   mediaType: MediaType;
   sort?: InputMaybe<Array<InputMaybe<MediaSort>> | InputMaybe<MediaSort>>;
@@ -5169,6 +5182,336 @@ export type GetReviewQueryHookResult = ReturnType<typeof useGetReviewQuery>;
 export type GetReviewLazyQueryHookResult = ReturnType<typeof useGetReviewLazyQuery>;
 export type GetReviewSuspenseQueryHookResult = ReturnType<typeof useGetReviewSuspenseQuery>;
 export type GetReviewQueryResult = Apollo.QueryResult<GetReviewQuery, GetReviewQueryVariables>;
+export const GetAnimeHomePageDocument = gql`
+    query GetAnimeHomePage($season: MediaSeason, $year: Int) {
+  Carousel: Page(page: 1, perPage: 20) {
+    media(type: ANIME, sort: [POPULARITY_DESC], seasonYear: $year, season: $season) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Trending: Page(page: 1, perPage: 20) {
+    media(type: ANIME, sort: TRENDING_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  HighestRated: Page(page: 1, perPage: 20) {
+    media(type: ANIME, sort: SCORE_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Popular: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: POPULARITY_DESC) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAnimeHomePageQuery__
+ *
+ * To run a query within a React component, call `useGetAnimeHomePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAnimeHomePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAnimeHomePageQuery({
+ *   variables: {
+ *      season: // value for 'season'
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useGetAnimeHomePageQuery(baseOptions?: Apollo.QueryHookOptions<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>(GetAnimeHomePageDocument, options);
+      }
+export function useGetAnimeHomePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>(GetAnimeHomePageDocument, options);
+        }
+export function useGetAnimeHomePageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>(GetAnimeHomePageDocument, options);
+        }
+export type GetAnimeHomePageQueryHookResult = ReturnType<typeof useGetAnimeHomePageQuery>;
+export type GetAnimeHomePageLazyQueryHookResult = ReturnType<typeof useGetAnimeHomePageLazyQuery>;
+export type GetAnimeHomePageSuspenseQueryHookResult = ReturnType<typeof useGetAnimeHomePageSuspenseQuery>;
+export type GetAnimeHomePageQueryResult = Apollo.QueryResult<GetAnimeHomePageQuery, GetAnimeHomePageQueryVariables>;
+export const GetMangaHomePageDocument = gql`
+    query GetMangaHomePage {
+  Carousel: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: [POPULARITY_DESC], status: RELEASING) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Trending: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: TRENDING_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  HighestRated: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: SCORE_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Popular: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: POPULARITY_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetMangaHomePageQuery__
+ *
+ * To run a query within a React component, call `useGetMangaHomePageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMangaHomePageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMangaHomePageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMangaHomePageQuery(baseOptions?: Apollo.QueryHookOptions<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>(GetMangaHomePageDocument, options);
+      }
+export function useGetMangaHomePageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>(GetMangaHomePageDocument, options);
+        }
+export function useGetMangaHomePageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>(GetMangaHomePageDocument, options);
+        }
+export type GetMangaHomePageQueryHookResult = ReturnType<typeof useGetMangaHomePageQuery>;
+export type GetMangaHomePageLazyQueryHookResult = ReturnType<typeof useGetMangaHomePageLazyQuery>;
+export type GetMangaHomePageSuspenseQueryHookResult = ReturnType<typeof useGetMangaHomePageSuspenseQuery>;
+export type GetMangaHomePageQueryResult = Apollo.QueryResult<GetMangaHomePageQuery, GetMangaHomePageQueryVariables>;
 export const GetMediaDocument = gql`
     query GetMedia($mediaType: MediaType!, $sort: [MediaSort], $status: MediaStatus, $onList: Boolean, $season: MediaSeason, $year: Int, $page: Int = 1, $perPage: Int = 20) {
   Page(page: $page, perPage: $perPage) {

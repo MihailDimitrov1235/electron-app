@@ -22,7 +22,8 @@ export default function Review() {
   const { loading, error, data } = useGetReviewQuery({
     variables: { id: Number(id) },
   });
-  const [rateReview, { data: rateReviewData }] = useRateReviewMutation();
+  const [rateReview, { data: rateReviewData, error: rateReviewError }] =
+    useRateReviewMutation();
   const [rating, setRating] = useState({
     like: 0,
     dislike: 0,
@@ -53,6 +54,10 @@ export default function Review() {
   }, [rateReviewData]);
   if (error) {
     enqueueSnackbar({ variant: 'error', message: error.message });
+    return <div>error</div>;
+  }
+  if (rateReviewError) {
+    enqueueSnackbar({ variant: 'error', message: rateReviewError.message });
     return <div>error</div>;
   }
   if (loading || !data) {

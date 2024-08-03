@@ -5,11 +5,10 @@ import {
   createHttpLink,
   InMemoryCache,
   ApolloProvider,
-  from,
   ApolloLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { SnackbarProvider } from 'notistack';
+import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
 import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
 import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
@@ -20,24 +19,47 @@ import './global.css';
 function App() {
   const { theme } = useTheme();
   const { token } = useAuth();
+  // const port = useRef(8080);
+
+  // useEffect(() => {
+  //   const removeListener = window.electronAPI.handleSetPort((message) => {
+  //     console.log(message);
+  //     port.current = message;
+  //   });
+
+  //   return () => {
+  //     removeListener();
+  //   };
+  // });
 
   const client = useMemo(() => {
     const httpLink = createHttpLink({
       uri: 'https://graphql.anilist.co',
-      // fetchOptions: {
-      //   mode: 'no-cors', // no-cors, *cors, same-origin
-      // },
+      // uri: `http://localhost:${port.current}/api`,
     });
 
-    const afterwareLink = new ApolloLink((operation, forward) => {
+    const rateLimitLink = new ApolloLink((operation, forward) => {
       return forward(operation).map((response) => {
         const context = operation.getContext();
-        const {
-          response: { headers },
-        } = context;
+        const headers = context.response?.headers;
 
         if (headers) {
-          console.log(headers);
+          // Extract rate limit information from headers
+          const rateLimitRemaining = headers.get('X-RateLimit-Remaining');
+          const rateLimitReset = headers.get('X-RateLimit-Reset');
+
+          if (rateLimitRemaining) {
+            console.log('Rate Limit Remaining:', rateLimitRemaining);
+          }
+          if (rateLimitReset) {
+            console.log('Rate Limit Reset Time:', rateLimitReset);
+            enqueueSnackbar({
+              variant: 'error',
+              message: `Too many requests. Try again in ${rateLimitReset} seconds.`,
+            });
+          }
+        } else {
+          console.log('No headers found in response.');
         }
 
         return response;
@@ -45,23 +67,18 @@ function App() {
     });
 
     const authLink = setContext((_, { headers }) => {
-      if (token) {
-        return {
-          headers: {
-            ...headers,
-            authorization: `Bearer ${token}`,
-          },
-        };
-      }
       return {
         headers: {
           ...headers,
+          authorization: token ? `Bearer ${token}` : '',
         },
       };
     });
 
     return new ApolloClient({
-      link: from([authLink, httpLink, afterwareLink]),
+      link: token
+        ? ApolloLink.from([authLink, rateLimitLink, httpLink])
+        : ApolloLink.from([rateLimitLink, httpLink]),
       cache: new InMemoryCache(),
     });
   }, [token]);
