@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect } from 'react';
+import React from 'react';
 import Carousel from '@Components/Media/Carousel';
 import {
   GetMediaQuery,

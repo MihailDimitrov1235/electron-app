@@ -5,7 +5,9 @@ import {
 import React = require('react');
 
 type changeMediaListEntryPropsType = {
-  setData: React.Dispatch<React.SetStateAction<GetMediaDetailsQuery | null>>;
+  setData: React.Dispatch<
+    React.SetStateAction<GetMediaDetailsQuery['MediaDetails'] | null>
+  >;
   mediaListEntry?: {
     id: number;
     status?: MediaListStatus | null;
@@ -34,12 +36,9 @@ export default function changeMediaListEntry({
   mediaListEntry,
 }: changeMediaListEntryPropsType) {
   setData((prev) => ({
+    id: prev?.id || 0,
+    isFavourite: prev?.isFavourite || false,
     ...prev,
-    Media: {
-      id: prev?.Media?.id || 0,
-      isFavourite: prev?.Media?.isFavourite || false,
-      ...prev?.Media,
-      mediaListEntry,
-    },
+    mediaListEntry,
   }));
 }

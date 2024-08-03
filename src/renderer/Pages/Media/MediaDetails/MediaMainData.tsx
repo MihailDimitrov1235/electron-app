@@ -28,8 +28,10 @@ import { enqueueSnackbar } from 'notistack';
 import MediaListEntryPopover from './MediaListEntryPopover';
 
 type MediaMainDataPropsType = {
-  data: GetMediaDetailsQuery;
-  setData: React.Dispatch<React.SetStateAction<GetMediaDetailsQuery | null>>;
+  data: GetMediaDetailsQuery['MediaDetails'];
+  setData: React.Dispatch<
+    React.SetStateAction<GetMediaDetailsQuery['MediaDetails'] | null>
+  >;
   openTab: string;
   setOpenTab: React.Dispatch<React.SetStateAction<string>>;
   MediaTabs: string[];
@@ -90,11 +92,8 @@ export default function MediaMainData({
       enqueueSnackbar({ variant: 'success', message: 'Updated favourites' });
       setData((prev) => ({
         ...prev,
-        Media: {
-          ...prev?.Media,
-          id: prev?.Media?.id || 1,
-          isFavourite: !prev?.Media?.isFavourite,
-        },
+        id: prev?.id || 1,
+        isFavourite: !prev?.isFavourite,
       }));
     };
 
@@ -112,20 +111,18 @@ export default function MediaMainData({
     useState(false);
 
   useEffect(() => {
-    setProgress(data?.Media?.mediaListEntry?.progress || 0);
-    setProgressVolumes(data.Media?.mediaListEntry?.progressVolumes || 0);
+    setProgress(data?.mediaListEntry?.progress || 0);
+    setProgressVolumes(data?.mediaListEntry?.progressVolumes || 0);
     setUserScore(
-      data?.Media?.mediaListEntry?.score
-        ? data.Media.mediaListEntry.score / 10
-        : 0,
+      data?.mediaListEntry?.score ? data.mediaListEntry.score / 10 : 0,
     );
   }, [data]);
 
   const handleFavoriteChange = () => {
-    if (data.Media?.type === MediaType.Anime) {
-      toggleFavouriteAnime({ variables: { animeId: data.Media.id } });
-    } else if (data.Media?.type === MediaType.Manga) {
-      toggleFavouriteManga({ variables: { mangaId: data.Media.id } });
+    if (data?.type === MediaType.Anime) {
+      toggleFavouriteAnime({ variables: { animeId: data.id } });
+    } else if (data?.type === MediaType.Manga) {
+      toggleFavouriteManga({ variables: { mangaId: data.id } });
     }
   };
 
@@ -143,42 +140,40 @@ export default function MediaMainData({
         progress !== 0 ||
         userScore !== 0 ||
         progressVolumes !== 0 ||
-        data.Media?.mediaListEntry
+        data?.mediaListEntry
       ) {
-        if (data.Media?.mediaListEntry) {
+        if (data?.mediaListEntry) {
           updateMediaListEntries({
             variables: {
-              ids: [data.Media.mediaListEntry.id],
+              ids: [data.mediaListEntry.id],
               status:
-                data.Media?.episodes === progress ||
-                data.Media?.chapters === progress
+                data?.episodes === progress || data?.chapters === progress
                   ? MediaListStatus.Completed
-                  : data.Media.mediaListEntry.status,
+                  : data.mediaListEntry.status,
               scoreRaw: userScore * 10,
               progress,
               progressVolumes,
-              private: data.Media.mediaListEntry.private,
-              notes: data.Media.mediaListEntry.notes,
-              repeat: data.Media.mediaListEntry.repeat,
+              private: data.mediaListEntry.private,
+              notes: data.mediaListEntry.notes,
+              repeat: data.mediaListEntry.repeat,
               startedAt: {
-                year: data.Media.mediaListEntry.startedAt?.year,
-                month: data.Media.mediaListEntry.startedAt?.month,
-                day: data.Media.mediaListEntry.startedAt?.day,
+                year: data.mediaListEntry.startedAt?.year,
+                month: data.mediaListEntry.startedAt?.month,
+                day: data.mediaListEntry.startedAt?.day,
               },
               completedAt: {
-                year: data.Media.mediaListEntry.completedAt?.year,
-                month: data.Media.mediaListEntry.completedAt?.month,
-                day: data.Media.mediaListEntry.completedAt?.day,
+                year: data.mediaListEntry.completedAt?.year,
+                month: data.mediaListEntry.completedAt?.month,
+                day: data.mediaListEntry.completedAt?.day,
               },
             },
           });
         } else {
           saveMediaListEntry({
             variables: {
-              mediaId: data.Media?.id,
+              mediaId: data?.id,
               status:
-                data.Media?.episodes === progress ||
-                data.Media?.chapters === progress
+                data?.episodes === progress || data?.chapters === progress
                   ? MediaListStatus.Completed
                   : MediaListStatus.Current,
               scoreRaw: userScore * 10,
@@ -212,7 +207,7 @@ export default function MediaMainData({
       />
       <div className="flex flex-col gap-4">
         <MediaCard
-          {...data.Media}
+          {...data}
           withTitle={false}
           withEpisodes={false}
           withScore={false}
@@ -226,17 +221,15 @@ export default function MediaMainData({
             className="flex-1"
             onClick={handleStatusClick}
           >
-            {data.Media?.mediaListEntry?.status === MediaListStatus.Current
-              ? data.Media.type === MediaType.Anime
+            {data?.mediaListEntry?.status === MediaListStatus.Current
+              ? data.type === MediaType.Anime
                 ? 'Watching'
                 : 'Reading'
-              : data.Media?.mediaListEntry?.status || 'Add to list'}
+              : data?.mediaListEntry?.status || 'Add to list'}
           </Button>
           <Tooltip
             text={
-              data.Media?.isFavourite
-                ? 'Remove From Favourites'
-                : 'Add To Favourites'
+              data?.isFavourite ? 'Remove From Favourites' : 'Add To Favourites'
             }
             direction="right"
           >
@@ -245,36 +238,32 @@ export default function MediaMainData({
               variant="icon-square"
               className="bg-secondary ring-primary text-primary-background"
             >
-              {data.Media?.isFavourite ? <FaHeart /> : <FaRegHeart />}
+              {data?.isFavourite ? <FaHeart /> : <FaRegHeart />}
             </Button>
           </Tooltip>
         </div>
         <div className=" flex justify-between">
-          <div>
-            {data.Media?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}
-          </div>
+          <div>{data?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}</div>
           <CounterInput
             count={progress}
             setCount={setProgress}
             min={0}
             max={
-              data.Media?.type === MediaType.Anime
-                ? data.Media?.episodes ||
-                  data.Media?.nextAiringEpisode?.episode ||
-                  99999
-                : data.Media?.chapters || 99999
+              data?.type === MediaType.Anime
+                ? data?.episodes || data?.nextAiringEpisode?.episode || 99999
+                : data?.chapters || 99999
             }
             digitsAfterDecimal={0}
           />
         </div>
-        {data.Media?.type === MediaType.Manga && (
+        {data?.type === MediaType.Manga && (
           <div className=" flex justify-between">
             <div>Volumes</div>
             <CounterInput
               count={progressVolumes}
               setCount={setProgressVolumes}
               min={0}
-              max={data.Media.volumes || 99999}
+              max={data.volumes || 99999}
               digitsAfterDecimal={0}
             />
           </div>
@@ -300,45 +289,39 @@ export default function MediaMainData({
             <div className="flex flex-col">
               <div className="flex justify-between text-4xl">
                 <div className=" line-clamp-2 font-medium pb-1">
-                  {data.Media?.title?.userPreferred}
+                  {data?.title?.userPreferred}
                 </div>
               </div>
               <div className="text-lg text-text-main font-semibold">
-                {data.Media?.format} {' - '} {data.Media?.status}
+                {data?.format} {' - '} {data?.status}
               </div>
             </div>
             <div>
-              {data.Media?.type === 'ANIME' ? (
+              {data?.type === 'ANIME' ? (
                 <div>
-                  {data.Media?.nextAiringEpisode
-                    ? `${data.Media.nextAiringEpisode.episode - 1} / ${
-                        data.Media.episodes || '~'
+                  {data?.nextAiringEpisode
+                    ? `${data.nextAiringEpisode.episode - 1} / ${
+                        data.episodes || '~'
                       } Episodes`
-                    : `${data.Media?.episodes} Episodes`}
+                    : `${data?.episodes} Episodes`}
                   {' - '}
-                  {data.Media?.duration} Min/Ep
+                  {data?.duration} Min/Ep
                 </div>
               ) : (
                 <div>
-                  {data.Media?.chapters && (
-                    <div>{data.Media.chapters} Chapters</div>
-                  )}{' '}
-                  {data.Media?.volumes && (
-                    <div>{data.Media.volumes} Volumes</div>
-                  )}
+                  {data?.chapters && <div>{data.chapters} Chapters</div>}{' '}
+                  {data?.volumes && <div>{data.volumes} Volumes</div>}
                 </div>
               )}
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            {data.Media?.meanScore && (
-              <MediaScore score={data.Media.meanScore} />
-            )}
+            {data?.meanScore && <MediaScore score={data.meanScore} />}
 
             <div className="flex flex-col gap-1 items-end">
               <Tooltip text="Popularity" direction="left">
                 <div className="flex gap-2 items-center bg-background-dark/30 border border-primary/30 py-1 px-2 rounded-full text-md">
-                  {data.Media?.popularity}
+                  {data?.popularity}
                   <span className="text-blue-500">
                     <IoPeople size={20} />
                   </span>
@@ -347,7 +330,7 @@ export default function MediaMainData({
 
               <Tooltip text="Favourites" direction="left">
                 <div className="flex gap-2 items-center bg-background-dark/30 border border-primary/30 py-1 px-2 rounded-full text-md">
-                  {data.Media?.favourites}
+                  {data?.favourites}
                   <span className="text-secondary/80">
                     <FaHeart size={20} />
                   </span>
@@ -359,15 +342,13 @@ export default function MediaMainData({
 
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 justify-start">
-            {data.Media?.genres?.map((genre) => (
+            {data?.genres?.map((genre) => (
               <GenreButton key={genre} genre={genre} />
             ))}
           </div>
           <div className=" flex justify-between gap-4">
             <div className="flex flex-wrap gap-2 justify-between">
-              {data.Media?.tags?.map((tag) => (
-                <Tag key={tag?.name} tag={tag} />
-              ))}
+              {data?.tags?.map((tag) => <Tag key={tag?.name} tag={tag} />)}
               <div className="flex-1" />
             </div>
           </div>

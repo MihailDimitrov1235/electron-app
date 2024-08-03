@@ -4781,10 +4781,13 @@ export type GetMediaCharactersQuery = { __typename?: 'Query', Media?: { __typena
 export type GetMediaDetailsQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
   mediaType?: InputMaybe<MediaType>;
+  charactersPerPage?: InputMaybe<Scalars['Int']['input']>;
+  staffPerPage?: InputMaybe<Scalars['Int']['input']>;
+  reviewsPerPage?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type GetMediaDetailsQuery = { __typename?: 'Query', Media?: { __typename?: 'Media', id: number, favourites?: number | null, popularity?: number | null, status?: MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, source?: MediaSource | null, format?: MediaFormat | null, genres?: Array<string | null> | null, countryOfOrigin?: any | null, season?: MediaSeason | null, seasonYear?: number | null, synonyms?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, trailer?: { __typename?: 'MediaTrailer', site?: string | null, id?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, isMediaSpoiler?: boolean | null } | null> | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, endDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, studios?: { __typename?: 'StudioConnection', nodes?: Array<{ __typename?: 'Studio', id: number, name: string, siteUrl?: string | null } | null> | null } | null } | null, Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaList?: Array<{ __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null } | null> | null } | null };
+export type GetMediaDetailsQuery = { __typename?: 'Query', MediaDetails?: { __typename?: 'Media', id: number, favourites?: number | null, popularity?: number | null, status?: MediaStatus | null, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, source?: MediaSource | null, format?: MediaFormat | null, genres?: Array<string | null> | null, countryOfOrigin?: any | null, season?: MediaSeason | null, seasonYear?: number | null, synonyms?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, trailer?: { __typename?: 'MediaTrailer', site?: string | null, id?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, private?: boolean | null, notes?: string | null, repeat?: number | null, customLists?: any | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null, tags?: Array<{ __typename?: 'MediaTag', name: string, rank?: number | null, isMediaSpoiler?: boolean | null } | null> | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, endDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, studios?: { __typename?: 'StudioConnection', nodes?: Array<{ __typename?: 'Studio', id: number, name: string, siteUrl?: string | null } | null> | null } | null } | null, Following?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', total?: number | null, perPage?: number | null, currentPage?: number | null, lastPage?: number | null, hasNextPage?: boolean | null } | null, mediaList?: Array<{ __typename?: 'MediaList', id: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null } | null> | null } | null, MediaInfo?: { __typename?: 'Media', id: number, description?: string | null, relations?: { __typename?: 'MediaConnection', edges?: Array<{ __typename?: 'MediaEdge', relationType?: MediaRelation | null, node?: { __typename?: 'Media', id: number, idMal?: number | null, episodes?: number | null, chapters?: number | null, popularity?: number | null, meanScore?: number | null, isAdult?: boolean | null, isFavourite: boolean, format?: MediaFormat | null, type?: MediaType | null, status?: MediaStatus | null, bannerImage?: string | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null, private?: boolean | null, score?: number | null, status?: MediaListStatus | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null, title?: { __typename?: 'MediaTitle', english?: string | null, romaji?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null> | null } | null, recommendations?: { __typename?: 'RecommendationConnection', nodes?: Array<{ __typename?: 'Recommendation', mediaRecommendation?: { __typename?: 'Media', id: number, episodes?: number | null, chapters?: number | null, meanScore?: number | null, isAdult?: boolean | null, format?: MediaFormat | null, type?: MediaType | null, status?: MediaStatus | null, bannerImage?: string | null, title?: { __typename?: 'MediaTitle', english?: string | null, romaji?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', large?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null, score?: number | null } | null } | null } | null> | null } | null } | null, MediaCharacters?: { __typename?: 'Media', characters?: { __typename?: 'CharacterConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'CharacterEdge', role?: CharacterRole | null, voiceActors?: Array<{ __typename?: 'Staff', id: number, languageV2?: string | null, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null } | null> | null } | null } | null, MediaStaff?: { __typename?: 'Media', id: number, staff?: { __typename?: 'StaffConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'StaffEdge', id?: number | null, role?: string | null, node?: { __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null } | null } | null } | null> | null } | null } | null, MediaReviews?: { __typename?: 'Media', reviews?: { __typename?: 'ReviewConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, edges?: Array<{ __typename?: 'ReviewEdge', node?: { __typename?: 'Review', id: number, score?: number | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, summary?: string | null, createdAt: number, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null } | null } | null> | null } | null } | null };
 
 export type GetMediaInfoQueryVariables = Exact<{
   mediaId?: InputMaybe<Scalars['Int']['input']>;
@@ -5673,8 +5676,8 @@ export type GetMediaCharactersLazyQueryHookResult = ReturnType<typeof useGetMedi
 export type GetMediaCharactersSuspenseQueryHookResult = ReturnType<typeof useGetMediaCharactersSuspenseQuery>;
 export type GetMediaCharactersQueryResult = Apollo.QueryResult<GetMediaCharactersQuery, GetMediaCharactersQueryVariables>;
 export const GetMediaDetailsDocument = gql`
-    query GetMediaDetails($mediaId: Int, $mediaType: MediaType) {
-  Media(id: $mediaId, type: $mediaType) {
+    query GetMediaDetails($mediaId: Int, $mediaType: MediaType, $charactersPerPage: Int, $staffPerPage: Int, $reviewsPerPage: Int) {
+  MediaDetails: Media(id: $mediaId, type: $mediaType) {
     id
     favourites
     popularity
@@ -5759,7 +5762,7 @@ export const GetMediaDetailsDocument = gql`
     source
     synonyms
   }
-  Page(page: 1) {
+  Following: Page(page: 1) {
     pageInfo {
       total
       perPage
@@ -5783,6 +5786,159 @@ export const GetMediaDetailsDocument = gql`
       }
     }
   }
+  MediaInfo: Media(id: $mediaId, type: $mediaType) {
+    id
+    description
+    relations {
+      edges {
+        relationType(version: 2)
+        node {
+          id
+          idMal
+          mediaListEntry {
+            progress
+            private
+            score(format: POINT_100)
+            status
+          }
+          episodes
+          chapters
+          nextAiringEpisode {
+            episode
+          }
+          popularity
+          meanScore
+          isAdult
+          isFavourite
+          format
+          title {
+            english
+            romaji
+            userPreferred
+          }
+          type
+          status(version: 2)
+          bannerImage
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+        }
+      }
+    }
+    recommendations(sort: RATING_DESC) {
+      nodes {
+        mediaRecommendation {
+          id
+          episodes
+          chapters
+          meanScore
+          isAdult
+          format
+          title {
+            english
+            romaji
+            userPreferred
+          }
+          type
+          status(version: 2)
+          bannerImage
+          coverImage {
+            large
+          }
+          mediaListEntry {
+            progress
+            score(format: POINT_100)
+          }
+        }
+      }
+    }
+  }
+  MediaCharacters: Media(id: $mediaId, type: $mediaType) {
+    characters(page: 1, perPage: $charactersPerPage, sort: [ROLE, FAVOURITES_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        role
+        voiceActors {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            userPreferred
+          }
+          image {
+            large
+            medium
+          }
+          languageV2
+        }
+        node {
+          id
+          image {
+            large
+            medium
+          }
+          name {
+            userPreferred
+          }
+          isFavourite
+        }
+      }
+    }
+  }
+  MediaStaff: Media(id: $mediaId, type: $mediaType) {
+    id
+    staff(page: 1, perPage: $staffPerPage) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            userPreferred
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
+  }
+  MediaReviews: Media(id: $mediaId, type: $mediaType) {
+    reviews(page: 1, perPage: $reviewsPerPage, sort: [RATING_DESC]) {
+      pageInfo {
+        hasNextPage
+      }
+      edges {
+        node {
+          id
+          score
+          rating
+          ratingAmount
+          userRating
+          summary
+          createdAt
+          user {
+            id
+            name
+            avatar {
+              medium
+            }
+          }
+        }
+      }
+    }
+  }
 }
     `;
 
@@ -5800,6 +5956,9 @@ export const GetMediaDetailsDocument = gql`
  *   variables: {
  *      mediaId: // value for 'mediaId'
  *      mediaType: // value for 'mediaType'
+ *      charactersPerPage: // value for 'charactersPerPage'
+ *      staffPerPage: // value for 'staffPerPage'
+ *      reviewsPerPage: // value for 'reviewsPerPage'
  *   },
  * });
  */

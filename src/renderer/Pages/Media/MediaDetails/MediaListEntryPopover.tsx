@@ -24,8 +24,10 @@ import { enqueueSnackbar } from 'notistack';
 type MediaListEntryPopoverPropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: GetMediaDetailsQuery;
-  setData: React.Dispatch<React.SetStateAction<GetMediaDetailsQuery | null>>;
+  data: GetMediaDetailsQuery['MediaDetails'];
+  setData: React.Dispatch<
+    React.SetStateAction<GetMediaDetailsQuery['MediaDetails'] | null>
+  >;
 };
 
 export default function MediaListEntryPopover({
@@ -48,8 +50,8 @@ export default function MediaListEntryPopover({
     { data: deleteMutationData, error: deleteMutationError },
   ] = useDeleteMediaListEntryMutation();
   const defaultFormData = {
-    id: data.Media?.mediaListEntry?.id || null,
-    mediaId: data.Media?.id,
+    id: data?.mediaListEntry?.id || null,
+    mediaId: data?.id,
     status: MediaListStatus.Current,
     score: 0,
     progress: 0,
@@ -61,10 +63,10 @@ export default function MediaListEntryPopover({
     completedAt: null,
   };
   const [formData, setFormData] = useState(
-    data.Media?.mediaListEntry ?? defaultFormData,
+    data?.mediaListEntry ?? defaultFormData,
   );
   useEffect(() => {
-    setFormData(data.Media?.mediaListEntry ?? defaultFormData);
+    setFormData(data?.mediaListEntry ?? defaultFormData);
   }, [data]);
 
   if (saveMutationError) {
@@ -111,8 +113,7 @@ export default function MediaListEntryPopover({
     }
   }, [deleteMutationData]);
 
-  const currentKey =
-    data.Media?.type === MediaType.Anime ? 'Watching' : 'Reading';
+  const currentKey = data?.type === MediaType.Anime ? 'Watching' : 'Reading';
 
   const statusDropdownOptions = {
     [currentKey]: MediaListStatus.Current,
@@ -124,10 +125,10 @@ export default function MediaListEntryPopover({
   };
 
   const handleApply = () => {
-    if (data.Media?.mediaListEntry) {
+    if (data?.mediaListEntry) {
       updateMediaListEntries({
         variables: {
-          ids: [data.Media.mediaListEntry.id],
+          ids: [data.mediaListEntry.id],
           status: formData.status,
           scoreRaw: formData.score || 0,
           progress: formData.progress,
@@ -150,7 +151,7 @@ export default function MediaListEntryPopover({
     } else {
       saveMediaListEntry({
         variables: {
-          mediaId: data.Media?.id,
+          mediaId: data?.id,
           status: formData.status,
           scoreRaw: formData.score || 0,
           progress: formData.progress,
@@ -173,8 +174,8 @@ export default function MediaListEntryPopover({
     }
   };
   const handleDelete = () => {
-    if (data.Media?.mediaListEntry) {
-      deleteMediaListEntry({ variables: { id: data.Media.mediaListEntry.id } });
+    if (data?.mediaListEntry) {
+      deleteMediaListEntry({ variables: { id: data.mediaListEntry.id } });
     }
   };
 
@@ -185,15 +186,13 @@ export default function MediaListEntryPopover({
           <div
             className="h-[280px] bg-cover rounded-md"
             style={{
-              backgroundImage: `url(${data.Media?.coverImage?.extraLarge})`,
+              backgroundImage: `url(${data?.coverImage?.extraLarge})`,
               aspectRatio: '2/3',
             }}
           />
           <div className="flex flex-col gap-4 w-full">
             <div className="flex justify-between">
-              <span className="text-lg">
-                {data.Media?.title?.userPreferred}
-              </span>
+              <span className="text-lg">{data?.title?.userPreferred}</span>
               <div className="flex gap-4">
                 <Button onClick={() => setOpen(false)}>Cancel</Button>
                 <Button onClick={handleApply} variant="gradient">
@@ -252,32 +251,28 @@ export default function MediaListEntryPopover({
               <div className="flex gap-4">
                 <div className="flex-1 flex flex-col gap-1">
                   <div>
-                    {data.Media?.type === MediaType.Anime
-                      ? 'Episodes'
-                      : 'Chapters'}
+                    {data?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}
                   </div>
                   <TextField
                     title={
-                      data.Media?.type === MediaType.Anime
-                        ? 'Episodes'
-                        : 'Chapters'
+                      data?.type === MediaType.Anime ? 'Episodes' : 'Chapters'
                     }
                     endElement={
                       <div className="flex">
                         /{' '}
-                        {data.Media?.type === MediaType.Anime
-                          ? data.Media?.nextAiringEpisode?.episode
-                            ? data.Media.nextAiringEpisode.episode - 1
-                            : data.Media.episodes || '~'
-                          : data.Media?.chapters}
+                        {data?.type === MediaType.Anime
+                          ? data?.nextAiringEpisode?.episode
+                            ? data.nextAiringEpisode.episode - 1
+                            : data.episodes || '~'
+                          : data?.chapters}
                       </div>
                     }
                     number={{
                       min: 0,
                       max:
-                        data.Media?.chapters ||
-                        data.Media?.episodes ||
-                        (data.Media?.nextAiringEpisode?.episode || 0) - 1 ||
+                        data?.chapters ||
+                        data?.episodes ||
+                        (data?.nextAiringEpisode?.episode || 0) - 1 ||
                         99999,
                       digitsAfterDecimal: 0,
                     }}
@@ -290,19 +285,17 @@ export default function MediaListEntryPopover({
                     }}
                   />
                 </div>
-                {data.Media?.type === MediaType.Manga && (
+                {data?.type === MediaType.Manga && (
                   <div className="flex-1 flex flex-col gap-1">
                     <div>Volumes</div>
                     <TextField
                       title="Volumes"
                       endElement={
-                        <div className="flex">
-                          / {data.Media.volumes || '~'}
-                        </div>
+                        <div className="flex">/ {data.volumes || '~'}</div>
                       }
                       number={{
                         min: 0,
-                        max: data.Media?.volumes || 99999,
+                        max: data?.volumes || 99999,
                         digitsAfterDecimal: 0,
                       }}
                       value={formData.progressVolumes?.toString() || '0'}
@@ -447,7 +440,7 @@ export default function MediaListEntryPopover({
                 }
               />
             </div>
-            {data.Media?.mediaListEntry && (
+            {data?.mediaListEntry && (
               <Button
                 variant="error"
                 className="ml-auto mt-6"
