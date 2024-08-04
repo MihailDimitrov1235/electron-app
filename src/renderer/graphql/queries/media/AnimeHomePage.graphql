@@ -10,6 +10,7 @@ query GetAnimeHomePage($season: MediaSeason, $year: Int) {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -42,6 +43,7 @@ query GetAnimeHomePage($season: MediaSeason, $year: Int) {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -74,6 +76,7 @@ query GetAnimeHomePage($season: MediaSeason, $year: Int) {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -106,6 +109,7 @@ query GetAnimeHomePage($season: MediaSeason, $year: Int) {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large

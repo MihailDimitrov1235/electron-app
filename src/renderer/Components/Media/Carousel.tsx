@@ -4,10 +4,10 @@
 /* eslint-disable react/require-default-props */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { GetMediaQuery } from '@graphql/generated/types-and-hooks';
+import { GetMediaQuery, MediaType } from '@graphql/generated/types-and-hooks';
 import DOMPurify from 'dompurify';
 // import { enqueueSnackbar } from 'notistack';
-import MediaCard from './MediaCard';
+import MediaCard from '../Card/MediaCard';
 import EpisodesDisplay from './EpisodesDisplay';
 import GenreButton from '../GenreButton';
 import MediaScore from './MediaScore';
@@ -105,7 +105,11 @@ export default function Carousel({
                   />
                   <div className="flex gap-2">
                     {media?.genres?.map((genre) => (
-                      <GenreButton key={genre} genre={genre} />
+                      <GenreButton
+                        key={genre}
+                        genre={genre}
+                        mediaType={media.type || MediaType.Anime}
+                      />
                     ))}
                   </div>
                 </div>

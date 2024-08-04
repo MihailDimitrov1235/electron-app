@@ -12,7 +12,8 @@ import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
 import { MediaType } from '@graphql/generated/types-and-hooks';
 import Review from '@Pages/Review';
-import AnimeSearch from '@Pages/Media/AnimeSearch';
+import AnimeSearch from '@Pages/Search/AnimeSearch';
+import Search from '@Pages/Search';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -73,7 +74,15 @@ export default function RouteHandler() {
         },
         {
           path: '/search',
-          children: [{ path: '', element: <AnimeSearch /> }],
+          children: [
+            { path: 'anime', element: <AnimeSearch /> },
+            { path: 'manga', element: <AnimeSearch /> },
+            { path: 'users', element: <AnimeSearch /> },
+            { path: 'characters', element: <AnimeSearch /> },
+            { path: 'staff', element: <AnimeSearch /> },
+            { path: 'studios', element: <AnimeSearch /> },
+          ],
+          element: <Search />,
         },
         {
           path: '/review/:id',

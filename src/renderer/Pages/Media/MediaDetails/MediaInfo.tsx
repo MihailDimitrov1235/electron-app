@@ -2,7 +2,7 @@
 import React from 'react';
 import TruncatedText from '@Components/TruncatedText';
 import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
-import MediaCard from '@Components/Media/MediaCard';
+import MediaCard from '@Components/Card/MediaCard';
 
 // eslint-disable-next-line react/require-default-props
 export default function MediaInfo({

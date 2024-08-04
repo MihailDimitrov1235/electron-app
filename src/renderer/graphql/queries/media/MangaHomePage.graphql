@@ -5,6 +5,7 @@ query GetMangaHomePage {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -37,6 +38,7 @@ query GetMangaHomePage {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -69,6 +71,7 @@ query GetMangaHomePage {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large
@@ -101,6 +104,7 @@ query GetMangaHomePage {
       type
       meanScore
       bannerImage
+      format
       coverImage {
         extraLarge
         large

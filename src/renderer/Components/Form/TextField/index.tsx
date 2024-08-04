@@ -21,6 +21,7 @@ export type TextFieldPropsType = {
   };
   className?: string;
   endElement?: React.JSX.Element;
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
 function TextField(props: TextFieldPropsType) {

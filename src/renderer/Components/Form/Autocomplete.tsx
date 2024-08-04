@@ -71,18 +71,17 @@ export default function Autocomplete<T>({
 
   return (
     <div
-      className={`relative w-full flex gap-2 items-center px-2 py-2 bg-background-main border-background-dark rounded-md focus:outline-none focus:ring-1 focus:ring-text-main ${className}`}
+      className={`relative flex gap-2 items-center px-2 py-2 bg-background-main border-background-dark rounded-md focus:outline-none focus:ring-1 focus:ring-text-main ${className}`}
       ref={inputRef}
     >
       <div className=" flex w-fit gap-2 overflow-y-hidden flex-shrink-0 text-xs">
         {selectedOptions[0] && (
           <button
             type="button"
-            // key={getOptionValue(option)}
             onClick={() => onRemove(selectedOptions[0])}
             className="bg-primary text-primary-background px-1 rounded-full flex items-center gap-2"
           >
-            <span className="line-clamp-1 max-w-20">
+            <span className="line-clamp-1 max-w-20 px-1">
               {getOptionLabel(selectedOptions[0])}
             </span>
           </button>
@@ -104,7 +103,7 @@ export default function Autocomplete<T>({
         />
       </div>
 
-      {selectedOptions.length > 0 && (
+      {selectedOptions.length > 0 && !!selectedOptions[0] && (
         <button onClick={onRemoveAll} type="button">
           &times;
         </button>

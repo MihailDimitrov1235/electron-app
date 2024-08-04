@@ -1,21 +1,33 @@
-query GetMedia(
+query SearchMedia(
   $mediaType: MediaType!
   $sort: [MediaSort]
-  $status: MediaStatus
+  $statuses: [MediaStatus]
+  $formats: [MediaFormat]
   $onList: Boolean
   $season: MediaSeason
   $year: Int
+  $genres: [String]
+  $tags: [String]
+  $search: String
   $page: Int = 1
   $perPage: Int = 20
 ) {
   Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
     media(
       type: $mediaType
       sort: $sort
-      status: $status
+      status_in: $statuses
       onList: $onList
       season: $season
       seasonYear: $year
+      format_in: $formats
+      genre_in: $genres
+      tag_in: $tags
+      search: $search
     ) {
       id
       type

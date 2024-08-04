@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { enqueueSnackbar } from 'notistack';
 import Checkbox from '@Components/Form/Checkbox';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
-import MediaCard from './MediaCard';
+import MediaCard from '../Card/MediaCard';
 
 type MediaDisplayProps = {
   data: GetMediaQuery['Page'];

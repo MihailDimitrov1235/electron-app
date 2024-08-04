@@ -1,57 +1,18 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable react/require-default-props */
 import { Link } from 'react-router-dom';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook } from 'react-icons/io5';
 import Countdown from '@Components/Countdown';
-import EpisodesDisplay from './EpisodesDisplay';
+import EpisodesDisplay from '../../Media/EpisodesDisplay';
+import { type DefaultCardProps } from '.';
 
-type RequiredMediaCardProps = {
-  id?: number;
-  meanScore?: number | null;
-  coverImage?: {
-    extraLarge?: string | null;
-    large?: string | null;
-    medium?: string | null;
-    color?: string | null;
-  } | null;
-  title?: {
-    romaji?: string | null;
-    english?: string | null;
-    native?: string | null;
-    userPreferred?: string | null;
-  } | null;
-  episodes?: number | null;
-  mediaListEntry?: {
-    progress?: number | null;
-  } | null;
-  nextAiringEpisode?: {
-    episode?: number | null;
-    timeUntilAiring?: number | null;
-  } | null;
-  type?: any;
-};
-
-type OptionalMediaCardProps = {
-  withTitle?: boolean;
-  withEpisodes?: boolean;
-  withScore?: boolean;
-  withLink?: boolean;
-  withNextEpisode?: boolean;
-  withType?: boolean;
-  size?: number;
-  relationship?: string;
-  [key: string]: any;
-};
-
-type MediaCardPropsType = RequiredMediaCardProps & OptionalMediaCardProps;
-
-export default function MediaCard({
+export default function DefaultMediaCard({
   id,
   meanScore,
   coverImage,
   title,
   episodes,
+  chapters,
   mediaListEntry,
   nextAiringEpisode,
   type,
@@ -63,7 +24,7 @@ export default function MediaCard({
   withType = false,
   size = 3,
   relationship,
-}: MediaCardPropsType) {
+}: DefaultCardProps) {
   const width = 46 * size;
   const height = 65 * size;
   const fontSize = Math.min(6.5 * size, 16);
@@ -151,7 +112,7 @@ export default function MediaCard({
           episodes={{
             watched: mediaListEntry?.progress,
             nextAiring: nextAiringEpisode?.episode,
-            planned: episodes,
+            planned: episodes || chapters,
           }}
         />
       )}

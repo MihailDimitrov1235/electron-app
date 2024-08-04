@@ -1,16 +1,17 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-no-bind */
 import React, { useState, useRef, useEffect } from 'react';
 import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import Button from './Button';
 
 type DropdownProps = {
-  name: String;
-  options: String[];
-  onSelect: (option: String) => void;
-  // eslint-disable-next-line react/require-default-props
+  name: string;
+  options: string[];
+  onSelect: (option: string) => void;
   closeOnSelect?: boolean | undefined;
-  // eslint-disable-next-line react/require-default-props
-  className?: String;
+  className?: string;
+  buttonsClassName?: string;
 };
 
 export default function Dropdown({
@@ -19,6 +20,7 @@ export default function Dropdown({
   onSelect,
   closeOnSelect = true,
   className = '',
+  buttonsClassName = '',
 }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -41,7 +43,7 @@ export default function Dropdown({
   function handleDropdownClick() {
     setOpen(!open);
   }
-  function handleOptionSelect(option: String) {
+  function handleOptionSelect(option: string) {
     onSelect(option);
     if (closeOnSelect) {
       setOpen(false);
@@ -58,7 +60,7 @@ export default function Dropdown({
         onClick={handleDropdownClick}
         className={`w-full flex items-center justify-between gap-2 focus:border-text-main ${
           open ? 'rounded-b-none' : ''
-        }`}
+        } ${buttonsClassName}`}
       >
         {name}{' '}
         <div className=" items-center ">
@@ -73,20 +75,19 @@ export default function Dropdown({
       <div
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full `}
+        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-lg `}
       >
         {options.map((option, index) => (
-          <button
-            // eslint-disable-next-line react/no-array-index-key
+          <Button
             key={index}
             type="button"
             className={`${
               index === options.length - 1 && 'rounded-b-md'
-            } text-start px-3 py-2 w-full border border-transparent hover:border-background-dark`}
+            } rounded-none !justify-start px-3 py-2 w-full border border-transparent hover:border-background-dark ${buttonsClassName}`}
             onClick={() => handleOptionSelect(option)}
           >
             {option}
-          </button>
+          </Button>
         ))}
       </div>
     </div>

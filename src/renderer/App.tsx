@@ -7,6 +7,8 @@ import {
   ApolloProvider,
   ApolloLink,
 } from '@apollo/client';
+import { RetryLink } from '@apollo/client/link/retry';
+import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
@@ -38,11 +40,22 @@ function App() {
       // uri: `http://localhost:${port.current}/api`,
     });
 
+    const retryLink = new RetryLink({
+      delay: {
+        initial: 300,
+        max: Infinity,
+        jitter: true,
+      },
+      attempts: {
+        max: 5,
+        retryIf: (error, _operation) => !!error && error.statusCode !== 400,
+      },
+    });
+
     const rateLimitLink = new ApolloLink((operation, forward) => {
       return forward(operation).map((response) => {
         const context = operation.getContext();
         const headers = context.response?.headers;
-
         if (headers) {
           // Extract rate limit information from headers
           const rateLimitRemaining = headers.get('X-RateLimit-Remaining');
@@ -75,11 +88,44 @@ function App() {
       };
     });
 
+    const errorLink = onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors)
+        graphQLErrors.forEach(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          ),
+        );
+      if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+        enqueueSnackbar({
+          variant: 'error',
+          message: 'Network error occurred. Retrying...',
+        });
+      }
+    });
+
     return new ApolloClient({
-      link: token
-        ? ApolloLink.from([authLink, rateLimitLink, httpLink])
-        : ApolloLink.from([rateLimitLink, httpLink]),
+      link: ApolloLink.from([
+        errorLink,
+        retryLink,
+        token ? authLink : ApolloLink.empty(),
+        rateLimitLink,
+        httpLink,
+      ]),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'cache-and-network',
+          errorPolicy: 'all',
+        },
+        query: {
+          fetchPolicy: 'network-only',
+          errorPolicy: 'all',
+        },
+        mutate: {
+          errorPolicy: 'all',
+        },
+      },
     });
   }, [token]);
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
-import MediaCard from '@Components/Media/MediaCard';
+import MediaCard from '@Components/Card/MediaCard';
 import MediaScore from '@Components/Media/MediaScore';
 import Button from '@Components/Form/Button';
 import { useAuth } from '@Components/Contexts/AuthContext';
@@ -343,12 +343,22 @@ export default function MediaMainData({
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 justify-start">
             {data?.genres?.map((genre) => (
-              <GenreButton key={genre} genre={genre} />
+              <GenreButton
+                key={genre}
+                genre={genre}
+                mediaType={data.type || MediaType.Anime}
+              />
             ))}
           </div>
           <div className=" flex justify-between gap-4">
             <div className="flex flex-wrap gap-2 justify-between">
-              {data?.tags?.map((tag) => <Tag key={tag?.name} tag={tag} />)}
+              {data?.tags?.map((tag) => (
+                <Tag
+                  key={tag?.name}
+                  tag={tag}
+                  mediaType={data.type || MediaType.Anime}
+                />
+              ))}
               <div className="flex-1" />
             </div>
           </div>

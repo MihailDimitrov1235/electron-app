@@ -1,3 +1,37 @@
+import { MediaFormat, MediaSort } from '@graphql/generated/types-and-hooks';
+
+export const arrayFromRange = (
+  start: number,
+  stop: number,
+  step: number,
+  toString = false,
+) =>
+  Array.from({ length: (stop - start) / step + 1 }, (value, index) =>
+    toString ? (start + index * step).toString() : start + index * step,
+  );
+
+export const MediaSorts = [
+  MediaSort.PopularityDesc.toString().replace('_', ' '),
+  MediaSort.ScoreDesc.toString().replace('_', ' '),
+  MediaSort.TrendingDesc.toString().replace('_', ' '),
+];
+
+export const AnimeFormats = [
+  MediaFormat.Tv.toString(),
+  MediaFormat.Movie,
+  MediaFormat.Ova,
+  MediaFormat.Ona,
+  MediaFormat.Special,
+  MediaFormat.TvShort,
+  MediaFormat.Music,
+];
+
+export const MangaFormats = [
+  MediaFormat.Manga,
+  MediaFormat.Novel,
+  MediaFormat.OneShot,
+];
+
 export const MediaGenres = [
   'Action',
   'Adventure',

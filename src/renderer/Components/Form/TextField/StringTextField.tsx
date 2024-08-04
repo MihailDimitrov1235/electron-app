@@ -6,6 +6,7 @@ export default function StringTextfield({
   onChange,
   value,
   className = '',
+  onKeyDown,
 }: TextFieldPropsType) {
   return (
     <input
@@ -14,6 +15,7 @@ export default function StringTextfield({
       onChange={(e: ChangeEvent<HTMLInputElement>) => {
         onChange(e.target.value);
       }}
+      onKeyDown={onKeyDown}
       value={value}
       className={`w-full rounded-md p-2 text-text-main bg-background-main border border-background-dark shadow-md ring-0 outline-0 ring-text-main focus:ring-1 ${className}`}
     />

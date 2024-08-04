@@ -7,7 +7,7 @@ import {
   useGetViewerMediaQuery,
 } from '@graphql/generated/types-and-hooks';
 import { useAuth } from '@Components/Contexts/AuthContext';
-import MediaCard from '@Components/Media/MediaCard';
+import MediaCard from '@Components/Card/MediaCard';
 import { enqueueSnackbar } from 'notistack';
 
 export default function Home() {
