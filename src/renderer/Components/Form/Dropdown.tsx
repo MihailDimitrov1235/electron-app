@@ -10,6 +10,7 @@ type DropdownProps = {
   options: string[];
   onSelect: (option: string) => void;
   closeOnSelect?: boolean | undefined;
+  capitalize?: boolean;
   className?: string;
   buttonsClassName?: string;
 };
@@ -19,6 +20,7 @@ export default function Dropdown({
   options,
   onSelect,
   closeOnSelect = true,
+  capitalize = false,
   className = '',
   buttonsClassName = '',
 }: DropdownProps) {
@@ -60,9 +62,11 @@ export default function Dropdown({
         onClick={handleDropdownClick}
         className={`w-full flex items-center justify-between gap-2 focus:border-text-main ${
           open ? 'rounded-b-none' : ''
-        } ${buttonsClassName}`}
+        } ${capitalize && 'capitalize'} ${buttonsClassName}`}
       >
-        {name}{' '}
+        {capitalize
+          ? name.replaceAll('_', ' ').toLowerCase()
+          : name.replaceAll('_', ' ')}
         <div className=" items-center ">
           {open ? (
             <IoMdArrowDropup size="19px" />
@@ -75,18 +79,20 @@ export default function Dropdown({
       <div
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-lg `}
+        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-lg space-y-[1px] pt-[1px] `}
       >
         {options.map((option, index) => (
           <Button
             key={index}
             type="button"
-            className={`${
-              index === options.length - 1 && 'rounded-b-md'
+            className={`${index === options.length - 1 && 'rounded-b-md'} ${
+              capitalize && 'capitalize'
             } rounded-none !justify-start px-3 py-2 w-full border border-transparent hover:border-background-dark ${buttonsClassName}`}
             onClick={() => handleOptionSelect(option)}
           >
-            {option}
+            {capitalize
+              ? option.replaceAll('_', ' ').toLowerCase()
+              : option.replaceAll('_', ' ')}
           </Button>
         ))}
       </div>

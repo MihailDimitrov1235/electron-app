@@ -105,13 +105,15 @@ function App() {
     });
 
     return new ApolloClient({
-      link: ApolloLink.from([
-        errorLink,
-        retryLink,
-        token ? authLink : ApolloLink.empty(),
-        rateLimitLink,
-        httpLink,
-      ]),
+      link: token
+        ? ApolloLink.from([
+            errorLink,
+            retryLink,
+            authLink,
+            rateLimitLink,
+            httpLink,
+          ])
+        : ApolloLink.from([errorLink, retryLink, rateLimitLink, httpLink]),
       cache: new InMemoryCache(),
       defaultOptions: {
         watchQuery: {

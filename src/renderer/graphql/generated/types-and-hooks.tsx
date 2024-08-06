@@ -4741,6 +4741,16 @@ export type GetReviewQueryVariables = Exact<{
 
 export type GetReviewQuery = { __typename?: 'Query', Review?: { __typename?: 'Review', score?: number | null, body?: string | null, rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null, media?: { __typename?: 'Media', bannerImage?: string | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null } | null } | null };
 
+export type SearchCharacterQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<CharacterSort>> | InputMaybe<CharacterSort>>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type SearchCharacterQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', currentPage?: number | null, hasNextPage?: boolean | null } | null, characters?: Array<{ __typename?: 'Character', id: number, description?: string | null, name?: { __typename?: 'CharacterName', full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, media?: { __typename?: 'MediaConnection', nodes?: Array<{ __typename?: 'Media', id: number, type?: MediaType | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null> | null } | null } | null> | null } | null };
+
 export type GetAnimeHomePageQueryVariables = Exact<{
   season?: InputMaybe<MediaSeason>;
   year?: InputMaybe<Scalars['Int']['input']>;
@@ -4845,10 +4855,30 @@ export type GetViewerMediaQueryVariables = Exact<{
 
 export type GetViewerMediaQuery = { __typename?: 'Query', MediaListCollection?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, entries?: Array<{ __typename?: 'MediaList', id: number, progress?: number | null, score?: number | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, description?: string | null, genres?: Array<string | null> | null, episodes?: number | null, status?: MediaStatus | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', progress?: number | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number } | null } | null } | null> | null } | null> | null } | null };
 
+export type SearchStaffQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<StaffSort>> | InputMaybe<StaffSort>>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type SearchStaffQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', currentPage?: number | null, hasNextPage?: boolean | null } | null, staff?: Array<{ __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null, characters?: { __typename?: 'CharacterConnection', nodes?: Array<{ __typename?: 'Character', id: number, name?: { __typename?: 'CharacterName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null } | null> | null } | null } | null> | null } | null };
+
 export type GetViewerShortDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetViewerShortDataQuery = { __typename?: 'Query', Viewer?: { __typename?: 'User', id: number, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null };
+
+export type SearchUsersQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  perPage?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<UserSort>> | InputMaybe<UserSort>>;
+}>;
+
+
+export type SearchUsersQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', currentPage?: number | null, hasNextPage?: boolean | null } | null, users?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null };
 
 
 export const DeleteMediaListEntryDocument = gql`
@@ -5203,6 +5233,77 @@ export type GetReviewQueryHookResult = ReturnType<typeof useGetReviewQuery>;
 export type GetReviewLazyQueryHookResult = ReturnType<typeof useGetReviewLazyQuery>;
 export type GetReviewSuspenseQueryHookResult = ReturnType<typeof useGetReviewSuspenseQuery>;
 export type GetReviewQueryResult = Apollo.QueryResult<GetReviewQuery, GetReviewQueryVariables>;
+export const SearchCharacterDocument = gql`
+    query SearchCharacter($search: String, $sort: [CharacterSort], $page: Int, $perPage: Int) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
+    characters(search: $search, sort: $sort) {
+      id
+      name {
+        full
+        native
+        userPreferred
+      }
+      image {
+        large
+        medium
+      }
+      description
+      media(sort: POPULARITY_DESC) {
+        nodes {
+          id
+          type
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchCharacterQuery__
+ *
+ * To run a query within a React component, call `useSearchCharacterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCharacterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchCharacterQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      sort: // value for 'sort'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
+ *   },
+ * });
+ */
+export function useSearchCharacterQuery(baseOptions?: Apollo.QueryHookOptions<SearchCharacterQuery, SearchCharacterQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchCharacterQuery, SearchCharacterQueryVariables>(SearchCharacterDocument, options);
+      }
+export function useSearchCharacterLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCharacterQuery, SearchCharacterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchCharacterQuery, SearchCharacterQueryVariables>(SearchCharacterDocument, options);
+        }
+export function useSearchCharacterSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchCharacterQuery, SearchCharacterQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchCharacterQuery, SearchCharacterQueryVariables>(SearchCharacterDocument, options);
+        }
+export type SearchCharacterQueryHookResult = ReturnType<typeof useSearchCharacterQuery>;
+export type SearchCharacterLazyQueryHookResult = ReturnType<typeof useSearchCharacterLazyQuery>;
+export type SearchCharacterSuspenseQueryHookResult = ReturnType<typeof useSearchCharacterSuspenseQuery>;
+export type SearchCharacterQueryResult = Apollo.QueryResult<SearchCharacterQuery, SearchCharacterQueryVariables>;
 export const GetAnimeHomePageDocument = gql`
     query GetAnimeHomePage($season: MediaSeason, $year: Int) {
   Carousel: Page(page: 1, perPage: 20) {
@@ -6418,6 +6519,77 @@ export type GetViewerMediaQueryHookResult = ReturnType<typeof useGetViewerMediaQ
 export type GetViewerMediaLazyQueryHookResult = ReturnType<typeof useGetViewerMediaLazyQuery>;
 export type GetViewerMediaSuspenseQueryHookResult = ReturnType<typeof useGetViewerMediaSuspenseQuery>;
 export type GetViewerMediaQueryResult = Apollo.QueryResult<GetViewerMediaQuery, GetViewerMediaQueryVariables>;
+export const SearchStaffDocument = gql`
+    query SearchStaff($search: String, $sort: [StaffSort], $page: Int, $perPage: Int) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
+    staff(search: $search, sort: $sort) {
+      id
+      name {
+        full
+        native
+        userPreferred
+      }
+      image {
+        large
+        medium
+      }
+      characters(sort: ROLE) {
+        nodes {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchStaffQuery__
+ *
+ * To run a query within a React component, call `useSearchStaffQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchStaffQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchStaffQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      sort: // value for 'sort'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
+ *   },
+ * });
+ */
+export function useSearchStaffQuery(baseOptions?: Apollo.QueryHookOptions<SearchStaffQuery, SearchStaffQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchStaffQuery, SearchStaffQueryVariables>(SearchStaffDocument, options);
+      }
+export function useSearchStaffLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchStaffQuery, SearchStaffQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchStaffQuery, SearchStaffQueryVariables>(SearchStaffDocument, options);
+        }
+export function useSearchStaffSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchStaffQuery, SearchStaffQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchStaffQuery, SearchStaffQueryVariables>(SearchStaffDocument, options);
+        }
+export type SearchStaffQueryHookResult = ReturnType<typeof useSearchStaffQuery>;
+export type SearchStaffLazyQueryHookResult = ReturnType<typeof useSearchStaffLazyQuery>;
+export type SearchStaffSuspenseQueryHookResult = ReturnType<typeof useSearchStaffSuspenseQuery>;
+export type SearchStaffQueryResult = Apollo.QueryResult<SearchStaffQuery, SearchStaffQueryVariables>;
 export const GetViewerShortDataDocument = gql`
     query GetViewerShortData {
   Viewer {
@@ -6460,3 +6632,59 @@ export type GetViewerShortDataQueryHookResult = ReturnType<typeof useGetViewerSh
 export type GetViewerShortDataLazyQueryHookResult = ReturnType<typeof useGetViewerShortDataLazyQuery>;
 export type GetViewerShortDataSuspenseQueryHookResult = ReturnType<typeof useGetViewerShortDataSuspenseQuery>;
 export type GetViewerShortDataQueryResult = Apollo.QueryResult<GetViewerShortDataQuery, GetViewerShortDataQueryVariables>;
+export const SearchUsersDocument = gql`
+    query SearchUsers($search: String, $page: Int, $perPage: Int, $sort: [UserSort]) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
+    users(search: $search, sort: $sort) {
+      id
+      name
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      about
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchUsersQuery__
+ *
+ * To run a query within a React component, call `useSearchUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchUsersQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *      page: // value for 'page'
+ *      perPage: // value for 'perPage'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function useSearchUsersQuery(baseOptions?: Apollo.QueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, options);
+      }
+export function useSearchUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, options);
+        }
+export function useSearchUsersSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SearchUsersQuery, SearchUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchUsersQuery, SearchUsersQueryVariables>(SearchUsersDocument, options);
+        }
+export type SearchUsersQueryHookResult = ReturnType<typeof useSearchUsersQuery>;
+export type SearchUsersLazyQueryHookResult = ReturnType<typeof useSearchUsersLazyQuery>;
+export type SearchUsersSuspenseQueryHookResult = ReturnType<typeof useSearchUsersSuspenseQuery>;
+export type SearchUsersQueryResult = Apollo.QueryResult<SearchUsersQuery, SearchUsersQueryVariables>;

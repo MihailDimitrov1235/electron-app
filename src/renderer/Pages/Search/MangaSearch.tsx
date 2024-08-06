@@ -7,8 +7,8 @@ import Autocomplete from '@Components/Form/Autocomplete';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  AnimeFormats,
   arrayFromRange,
+  MangaFormats,
   MediaGenres,
   MediaSorts,
   MediaStatuses,
@@ -17,7 +17,6 @@ import {
 import { CgDetailsMore } from 'react-icons/cg';
 import {
   MediaFormat,
-  MediaSeason,
   MediaSort,
   MediaStatus,
   MediaType,
@@ -30,7 +29,7 @@ import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
 import Dropdown from '@Components/Form/Dropdown';
 import TextField from '@Components/Form/TextField';
 
-export default function AnimeSearch() {
+export default function MangaSearch() {
   const navigate = useNavigate();
   const location = useLocation();
   const [shouldSearch, setShouldSearch] = useState(true);
@@ -45,7 +44,6 @@ export default function AnimeSearch() {
     formats: [],
     statuses: [],
     year: undefined,
-    season: undefined,
     sort: MediaSort.PopularityDesc,
     search: '',
   };
@@ -55,14 +53,13 @@ export default function AnimeSearch() {
     formats: MediaFormat[];
     statuses: MediaStatus[];
     year: string | undefined;
-    season: MediaSeason | undefined;
     sort: MediaSort;
     search: string;
   }>(defaultFilters);
 
   const { data, loading, error, called } = useSearchMediaQuery({
     variables: {
-      mediaType: MediaType.Anime,
+      mediaType: MediaType.Manga,
       genres:
         selectedFilters.genres.length > 0 ? selectedFilters.genres : undefined,
       tags: selectedFilters.tags.length > 0 ? selectedFilters.tags : undefined,
@@ -75,7 +72,6 @@ export default function AnimeSearch() {
           ? selectedFilters.statuses
           : undefined,
       year: selectedFilters.year ? Number(selectedFilters.year) : undefined,
-      season: selectedFilters.season,
       sort: [MediaSort.SearchMatch, selectedFilters.sort],
       search: selectedFilters.search || undefined,
       page: currentPage,
@@ -116,7 +112,6 @@ export default function AnimeSearch() {
       formats: searchParams.getAll('formats') as MediaFormat[],
       statuses: searchParams.getAll('statuses') as MediaStatus[],
       year: searchParams.get('year') || undefined,
-      season: (searchParams.get('season') as MediaSeason) || undefined,
       sort: (searchParams.get('sort') as MediaSort) || MediaSort.PopularityDesc,
       search: searchParams.get('search') || '',
     });
@@ -218,7 +213,6 @@ export default function AnimeSearch() {
               getOptionValue={(option) => option}
               placeholder="Genres"
               className="flex-1"
-              capitalize
             />
             <Autocomplete
               options={MediaTags}
@@ -232,7 +226,7 @@ export default function AnimeSearch() {
               className="flex-1"
             />
             <Autocomplete
-              options={AnimeFormats}
+              options={MangaFormats}
               onSelect={(option) => handleSelect(option, 'formats')}
               onRemove={(option) => handleRemove(option, 'formats')}
               onRemoveAll={() => handleRemoveAll('formats')}
@@ -252,7 +246,6 @@ export default function AnimeSearch() {
               getOptionValue={(option) => option}
               placeholder="Status"
               className="flex-1"
-              capitalize
             />
             <Autocomplete
               options={arrayFromRange(
@@ -273,22 +266,6 @@ export default function AnimeSearch() {
               getOptionValue={(option) => option?.toString() || ''}
               placeholder="Year"
               className="flex-1"
-            />
-            <Autocomplete
-              options={Object.values(MediaSeason)}
-              onSelect={(option) =>
-                handleSelect(option?.toString() || '', 'season')
-              }
-              onRemove={(option) =>
-                handleRemove(option?.toString() || '', 'season')
-              }
-              onRemoveAll={() => handleRemoveAll('season')}
-              selectedOptions={[selectedFilters.season]}
-              getOptionLabel={(option) => option?.toString() || ''}
-              getOptionValue={(option) => option?.toString() || ''}
-              placeholder="Season"
-              className="flex-1"
-              capitalize
             />
             <Dropdown
               options={MediaSorts}

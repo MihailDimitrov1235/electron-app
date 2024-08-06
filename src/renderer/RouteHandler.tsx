@@ -14,6 +14,10 @@ import { MediaType } from '@graphql/generated/types-and-hooks';
 import Review from '@Pages/Review';
 import AnimeSearch from '@Pages/Search/AnimeSearch';
 import Search from '@Pages/Search';
+import MangaSearch from '@Pages/Search/MangaSearch';
+import UserSearch from '@Pages/Search/UserSearch';
+import CharacterSearch from '@Pages/Search/CharacterSearch';
+import StaffSearch from '@Pages/Search/StaffSearch';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -76,11 +80,10 @@ export default function RouteHandler() {
           path: '/search',
           children: [
             { path: 'anime', element: <AnimeSearch /> },
-            { path: 'manga', element: <AnimeSearch /> },
-            { path: 'users', element: <AnimeSearch /> },
-            { path: 'characters', element: <AnimeSearch /> },
-            { path: 'staff', element: <AnimeSearch /> },
-            { path: 'studios', element: <AnimeSearch /> },
+            { path: 'manga', element: <MangaSearch /> },
+            { path: 'users', element: <UserSearch /> },
+            { path: 'characters', element: <CharacterSearch /> },
+            { path: 'staff', element: <StaffSearch /> },
           ],
           element: <Search />,
         },

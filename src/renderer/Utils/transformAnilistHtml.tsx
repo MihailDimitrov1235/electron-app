@@ -1,19 +1,17 @@
 import DOMPurify from 'dompurify';
 
 export default function transformAniListText(text: string): string {
-  // Helper function to escape HTML special characters
-  // const escapeHTML = (str: string): string =>
-  //   str.replace(
-  //     /[&<>"']/g,
-  //     (m) =>
-  //       ({
-  //         '&': '&amp;',
-  //         '<': '&lt;',
-  //         '>': '&gt;',
-  //         '"': '&quot;',
-  //         "'": '&#39;',
-  //       })[m] || m,
-  //   );
+  const spoilerToggle = `
+    window.toggleSpoiler = function(el) {
+      if (el.classList.contains('revealed')) {
+        el.innerHTML = 'Spoiler';
+        el.classList.remove('revealed');
+      } else {
+        el.innerHTML = el.getAttribute('data-spoiler');
+        el.classList.add('revealed');
+      }
+    };
+  `;
 
   // Process the text
   const processedText = DOMPurify.sanitize(text, {
@@ -40,8 +38,6 @@ export default function transformAniListText(text: string): string {
     .replace(/~~(.*?)~~/g, '<del>$1</del>')
     // Line
     .replace(/~~(.*?)~~/g, '<del>$1</del>')
-    // Spoiler
-    .replace(/~!(.*?)!~/g, '<span class="spoiler">$1</span>')
     // Link
     .replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, '<a href="$2">$1</a>')
     // Image
@@ -79,10 +75,22 @@ export default function transformAniListText(text: string): string {
       /^-+$/gm,
       '<div style="border-bottom:5px #ABB6C2 solid; border-radius:99px; height:1px; width:100%;"></div>',
     )
+    // Spoiler
+    .replace(
+      /~!(.*?)!~/g,
+      (_, content) =>
+        ` <span class="bg-primary/70 cursor-pointer text-primary-background px-2 rounded-md" onclick="window.toggleSpoiler(this)" data-spoiler="${DOMPurify.sanitize(
+          content,
+        )}" >Spoiler</span> `,
+    )
     // Line breaks
     .replace(/\n/g, '<br>');
 
-  // processedText = escapeHTML(processedText);
+  if (typeof window !== 'undefined') {
+    const script = document.createElement('script');
+    script.textContent = spoilerToggle;
+    document.head.appendChild(script);
+  }
 
   return processedText;
 }

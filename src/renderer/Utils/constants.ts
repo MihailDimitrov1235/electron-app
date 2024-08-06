@@ -1,4 +1,11 @@
-import { MediaFormat, MediaSort } from '@graphql/generated/types-and-hooks';
+import {
+  CharacterSort,
+  MediaFormat,
+  MediaSort,
+  MediaStatus,
+  StaffSort,
+  UserSort,
+} from '@graphql/generated/types-and-hooks';
 
 export const arrayFromRange = (
   start: number,
@@ -11,9 +18,26 @@ export const arrayFromRange = (
   );
 
 export const MediaSorts = [
-  MediaSort.PopularityDesc.toString().replace('_', ' '),
-  MediaSort.ScoreDesc.toString().replace('_', ' '),
-  MediaSort.TrendingDesc.toString().replace('_', ' '),
+  MediaSort.PopularityDesc.toString(),
+  MediaSort.ScoreDesc.toString(),
+  MediaSort.TrendingDesc.toString(),
+];
+
+export const UserSorts = [
+  UserSort.WatchedTimeDesc.toString(),
+  UserSort.ChaptersReadDesc.toString(),
+  UserSort.UsernameDesc.toString(),
+];
+
+export const CharacterSorts = [CharacterSort.RoleDesc, CharacterSort.Role];
+
+export const StaffSorts = [StaffSort.RoleDesc, StaffSort.Role];
+
+export const MediaStatuses = [
+  MediaStatus.Finished,
+  MediaStatus.Releasing,
+  MediaStatus.NotYetReleased,
+  MediaStatus.Cancelled,
 ];
 
 export const AnimeFormats = [

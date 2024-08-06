@@ -51,7 +51,7 @@ export default function MediaShortInfo({
       {data?.source && (
         <div className="flex justify-between w-full">
           <div className="text-text-light">Source</div>
-          <div>{String(data.source).replace('_', ' ')}</div>
+          <div>{String(data.source).replaceAll('_', ' ')}</div>
         </div>
       )}
       {data?.countryOfOrigin && (

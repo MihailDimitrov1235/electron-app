@@ -12,6 +12,7 @@ type AutocompleteProps<T> = {
   getOptionValue: (option: T) => string;
   placeholder?: string;
   className?: string;
+  capitalize?: boolean;
 };
 
 export default function Autocomplete<T>({
@@ -24,6 +25,7 @@ export default function Autocomplete<T>({
   getOptionValue,
   placeholder = 'Type to search...',
   className = '',
+  capitalize = false,
 }: AutocompleteProps<T>) {
   const [inputValue, setInputValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -79,10 +81,15 @@ export default function Autocomplete<T>({
           <button
             type="button"
             onClick={() => onRemove(selectedOptions[0])}
-            className="bg-primary text-primary-background px-1 rounded-full flex items-center gap-2"
+            className={`bg-primary text-primary-background px-1 rounded-full flex items-center gap-2 ${
+              capitalize && capitalize
+            }`}
           >
             <span className="line-clamp-1 max-w-20 px-1">
-              {getOptionLabel(selectedOptions[0])}
+              {(capitalize
+                ? getOptionLabel(selectedOptions[0]).toLowerCase()
+                : getOptionLabel(selectedOptions[0])
+              ).replaceAll('_', ' ')}
             </span>
           </button>
         )}
@@ -98,7 +105,7 @@ export default function Autocomplete<T>({
           value={inputValue}
           onChange={handleInputChange}
           onFocus={() => setIsOpen(true)}
-          className="w-full bg-transparent outline-none"
+          className={`w-full bg-transparent outline-none `}
           placeholder={placeholder}
         />
       </div>
@@ -116,9 +123,16 @@ export default function Autocomplete<T>({
               type="button"
               key={getOptionValue(option)}
               onClick={() => handleOptionClick(option)}
-              className="p-2 hover:bg-background-dark/50 text-start flex items-center justify-between"
+              className={`p-2 hover:bg-background-dark/50 text-start flex items-center justify-between ${
+                capitalize && 'capitalize'
+              }`}
             >
-              <span>{getOptionLabel(option)}</span>
+              <span>
+                {(capitalize
+                  ? getOptionLabel(option).toLowerCase()
+                  : getOptionLabel(option)
+                ).replaceAll('_', ' ')}
+              </span>
               <span>{isOptionSelected(option) && <FaCheckSquare />}</span>
             </button>
           ))}

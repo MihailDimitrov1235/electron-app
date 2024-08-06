@@ -2,14 +2,7 @@ import Dropdown from '@Components/Form/Dropdown';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Search() {
-  const searchOptions = [
-    'Anime',
-    'Manga',
-    'Users',
-    'Characters',
-    'Staff',
-    'Studios',
-  ];
+  const searchOptions = ['Anime', 'Manga', 'Users', 'Characters', 'Staff'];
   const navigate = useNavigate();
   const location = useLocation();
   return (
@@ -20,8 +13,8 @@ export default function Search() {
           options={searchOptions}
           onSelect={(option) => navigate(`/search/${option.toLowerCase()}`)}
           name={location.pathname.split('/')[2].toUpperCase()}
-          buttonsClassName="!bg-background-dark hover:border-background-main w-48 shadow-none text-lg font-bold px-2"
-          className="ml-4 "
+          buttonsClassName="!bg-background-dark hover:border-background-main !w-44 shadow-none text-lg font-bold px-2"
+          className="ml-4 !w-44"
         />
       </div>
       <Outlet />
