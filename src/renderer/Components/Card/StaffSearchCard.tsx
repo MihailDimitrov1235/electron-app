@@ -12,7 +12,7 @@ export default function StaffSearchCard({ data }: { data: StaffType }) {
       <Link
         to={url}
         className="h-32 aspect-square bg-cover"
-        style={{ backgroundImage: `url(${data?.image?.large})` }}
+        style={{ backgroundImage: `url(${data?.image?.medium})` }}
       />
       <div className="flex flex-col gap-1 w-full overflow-hidden py-1">
         <Link

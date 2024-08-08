@@ -1,0 +1,87 @@
+query GetUser($userId: Int, $activitiesPerPage: Int) {
+  User(id: $userId) {
+    name
+    avatar {
+      large
+      medium
+    }
+    bannerImage
+    isFollowing
+    isFollower
+    isBlocked
+  }
+
+  Overview: User(id: $userId) {
+    about
+    statistics {
+      anime {
+        count
+        meanScore
+        minutesWatched
+        episodesWatched
+        highestCount: genres(limit: 5, sort: [COUNT_DESC]) {
+          count
+          genre
+        }
+        highestScore: genres(limit: 5, sort: [MEAN_SCORE_DESC]) {
+          meanScore
+          genre
+        }
+        highestProgress: genres(limit: 5, sort: [PROGRESS_DESC]) {
+          minutesWatched
+          genre
+        }
+      }
+      manga {
+        count
+        meanScore
+        chaptersRead
+        volumesRead
+        highestCount: genres(limit: 5, sort: [COUNT_DESC]) {
+          count
+          genre
+        }
+        highestScore: genres(limit: 5, sort: [MEAN_SCORE_DESC]) {
+          meanScore
+          genre
+        }
+        highestProgress: genres(limit: 5, sort: [PROGRESS_DESC]) {
+          chaptersRead
+          genre
+        }
+      }
+    }
+  }
+
+  Activities: Page(page: 1, perPage: $activitiesPerPage) {
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      __typename
+      ... on ListActivity {
+        id
+        status
+        progress
+        createdAt
+        likeCount
+        isLiked
+        isPinned
+        replyCount
+        media {
+          id
+          type
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}

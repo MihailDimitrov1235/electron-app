@@ -1,5 +1,6 @@
+/* eslint-disable react/no-danger */
 import { SearchUsersQuery } from '@graphql/generated/types-and-hooks';
-import React from 'react';
+import transformAniListText from '@Utils/transformAnilistHtml';
 import { Link } from 'react-router-dom';
 
 type UserType = NonNullable<
@@ -13,7 +14,7 @@ export default function UserCard({ data }: { data: UserType }) {
       <Link
         to={url}
         className="h-32 aspect-square bg-cover"
-        style={{ backgroundImage: `url(${data?.avatar?.large})` }}
+        style={{ backgroundImage: `url(${data?.avatar?.medium})` }}
       />
       <div className="flex flex-col gap-1 w-full overflow-hidden py-1">
         <Link
@@ -22,9 +23,12 @@ export default function UserCard({ data }: { data: UserType }) {
         >
           {data?.name}
         </Link>
-        <span className="text-sm text-text-light line-clamp-4 overflow-hidden text-ellipsis">
-          {data?.about}
-        </span>
+        <div
+          className="text-sm text-text-light line-clamp-4 overflow-hidden text-ellipsis"
+          dangerouslySetInnerHTML={{
+            __html: transformAniListText(data?.about || ''),
+          }}
+        />
       </div>
     </div>
   );

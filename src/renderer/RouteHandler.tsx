@@ -18,6 +18,7 @@ import MangaSearch from '@Pages/Search/MangaSearch';
 import UserSearch from '@Pages/Search/UserSearch';
 import CharacterSearch from '@Pages/Search/CharacterSearch';
 import StaffSearch from '@Pages/Search/StaffSearch';
+import Users from '@Pages/User';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -75,6 +76,10 @@ export default function RouteHandler() {
               element: <MediaDetails mediaType={MediaType.Manga} />,
             },
           ],
+        },
+        {
+          path: '/users/:id',
+          element: <Users />,
         },
         {
           path: '/search',

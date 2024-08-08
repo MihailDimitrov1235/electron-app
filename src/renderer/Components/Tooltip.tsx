@@ -7,6 +7,7 @@ type TooltipProps = {
   text: string;
   direction?: Direction;
   className?: string;
+  center?: boolean;
   children: React.ReactNode;
 };
 
@@ -14,6 +15,7 @@ function Tooltip({
   text,
   direction = 'top',
   className = '',
+  center = false,
   children,
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -42,7 +44,9 @@ function Tooltip({
       </div>
       {isVisible && (
         <div
-          className={`absolute z-10 px-3 py-2 text-sm font-medium text-white bg-background-main rounded-md shadow-sm tooltip ${getPositionClasses()}`}
+          className={`absolute z-10 px-3 py-2 text-sm font-medium text-white bg-background-main rounded-md shadow-sm tooltip ${getPositionClasses()} ${
+            center && 'text-center'
+          }`}
         >
           {text}
         </div>

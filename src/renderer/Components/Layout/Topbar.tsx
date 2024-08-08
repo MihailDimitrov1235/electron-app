@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoIosNotifications } from 'react-icons/io';
 import { IoLogIn, IoSearchSharp } from 'react-icons/io5';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
@@ -8,7 +8,8 @@ import Button from '../Form/Button';
 import TextField from '../Form/TextField';
 
 export default function Topbar() {
-  const { isLoggedIn, userAvatar } = useAuth();
+  const navigate = useNavigate();
+  const { isLoggedIn, userAvatar, userId } = useAuth();
   const [search, setSearch] = useState('');
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
@@ -84,6 +85,7 @@ export default function Topbar() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
+              onClick={() => navigate(`/users/${userId}`)}
             />
           </>
         ) : (
