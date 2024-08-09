@@ -54,6 +54,9 @@ query GetUser($userId: Int, $activitiesPerPage: Int) {
   }
 
   Activities: Page(page: 1, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
     activities(userId: $userId, sort: [PINNED, ID_DESC]) {
       __typename
       ... on ListActivity {

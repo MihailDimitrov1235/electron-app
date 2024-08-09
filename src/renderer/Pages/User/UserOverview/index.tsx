@@ -1,74 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable react/no-danger */
-import {
-  GetUserQuery,
-  useLikeListActivityMutation,
-} from '@graphql/generated/types-and-hooks';
+import { GetUserQuery } from '@graphql/generated/types-and-hooks';
 import transformAniListText from '@Utils/transformAnilistHtml';
-import { FaStar, FaHeart, FaComment, FaEye } from 'react-icons/fa';
+import { FaStar, FaEye } from 'react-icons/fa';
 import { GiBowTieRibbon } from 'react-icons/gi';
-import { CgDetailsMore } from 'react-icons/cg';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook, IoTimeSharp } from 'react-icons/io5';
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import getTimePassed from '@Utils/getTimePassed';
-import { enqueueSnackbar } from 'notistack';
+import ListActivities from './ListActivities';
 
 export default function UserOverview({
+  userId,
   data,
+  activitiesPerPage,
 }: {
+  userId: number;
+  activitiesPerPage: number;
   data: {
     overview: GetUserQuery['Overview'];
     activities: GetUserQuery['Activities'];
   };
 }) {
-  const [toggleLikeListActivity] = useLikeListActivityMutation();
-
-  const [listActivities, setListActivities] = useState(
-    data.activities?.activities?.filter(
-      (
-        activity,
-      ): activity is NonNullable<
-        NonNullable<GetUserQuery['Activities']>['activities']
-      >[0] & {
-        __typename: 'ListActivity';
-      } => activity?.__typename === 'ListActivity',
-    ),
-  );
-
-  const handleToggleLike = async (id: number) => {
-    try {
-      const { data: ToggleLikeListActivityData } = await toggleLikeListActivity(
-        { variables: { id } },
-      );
-      setListActivities(
-        (prevActivities) =>
-          prevActivities?.map((activity) =>
-            activity.id === id &&
-            ToggleLikeListActivityData?.ToggleLikeV2?.__typename ===
-              'ListActivity'
-              ? {
-                  ...activity,
-                  isLiked: ToggleLikeListActivityData?.ToggleLikeV2?.isLiked,
-                  likeCount:
-                    ToggleLikeListActivityData?.ToggleLikeV2?.likeCount,
-                }
-              : activity,
-          ),
-      );
-      enqueueSnackbar({ variant: 'success', message: 'Updated activity' });
-    } catch (error) {
-      enqueueSnackbar({ variant: 'error', message: 'Error updating activity' });
-    }
-  };
-
-  const statusColors = {
-    'watched episode': 'text-green-500',
-    'read chapter': 'text-green-500',
-    'plans to watch': 'text-text-light',
-    completed: 'text-blue-500',
-  };
   return (
     <div className="flex flex-col gap-2">
       {data?.overview?.about && (
@@ -128,7 +80,7 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.anime?.highestCount?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/anime/?genres=${genre?.genre}`}
                           className="hover:text-primary"
@@ -148,7 +100,7 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.anime?.highestScore?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/anime/?genres=${genre?.genre}`}
                           className="hover:text-primary"
@@ -172,7 +124,7 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.anime?.highestProgress?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/anime/?genres=${genre?.genre}`}
                           className="hover:text-primary"
@@ -237,7 +189,7 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.manga?.highestCount?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/manga/?genres=${genre?.genre}`}
                           className="hover:text-primary"
@@ -257,7 +209,7 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.manga?.highestScore?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/manga/?genres=${genre?.genre}`}
                           className="hover:text-primary"
@@ -281,14 +233,14 @@ export default function UserOverview({
                 <div className="text-sm">
                   {data.overview.statistics.manga?.highestProgress?.map(
                     (genre) => (
-                      <div className="flex justify-between">
+                      <div key={genre?.genre} className="flex justify-between">
                         <Link
                           to={`/search/manga/?genres=${genre?.genre}`}
                           className="hover:text-primary"
                         >
                           {genre?.genre}
                         </Link>
-                        <span>{genre?.chaptersRead} Chapters</span>
+                        <span>{genre?.chaptersRead} Ch.</span>
                       </div>
                     ),
                   )}
@@ -299,91 +251,11 @@ export default function UserOverview({
         )}
       </div>
       <div className="flex gap-8 mt-8">
-        <div className="space-y-2 flex-1">
-          <span className="text-xl">Activities</span>
-          <div className="grid grid-cols-2 gap-4 ">
-            {listActivities?.map((activity) => (
-              <div className="flex items-center w-full gap-8 rounded-md overflow-hidden border shadow-md border-background-main pr-4 relative">
-                <Link
-                  className="flex-shrink-0"
-                  to={`/${activity.media?.type}/${activity.media?.id}`}
-                >
-                  <img
-                    className="h-24 w-[68px]"
-                    src={activity.media?.coverImage?.medium || ''}
-                    alt="Media cover"
-                  />
-                </Link>
-                <div className="grid grid-flow-col grid-cols-12 w-full overflow-hidden">
-                  <span
-                    className={` col-span-3  capitalize ${
-                      Object.prototype.hasOwnProperty.call(
-                        statusColors,
-                        activity.status || '',
-                      )
-                        ? statusColors[
-                            (activity.status as keyof typeof statusColors) || ''
-                          ]
-                        : 'text-text-light'
-                    }`}
-                  >
-                    {activity.status}
-                  </span>
-                  <span className="">
-                    {activity.progress && `${activity.progress}`}
-                  </span>
-                  <div className=" w-full col-span-8">
-                    <Link
-                      to={`/${activity.media?.type}/${activity.media?.id}`}
-                      className="hover:text-primary line-clamp-1 w-fit ml-auto text-ellipsis overflow-hidden"
-                    >
-                      {activity.media?.title?.userPreferred}
-                    </Link>
-                  </div>
-                </div>
-                <div className="flex flex-col justify-end h-24 py-2 items-end text-end">
-                  <span className="text-text-light text-sm absolute top-2">
-                    {getTimePassed(activity.createdAt)}
-                  </span>
-                  <div className="text-text-light flex gap-2">
-                    <button
-                      type="button"
-                      className={`flex items-center gap-1  `}
-                    >
-                      {activity.replyCount !== 0 && activity.replyCount}
-                      <span className="hover:text-blue-500">
-                        <FaComment />
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleToggleLike(activity.id)}
-                      className={`flex items-center gap-1 `}
-                    >
-                      {activity.likeCount !== 0 && activity.likeCount}
-                      <span
-                        className={`${
-                          activity.isLiked
-                            ? 'text-secondary hover:text-text-light'
-                            : 'text-text-light hover:text-secondary'
-                        }`}
-                      >
-                        <FaHeart />
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="flex gap-4 justify-center items-center w-full h-24 rounded-md overflow-hidden border shadow-md border-background-main relative hover:bg-primary/50 transition-colors"
-            >
-              <span>Load More</span>
-              <CgDetailsMore size={40} />
-            </button>
-          </div>
-        </div>
+        <ListActivities
+          userId={userId}
+          activitiesData={data.activities}
+          activitiesPerPage={activitiesPerPage}
+        />
       </div>
     </div>
   );

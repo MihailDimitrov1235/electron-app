@@ -1,0 +1,36 @@
+query GetUserListActivities($page: Int, $activitiesPerPage: Int, $userId: Int) {
+  Page(page: $page, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      __typename
+      ... on ListActivity {
+        id
+        status
+        progress
+        createdAt
+        likeCount
+        isLiked
+        isPinned
+        replyCount
+        media {
+          id
+          type
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}

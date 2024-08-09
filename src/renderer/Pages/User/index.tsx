@@ -106,6 +106,7 @@ export default function Users() {
             case userTabs[0]:
               return (
                 <UserOverview
+                  userId={Number(id)}
                   data={{
                     overview: data?.Overview,
                     activities: data?.Activities,

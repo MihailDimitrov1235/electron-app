@@ -4883,7 +4883,16 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', User?: { __typename?: 'User', name: string, bannerImage?: string | null, isFollowing?: boolean | null, isFollower?: boolean | null, isBlocked?: boolean | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null, Overview?: { __typename?: 'User', about?: string | null, statistics?: { __typename?: 'UserStatisticTypes', anime?: { __typename?: 'UserStatistics', count: number, meanScore: number, minutesWatched: number, episodesWatched: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', minutesWatched: number, genre?: string | null } | null> | null } | null, manga?: { __typename?: 'UserStatistics', count: number, meanScore: number, chaptersRead: number, volumesRead: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', chaptersRead: number, genre?: string | null } | null> | null } | null } | null } | null, Activities?: { __typename?: 'Page', activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
+export type GetUserQuery = { __typename?: 'Query', User?: { __typename?: 'User', name: string, bannerImage?: string | null, isFollowing?: boolean | null, isFollower?: boolean | null, isBlocked?: boolean | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null, Overview?: { __typename?: 'User', about?: string | null, statistics?: { __typename?: 'UserStatisticTypes', anime?: { __typename?: 'UserStatistics', count: number, meanScore: number, minutesWatched: number, episodesWatched: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', minutesWatched: number, genre?: string | null } | null> | null } | null, manga?: { __typename?: 'UserStatistics', count: number, meanScore: number, chaptersRead: number, volumesRead: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', chaptersRead: number, genre?: string | null } | null> | null } | null } | null } | null, Activities?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
+
+export type GetUserListActivitiesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  activitiesPerPage?: InputMaybe<Scalars['Int']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetUserListActivitiesQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
 
 export type SearchUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
@@ -6739,6 +6748,9 @@ export const GetUserDocument = gql`
     }
   }
   Activities: Page(page: 1, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
     activities(userId: $userId, sort: [PINNED, ID_DESC]) {
       __typename
       ... on ListActivity {
@@ -6805,6 +6817,79 @@ export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserSuspenseQueryHookResult = ReturnType<typeof useGetUserSuspenseQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const GetUserListActivitiesDocument = gql`
+    query GetUserListActivities($page: Int, $activitiesPerPage: Int, $userId: Int) {
+  Page(page: $page, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      __typename
+      ... on ListActivity {
+        id
+        status
+        progress
+        createdAt
+        likeCount
+        isLiked
+        isPinned
+        replyCount
+        media {
+          id
+          type
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserListActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserListActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserListActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserListActivitiesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      activitiesPerPage: // value for 'activitiesPerPage'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserListActivitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
+      }
+export function useGetUserListActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
+        }
+export function useGetUserListActivitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
+        }
+export type GetUserListActivitiesQueryHookResult = ReturnType<typeof useGetUserListActivitiesQuery>;
+export type GetUserListActivitiesLazyQueryHookResult = ReturnType<typeof useGetUserListActivitiesLazyQuery>;
+export type GetUserListActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetUserListActivitiesSuspenseQuery>;
+export type GetUserListActivitiesQueryResult = Apollo.QueryResult<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>;
 export const SearchUsersDocument = gql`
     query SearchUsers($search: String, $page: Int, $perPage: Int, $sort: [UserSort]) {
   Page(page: $page, perPage: $perPage) {
