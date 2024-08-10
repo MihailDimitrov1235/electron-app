@@ -1,4 +1,4 @@
-import { useGetUserQuery } from '@graphql/generated/types-and-hooks';
+import { MediaType, useGetUserQuery } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
 import { SiAuth0 } from 'react-icons/si';
 import { CgBlock } from 'react-icons/cg';
@@ -10,6 +10,7 @@ import Button from '@Components/Form/Button';
 import Tabs from '@Components/Tabs';
 import { useEffect, useState } from 'react';
 import UserOverview from './UserOverview';
+import UserMediaList from './UserMediaList';
 
 const userTabs = [
   'Overview',
@@ -111,6 +112,21 @@ export default function Users() {
                     overview: data?.Overview,
                     activities: data?.Activities,
                   }}
+                  activitiesPerPage={itemsPerPage.activities}
+                />
+              );
+            case userTabs[1]:
+              return (
+                <UserMediaList
+                  userId={Number(id)}
+                  mediaType={MediaType.Anime}
+                />
+              );
+            case userTabs[2]:
+              return (
+                <UserMediaList
+                  userId={Number(id)}
+                  mediaType={MediaType.Manga}
                 />
               );
             default:

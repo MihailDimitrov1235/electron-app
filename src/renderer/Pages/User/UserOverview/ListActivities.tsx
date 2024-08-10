@@ -152,7 +152,10 @@ export default function ListActivities({
       <span className="text-xl">Activities</span>
       <div className="grid grid-cols-2 gap-4 ">
         {listActivities?.map((activity) => (
-          <div className="flex items-center w-full gap-8 rounded-md overflow-hidden border shadow-md border-background-main pr-4 relative">
+          <div
+            key={activity.id}
+            className="flex items-center w-full gap-8 rounded-md overflow-hidden border shadow-md border-background-main pr-4 relative"
+          >
             <Link
               className="flex-shrink-0"
               to={`/${activity.media?.type}/${activity.media?.id}`}

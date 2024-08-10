@@ -4894,6 +4894,16 @@ export type GetUserListActivitiesQueryVariables = Exact<{
 
 export type GetUserListActivitiesQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
 
+export type GetUserMediaListQueryVariables = Exact<{
+  userId?: InputMaybe<Scalars['Int']['input']>;
+  mediaType?: InputMaybe<MediaType>;
+}>;
+
+
+export type GetUserMediaListQuery = { __typename?: 'Query', MediaListCollection?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, isCustomList?: boolean | null, isCompletedList?: boolean | null, entries?: Array<{ __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, bannerImage?: string | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null> | null } | null> | null, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null, mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null, rowOrder?: string | null, animeList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null, mangaList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null } | null } | null } | null };
+
+export type MediaListEntryFragment = { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, bannerImage?: string | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null };
+
 export type SearchUsersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -4904,7 +4914,65 @@ export type SearchUsersQueryVariables = Exact<{
 
 export type SearchUsersQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', currentPage?: number | null, hasNextPage?: boolean | null } | null, users?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null };
 
-
+export const MediaListEntryFragmentDoc = gql`
+    fragment mediaListEntry on MediaList {
+  id
+  mediaId
+  status
+  score
+  progress
+  progressVolumes
+  repeat
+  priority
+  private
+  hiddenFromStatusLists
+  customLists
+  advancedScores
+  notes
+  updatedAt
+  startedAt {
+    year
+    month
+    day
+  }
+  completedAt {
+    year
+    month
+    day
+  }
+  media {
+    id
+    title {
+      userPreferred
+      romaji
+      english
+      native
+    }
+    coverImage {
+      extraLarge
+      large
+      medium
+    }
+    type
+    format
+    status(version: 2)
+    episodes
+    volumes
+    chapters
+    averageScore
+    popularity
+    isAdult
+    countryOfOrigin
+    genres
+    bannerImage
+    startDate {
+      year
+      month
+      day
+    }
+  }
+}
+    `;
 export const LikeListActivityDocument = gql`
     mutation LikeListActivity($id: Int) {
   ToggleLikeV2(type: ACTIVITY, id: $id) {
@@ -6890,6 +6958,77 @@ export type GetUserListActivitiesQueryHookResult = ReturnType<typeof useGetUserL
 export type GetUserListActivitiesLazyQueryHookResult = ReturnType<typeof useGetUserListActivitiesLazyQuery>;
 export type GetUserListActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetUserListActivitiesSuspenseQuery>;
 export type GetUserListActivitiesQueryResult = Apollo.QueryResult<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>;
+export const GetUserMediaListDocument = gql`
+    query GetUserMediaList($userId: Int, $mediaType: MediaType) {
+  MediaListCollection(userId: $userId, type: $mediaType) {
+    lists {
+      name
+      isCustomList
+      isCompletedList: isSplitCompletedList
+      entries {
+        ...mediaListEntry
+      }
+    }
+    user {
+      id
+      name
+      avatar {
+        large
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+        animeList {
+          sectionOrder
+          customLists
+          splitCompletedSectionByFormat
+          theme
+        }
+        mangaList {
+          sectionOrder
+          customLists
+          splitCompletedSectionByFormat
+          theme
+        }
+      }
+    }
+  }
+}
+    ${MediaListEntryFragmentDoc}`;
+
+/**
+ * __useGetUserMediaListQuery__
+ *
+ * To run a query within a React component, call `useGetUserMediaListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserMediaListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserMediaListQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      mediaType: // value for 'mediaType'
+ *   },
+ * });
+ */
+export function useGetUserMediaListQuery(baseOptions?: Apollo.QueryHookOptions<GetUserMediaListQuery, GetUserMediaListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserMediaListQuery, GetUserMediaListQueryVariables>(GetUserMediaListDocument, options);
+      }
+export function useGetUserMediaListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserMediaListQuery, GetUserMediaListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserMediaListQuery, GetUserMediaListQueryVariables>(GetUserMediaListDocument, options);
+        }
+export function useGetUserMediaListSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserMediaListQuery, GetUserMediaListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserMediaListQuery, GetUserMediaListQueryVariables>(GetUserMediaListDocument, options);
+        }
+export type GetUserMediaListQueryHookResult = ReturnType<typeof useGetUserMediaListQuery>;
+export type GetUserMediaListLazyQueryHookResult = ReturnType<typeof useGetUserMediaListLazyQuery>;
+export type GetUserMediaListSuspenseQueryHookResult = ReturnType<typeof useGetUserMediaListSuspenseQuery>;
+export type GetUserMediaListQueryResult = Apollo.QueryResult<GetUserMediaListQuery, GetUserMediaListQueryVariables>;
 export const SearchUsersDocument = gql`
     query SearchUsers($search: String, $page: Int, $perPage: Int, $sort: [UserSort]) {
   Page(page: $page, perPage: $perPage) {
