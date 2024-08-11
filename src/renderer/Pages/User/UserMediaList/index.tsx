@@ -8,9 +8,9 @@ import {
   MediaType,
   useGetUserMediaListQuery,
 } from '@graphql/generated/types-and-hooks';
+import TextField from '@Components/Form/TextField';
 import { enqueueSnackbar } from 'notistack';
 import MediaListTable from './MediaListTable';
-import TextField from '@Components/Form/TextField';
 
 type MediaListEntryType = NonNullable<
   NonNullable<
@@ -55,18 +55,16 @@ export default function UserMediaList({
   };
 
   const FILTER_FUNCTIONS: Record<keyof MediaListFiltersType, FilterFunction> = {
-    status: (
-      entry: MediaListEntryType,
-      value: MediaListFiltersType['status'],
-    ) => value === 'All' || entry?.status === value,
+    status: () => true,
     search: (
       entry: MediaListEntryType,
       value: MediaListFiltersType['search'],
     ) =>
       !value ||
-      entry?.media?.title?.userPreferred
-        ?.toLowerCase()
-        .includes(value.toLowerCase()) ||
+      (entry?.media?.title?.userPreferred &&
+        entry.media.title.userPreferred
+          .toLowerCase()
+          .includes(value.toLowerCase())) ||
       false,
     sort: () => true,
   };
@@ -86,15 +84,50 @@ export default function UserMediaList({
     }
   }, [error]);
 
-  const filteredAndSortedLists = useMemo(() => {
+  const orderedLists = useMemo(() => {
     if (!data?.MediaListCollection?.lists) return [];
 
-    return data.MediaListCollection.lists
+    const userSectionOrder =
+      data.MediaListCollection.user?.mediaListOptions?.[
+        mediaType === MediaType.Anime ? 'animeList' : 'mangaList'
+      ]?.sectionOrder || [];
+
+    // Create a map of list names to their original versions
+    const listMap = new Map(
+      data.MediaListCollection.lists.map((list) => [list?.name, list]),
+    );
+
+    // Create the final ordered array
+    const ordered: NonNullable<
+      GetUserMediaListQuery['MediaListCollection']
+    >['lists'] = [];
+
+    // First, add lists in the order specified by the user
+    userSectionOrder.forEach((sectionName) => {
+      const list = listMap.get(sectionName);
+      if (list) {
+        ordered.push(list);
+        listMap.delete(sectionName);
+      }
+    });
+
+    // Then, add any remaining lists that weren't in the user's order
+    listMap.forEach((list) => {
+      ordered.push(list);
+    });
+
+    return ordered;
+  }, [
+    data?.MediaListCollection?.lists,
+    data?.MediaListCollection?.user?.mediaListOptions,
+    mediaType,
+  ]);
+  const filteredAndSortedLists = useMemo(() => {
+    return orderedLists
       .map((list) => {
         if (!list) return null;
 
         let filteredEntries = list.entries ? [...list.entries] : [];
-
         (
           Object.keys(FILTER_FUNCTIONS) as Array<keyof MediaListFiltersType>
         ).forEach((key) => {
@@ -105,12 +138,11 @@ export default function UserMediaList({
           }
         });
 
+        // Sort entries
         filteredEntries.sort((a, b) => {
-          if (Object.keys(SORT_FUNCTIONS).includes(mediaListFilters.sort)) {
-            const primarySort = SORT_FUNCTIONS[mediaListFilters.sort](a, b);
-            if (primarySort !== 0) return primarySort;
-            return SORT_FUNCTIONS.Title(a, b);
-          }
+          const primarySort = SORT_FUNCTIONS[mediaListFilters.sort](a, b);
+          if (primarySort !== 0) return primarySort;
+          // Secondary sort by title if primary sort is equal
           return SORT_FUNCTIONS.Title(a, b);
         });
 
@@ -120,7 +152,7 @@ export default function UserMediaList({
         };
       })
       .filter(Boolean);
-  }, [data?.MediaListCollection?.lists, mediaListFilters]);
+  }, [orderedLists, mediaListFilters]);
 
   const handleFilterChange = (
     key: keyof MediaListFiltersType,
@@ -128,6 +160,15 @@ export default function UserMediaList({
   ) => {
     setMediaListFilters((prev) => ({ ...prev, [key]: value }));
   };
+
+  const listNames = useMemo(() => {
+    const names = orderedLists
+      .filter((list) => list?.entries?.length && list.entries.length > 0)
+      .map((list) => list?.name);
+    return ['All', ...names];
+  }, [orderedLists]);
+
+  const [selectedList, setSelectedList] = useState('All');
 
   if (loading && !data) {
     return <div>loading</div>;
@@ -144,9 +185,9 @@ export default function UserMediaList({
           }
         />
         <Tabs
-          tabs={['All', ...Object.values(MediaListStatus)]}
-          openTab={mediaListFilters.status}
-          setOpenTab={(value) => handleFilterChange('status', value)}
+          tabs={listNames as string[]}
+          openTab={selectedList}
+          setOpenTab={(value) => setSelectedList(value)}
           col
           small
           capitalize
@@ -154,7 +195,9 @@ export default function UserMediaList({
       </div>
       <div className="flex flex-col w-full gap-16">
         {filteredAndSortedLists.map((list) =>
-          list?.entries.length && list.entries.length > 0 ? (
+          list?.entries?.length &&
+          list.entries.length > 0 &&
+          (selectedList === 'All' || selectedList === list.name) ? (
             <div key={list?.name} className="w-full flex flex-col gap-2">
               <span className="text-lg">{list?.name}</span>
               <MediaListTable

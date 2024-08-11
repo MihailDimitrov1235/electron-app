@@ -51,7 +51,7 @@ export default function MediaListTable({
         </thead>
         <tbody>
           {list?.entries?.map((entry) => (
-            <tr className="  even:bg-background-main/50">
+            <tr key={entry?.id} className="  even:bg-background-main/50">
               <td className="w-20 p-2">
                 <Link
                   to={`/${entry?.media?.type?.toLowerCase()}/${entry?.media
