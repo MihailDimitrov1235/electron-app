@@ -1,3 +1,5 @@
+#import "../../fragments/media.graphql"
+
 query GetMediaDetails(
   $mediaId: Int
   $mediaType: MediaType
@@ -6,89 +8,7 @@ query GetMediaDetails(
   $reviewsPerPage: Int
 ) {
   MediaDetails: Media(id: $mediaId, type: $mediaType) {
-    id
-    favourites
-    popularity
-    status
-    episodes
-    duration
-    chapters
-    volumes
-    type
-    title {
-      romaji
-      english
-      native
-      userPreferred
-    }
-    coverImage {
-      extraLarge
-      large
-      medium
-      color
-    }
-    trailer {
-      site
-      id
-    }
-    meanScore
-    bannerImage
-    mediaListEntry {
-      id
-      status
-      score(format: POINT_100)
-      progress
-      progressVolumes
-      private
-      notes
-      repeat
-      customLists
-      startedAt {
-        year
-        month
-        day
-      }
-      completedAt {
-        year
-        month
-        day
-      }
-    }
-    isFavourite
-    nextAiringEpisode {
-      episode
-      timeUntilAiring
-    }
-    source
-    format
-    genres
-    tags {
-      name
-      rank
-      isMediaSpoiler
-    }
-    countryOfOrigin
-    season
-    seasonYear
-    startDate {
-      year
-      month
-      day
-    }
-    endDate {
-      year
-      month
-      day
-    }
-    studios(isMain: true) {
-      nodes {
-        id
-        name
-        siteUrl
-      }
-    }
-    source
-    synonyms
+    ...media
   }
 
   Following: Page(page: 1) {

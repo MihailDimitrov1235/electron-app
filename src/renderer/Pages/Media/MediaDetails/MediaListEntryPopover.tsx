@@ -7,34 +7,47 @@ import Dropdown from '@Components/Form/Dropdown';
 import Popover from '@Components/Popover';
 import TextField from '@Components/Form/TextField';
 import {
-  GetMediaDetailsQuery,
   MediaListStatus,
   useSaveMediaListEntryMutation,
   useUpdateMediaListEntriesMutation,
   useDeleteMediaListEntryMutation,
   MediaType,
+  MediaListEntryFragment,
 } from '@graphql/generated/types-and-hooks';
 import getDateFromDateType from '@Utils/getDateFromDateType';
 import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Button from '@Components/Form/Button';
-import changeMediaListEntry from '@Utils/changeMediaListEntry';
 import { enqueueSnackbar } from 'notistack';
+
+export type MediaListEntryMediaType = {
+  id: number;
+  type?: MediaType | null;
+  image?: string | null;
+  title?: string | null;
+  episodes?: number | null;
+  chapters?: number | null;
+  volumes?: number | null;
+};
 
 type MediaListEntryPopoverPropsType = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: GetMediaDetailsQuery['MediaDetails'];
-  setData: React.Dispatch<
-    React.SetStateAction<GetMediaDetailsQuery['MediaDetails'] | null>
-  >;
+  media: MediaListEntryMediaType | null;
+  entry: MediaListEntryFragment | null;
+  onChange: (
+    newEntry: MediaListEntryFragment | null,
+    mediaId: number,
+    lists: string[],
+  ) => void;
 };
 
 export default function MediaListEntryPopover({
   open,
   setOpen,
-  data,
-  setData,
+  media,
+  entry,
+  onChange,
 }: MediaListEntryPopoverPropsType) {
   const [moreOptions, setMoreOptions] = useState(false);
   const [
@@ -50,8 +63,8 @@ export default function MediaListEntryPopover({
     { data: deleteMutationData, error: deleteMutationError },
   ] = useDeleteMediaListEntryMutation();
   const defaultFormData = {
-    id: data?.mediaListEntry?.id || null,
-    mediaId: data?.id,
+    id: entry?.id || null,
+    mediaId: media?.id,
     status: MediaListStatus.Current,
     score: 0,
     progress: 0,
@@ -62,12 +75,14 @@ export default function MediaListEntryPopover({
     startedAt: null,
     completedAt: null,
   };
-  const [formData, setFormData] = useState(
-    data?.mediaListEntry ?? defaultFormData,
-  );
+  const [formData, setFormData] = useState(entry || defaultFormData);
   useEffect(() => {
-    setFormData(data?.mediaListEntry ?? defaultFormData);
-  }, [data]);
+    setFormData(entry || defaultFormData);
+  }, [entry]);
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
 
   if (saveMutationError) {
     enqueueSnackbar({ variant: 'error', message: saveMutationError.message });
@@ -79,22 +94,41 @@ export default function MediaListEntryPopover({
     enqueueSnackbar({ variant: 'error', message: deleteMutationError.message });
   }
 
+  const getStatusName = () => {
+    switch (formData.status) {
+      case MediaListStatus.Current:
+        return media?.type === MediaType.Anime ? 'Watching' : 'Reading';
+      case MediaListStatus.Completed:
+        return 'Completed';
+      case MediaListStatus.Paused:
+        return 'Paused';
+      case MediaListStatus.Dropped:
+        return 'Dropped';
+      case MediaListStatus.Planning:
+        return 'Planning';
+      case MediaListStatus.Repeating:
+        return media?.type === MediaType.Anime ? 'Rewatching' : 'Rereading';
+      default:
+        return 'Custom';
+    }
+  };
+
   useEffect(() => {
     if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
-      changeMediaListEntry({
-        setData,
-        mediaListEntry: saveMutationData.SaveMediaListEntry,
-      });
+      onChange(saveMutationData.SaveMediaListEntry, Number(media?.id), [
+        getStatusName(),
+      ]);
       enqueueSnackbar({ variant: 'success', message: 'Added to list' });
       setOpen(false);
     }
   }, [saveMutationData]);
   useEffect(() => {
     if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
-      changeMediaListEntry({
-        setData,
-        mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
-      });
+      onChange(
+        updateMutationData.UpdateMediaListEntries[0],
+        Number(media?.id),
+        [getStatusName()],
+      );
       enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
       setOpen(false);
     }
@@ -104,16 +138,13 @@ export default function MediaListEntryPopover({
       !deleteMutationError &&
       deleteMutationData?.DeleteMediaListEntry?.deleted
     ) {
-      changeMediaListEntry({
-        setData,
-        mediaListEntry: null,
-      });
+      onChange(null, Number(media?.id), []);
       enqueueSnackbar({ variant: 'success', message: 'Deleted entry' });
       setOpen(false);
     }
   }, [deleteMutationData]);
 
-  const currentKey = data?.type === MediaType.Anime ? 'Watching' : 'Reading';
+  const currentKey = media?.type === MediaType.Anime ? 'Watching' : 'Reading';
 
   const statusDropdownOptions = {
     [currentKey]: MediaListStatus.Current,
@@ -125,10 +156,10 @@ export default function MediaListEntryPopover({
   };
 
   const handleApply = () => {
-    if (data?.mediaListEntry) {
+    if (entry) {
       updateMediaListEntries({
         variables: {
-          ids: [data.mediaListEntry.id],
+          ids: [entry.id],
           status: formData.status,
           scoreRaw: formData.score || 0,
           progress: formData.progress,
@@ -151,7 +182,7 @@ export default function MediaListEntryPopover({
     } else {
       saveMediaListEntry({
         variables: {
-          mediaId: data?.id,
+          mediaId: media?.id,
           status: formData.status,
           scoreRaw: formData.score || 0,
           progress: formData.progress,
@@ -174,8 +205,8 @@ export default function MediaListEntryPopover({
     }
   };
   const handleDelete = () => {
-    if (data?.mediaListEntry) {
-      deleteMediaListEntry({ variables: { id: data.mediaListEntry.id } });
+    if (entry) {
+      deleteMediaListEntry({ variables: { id: entry.id } });
     }
   };
 
@@ -186,13 +217,13 @@ export default function MediaListEntryPopover({
           <div
             className="h-[280px] bg-cover rounded-md"
             style={{
-              backgroundImage: `url(${data?.coverImage?.extraLarge})`,
+              backgroundImage: `url(${media?.image})`,
               aspectRatio: '2/3',
             }}
           />
           <div className="flex flex-col gap-4 w-full">
             <div className="flex justify-between">
-              <span className="text-lg">{data?.title?.userPreferred}</span>
+              <span className="text-lg">{media?.title}</span>
               <div className="flex gap-4">
                 <Button onClick={() => setOpen(false)}>Cancel</Button>
                 <Button onClick={handleApply} variant="gradient">
@@ -205,6 +236,7 @@ export default function MediaListEntryPopover({
                 <div className="flex-1 flex flex-col gap-1">
                   <div>Status</div>
                   <Dropdown
+                    capitalize
                     name={
                       Object.keys(statusDropdownOptions).find(
                         (key) =>
@@ -251,32 +283,28 @@ export default function MediaListEntryPopover({
               <div className="flex gap-4">
                 <div className="flex-1 flex flex-col gap-1">
                   <div>
-                    {data?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}
+                    {media?.type === MediaType.Anime ? 'Episodes' : 'Chapters'}
                   </div>
                   <TextField
                     title={
-                      data?.type === MediaType.Anime ? 'Episodes' : 'Chapters'
+                      media?.type === MediaType.Anime ? 'Episodes' : 'Chapters'
                     }
                     endElement={
                       <div className="flex">
                         /{' '}
-                        {data?.type === MediaType.Anime
-                          ? data?.nextAiringEpisode?.episode
-                            ? data.nextAiringEpisode.episode - 1
-                            : data.episodes || '~'
-                          : data?.chapters}
+                        {media?.type === MediaType.Anime
+                          ? media.episodes || '~'
+                          : media?.chapters || '~'}
                       </div>
                     }
                     number={{
                       min: 0,
-                      max:
-                        data?.chapters ||
-                        data?.episodes ||
-                        (data?.nextAiringEpisode?.episode || 0) - 1 ||
-                        99999,
+                      max: media?.chapters || media?.episodes || 99999,
                       digitsAfterDecimal: 0,
                     }}
-                    value={formData.progress?.toString() || '0'}
+                    value={
+                      formData.progress ? formData.progress.toString() : '0'
+                    }
                     onChange={(val) => {
                       setFormData((prev) => ({
                         ...prev,
@@ -285,17 +313,17 @@ export default function MediaListEntryPopover({
                     }}
                   />
                 </div>
-                {data?.type === MediaType.Manga && (
+                {media?.type === MediaType.Manga && (
                   <div className="flex-1 flex flex-col gap-1">
                     <div>Volumes</div>
                     <TextField
                       title="Volumes"
                       endElement={
-                        <div className="flex">/ {data.volumes || '~'}</div>
+                        <div className="flex">/ {media.volumes || '~'}</div>
                       }
                       number={{
                         min: 0,
-                        max: data?.volumes || 99999,
+                        max: media.volumes || 99999,
                         digitsAfterDecimal: 0,
                       }}
                       value={formData.progressVolumes?.toString() || '0'}
@@ -339,6 +367,7 @@ export default function MediaListEntryPopover({
                       setFormData((prev) => ({
                         ...prev,
                         id: prev.id || 0,
+                        mediaId: prev.mediaId || 0,
                         startedAt: newValue?.startDate
                           ? getDateFromDateType(newValue.startDate)
                           : null,
@@ -377,6 +406,7 @@ export default function MediaListEntryPopover({
                       setFormData((prev) => ({
                         ...prev,
                         id: prev.id || 0,
+                        mediaId: prev.mediaId || 0,
                         completedAt: newValue?.endDate
                           ? getDateFromDateType(newValue.endDate)
                           : null,
@@ -440,7 +470,7 @@ export default function MediaListEntryPopover({
                 }
               />
             </div>
-            {data?.mediaListEntry && (
+            {entry && (
               <Button
                 variant="error"
                 className="ml-auto mt-6"

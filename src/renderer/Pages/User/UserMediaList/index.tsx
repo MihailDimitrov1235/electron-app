@@ -1,14 +1,20 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useAuth } from '@Components/Contexts/AuthContext';
 import Tabs from '@Components/Tabs';
 import {
   GetUserMediaListQuery,
+  MediaListEntryFragment,
   MediaListSort,
   MediaListStatus,
   MediaType,
   useGetUserMediaListQuery,
 } from '@graphql/generated/types-and-hooks';
 import TextField from '@Components/Form/TextField';
+import MediaListEntryPopover, {
+  type MediaListEntryMediaType,
+} from '@Pages/Media/MediaDetails/MediaListEntryPopover';
 import { enqueueSnackbar } from 'notistack';
 import MediaListTable from './MediaListTable';
 
@@ -36,6 +42,8 @@ export default function UserMediaList({
   userId: number;
   mediaType: MediaType;
 }) {
+  const { userId: authUserId, isLoggedIn } = useAuth();
+
   const defaultMediaListFilters: MediaListFiltersType = {
     sort: MediaListSort.ScoreDesc,
     status: 'All',
@@ -78,6 +86,14 @@ export default function UserMediaList({
     },
   });
 
+  const [displayData, setDisplayData] = useState(data);
+
+  useEffect(() => {
+    if (data) {
+      setDisplayData(data);
+    }
+  }, [data]);
+
   useEffect(() => {
     if (error) {
       enqueueSnackbar({ variant: 'error', message: error.message });
@@ -85,16 +101,16 @@ export default function UserMediaList({
   }, [error]);
 
   const orderedLists = useMemo(() => {
-    if (!data?.MediaListCollection?.lists) return [];
+    if (!displayData?.MediaListCollection?.lists) return [];
 
     const userSectionOrder =
-      data.MediaListCollection.user?.mediaListOptions?.[
+      displayData.MediaListCollection.user?.mediaListOptions?.[
         mediaType === MediaType.Anime ? 'animeList' : 'mangaList'
       ]?.sectionOrder || [];
 
     // Create a map of list names to their original versions
     const listMap = new Map(
-      data.MediaListCollection.lists.map((list) => [list?.name, list]),
+      displayData.MediaListCollection.lists.map((list) => [list?.name, list]),
     );
 
     // Create the final ordered array
@@ -117,11 +133,8 @@ export default function UserMediaList({
     });
 
     return ordered;
-  }, [
-    data?.MediaListCollection?.lists,
-    data?.MediaListCollection?.user?.mediaListOptions,
-    mediaType,
-  ]);
+  }, [displayData, mediaType]);
+
   const filteredAndSortedLists = useMemo(() => {
     return orderedLists
       .map((list) => {
@@ -162,20 +175,96 @@ export default function UserMediaList({
   };
 
   const listNames = useMemo(() => {
-    const names = orderedLists
-      .filter((list) => list?.entries?.length && list.entries.length > 0)
-      .map((list) => list?.name);
+    const names = orderedLists.map((list) => list?.name);
     return ['All', ...names];
   }, [orderedLists]);
 
   const [selectedList, setSelectedList] = useState('All');
+  type PopoverState = {
+    isOpen: boolean;
+    entry: MediaListEntryFragment | null;
+    media: MediaListEntryMediaType | null;
+  };
+  const [popoverState, setPopoverState] = useState<PopoverState>({
+    isOpen: false,
+    entry: null,
+    media: null,
+  });
 
-  if (loading && !data) {
+  const handleOpenPopover = (
+    entry: MediaListEntryFragment,
+    media: MediaListEntryMediaType,
+  ) => {
+    setPopoverState({
+      isOpen: true,
+      entry,
+      media,
+    });
+  };
+
+  const handleClosePopover = () => {
+    setPopoverState({
+      isOpen: false,
+      entry: null,
+      media: null,
+    });
+  };
+
+  const handleEntryChange = useCallback(
+    (
+      newEntry: MediaListEntryType,
+      mediaId: number,
+      listsWithEntry: string[],
+    ) => {
+      setDisplayData((prev) => {
+        if (!prev?.MediaListCollection?.lists) return prev;
+
+        const updatedLists = prev.MediaListCollection.lists.map((list) => {
+          if (!list) return list;
+
+          // Remove the entry from all lists
+          let updatedEntries =
+            list.entries?.filter((entry) => entry?.media?.id !== mediaId) || [];
+
+          // Add the entry to the appropriate list
+          if (listsWithEntry.includes(list.name || '')) {
+            updatedEntries = [...updatedEntries, newEntry];
+          }
+
+          return {
+            ...list,
+            entries: updatedEntries,
+          };
+        });
+
+        return {
+          ...prev,
+          MediaListCollection: {
+            ...prev.MediaListCollection,
+            lists: updatedLists,
+          },
+        };
+      });
+    },
+    [setDisplayData],
+  );
+
+  if (loading && !displayData) {
     return <div>loading</div>;
   }
 
   return (
     <div className="flex gap-4">
+      {popoverState.entry && (
+        <MediaListEntryPopover
+          open={popoverState.isOpen}
+          setOpen={handleClosePopover}
+          entry={popoverState.entry}
+          media={popoverState.media}
+          onChange={handleEntryChange}
+        />
+      )}
+
       <div className="flex flex-col gap-4 ">
         <TextField
           title="Search"
@@ -194,20 +283,27 @@ export default function UserMediaList({
         />
       </div>
       <div className="flex flex-col w-full gap-16">
-        {filteredAndSortedLists.map((list) =>
-          list?.entries?.length &&
-          list.entries.length > 0 &&
-          (selectedList === 'All' || selectedList === list.name) ? (
-            <div key={list?.name} className="w-full flex flex-col gap-2">
-              <span className="text-lg">{list?.name}</span>
-              <MediaListTable
-                list={list}
-                onSort={(sort) => handleFilterChange('sort', sort)}
-                currentSort={mediaListFilters.sort}
-              />
-            </div>
-          ) : null,
-        )}
+        {filteredAndSortedLists.map((list) => (
+          <div
+            key={list?.name}
+            className={`w-full flex flex-col gap-2 ${
+              list?.entries &&
+              list.entries.length > 0 &&
+              (selectedList === 'All' || selectedList === list.name)
+                ? 'visible'
+                : 'hidden'
+            } `}
+          >
+            <span className="text-lg">{list?.name}</span>
+            <MediaListTable
+              list={list}
+              onSort={(sort) => handleFilterChange('sort', sort)}
+              currentSort={mediaListFilters.sort}
+              isUser={isLoggedIn && userId === authUserId}
+              handleEdit={handleOpenPopover}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

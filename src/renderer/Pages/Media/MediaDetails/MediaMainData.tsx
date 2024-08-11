@@ -12,6 +12,7 @@ import Tag from '@Components/Tag';
 import Tooltip from '@Components/Tooltip';
 import {
   GetMediaDetailsQuery,
+  MediaListEntryFragment,
   MediaListStatus,
   MediaType,
   useSaveMediaListEntryMutation,
@@ -23,7 +24,6 @@ import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { IoPeople } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
-import changeMediaListEntry from '@Utils/changeMediaListEntry';
 import { enqueueSnackbar } from 'notistack';
 import MediaListEntryPopover from './MediaListEntryPopover';
 
@@ -68,21 +68,24 @@ export default function MediaMainData({
     enqueueSnackbar({ variant: 'error', message: updateMutationError.message });
   }
 
+  const handleEntryChange = (newEntry: MediaListEntryFragment | null) => {
+    setData((prev) => ({
+      id: prev?.id || 0,
+      isFavourite: prev?.isFavourite || false,
+      ...prev,
+      mediaListEntry: newEntry,
+    }));
+  };
+
   useEffect(() => {
     if (!saveMutationError && saveMutationData?.SaveMediaListEntry) {
-      changeMediaListEntry({
-        setData,
-        mediaListEntry: saveMutationData.SaveMediaListEntry,
-      });
+      handleEntryChange(saveMutationData.SaveMediaListEntry);
       enqueueSnackbar({ variant: 'success', message: 'Added to list' });
     }
   }, [saveMutationData]);
   useEffect(() => {
     if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
-      changeMediaListEntry({
-        setData,
-        mediaListEntry: updateMutationData.UpdateMediaListEntries[0],
-      });
+      handleEntryChange(updateMutationData.UpdateMediaListEntries[0] || null);
       enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
     }
   }, [updateMutationData]);
@@ -199,12 +202,24 @@ export default function MediaMainData({
 
   return (
     <div className="relative z-10 p-8 flex gap-8">
-      <MediaListEntryPopover
-        open={openMediaListEntryPopover}
-        setOpen={setOpenMediaListEntryPopover}
-        data={data}
-        setData={setData}
-      />
+      {data && (
+        <MediaListEntryPopover
+          open={openMediaListEntryPopover}
+          setOpen={setOpenMediaListEntryPopover}
+          entry={data?.mediaListEntry || null}
+          onChange={handleEntryChange}
+          media={{
+            id: data.id,
+            type: data.type,
+            image: data.coverImage?.large,
+            title: data.title?.userPreferred,
+            episodes: data.episodes,
+            chapters: data.chapters,
+            volumes: data.volumes,
+          }}
+        />
+      )}
+
       <div className="flex flex-col gap-4">
         <MediaCard
           {...data}

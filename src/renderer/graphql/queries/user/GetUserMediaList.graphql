@@ -1,3 +1,5 @@
+#import "../../fragments/mediaListEntry.graphql"
+
 query GetUserMediaList($userId: Int, $mediaType: MediaType) {
   MediaListCollection(userId: $userId, type: $mediaType) {
     lists {
@@ -30,64 +32,6 @@ query GetUserMediaList($userId: Int, $mediaType: MediaType) {
           theme
         }
       }
-    }
-  }
-}
-
-fragment mediaListEntry on MediaList {
-  id
-  mediaId
-  status
-  score
-  progress
-  progressVolumes
-  repeat
-  priority
-  private
-  hiddenFromStatusLists
-  customLists
-  advancedScores
-  notes
-  updatedAt
-  startedAt {
-    year
-    month
-    day
-  }
-  completedAt {
-    year
-    month
-    day
-  }
-  media {
-    id
-    title {
-      userPreferred
-      romaji
-      english
-      native
-    }
-    coverImage {
-      extraLarge
-      large
-      medium
-    }
-    type
-    format
-    status(version: 2)
-    episodes
-    volumes
-    chapters
-    averageScore
-    popularity
-    isAdult
-    countryOfOrigin
-    genres
-    bannerImage
-    startDate {
-      year
-      month
-      day
     }
   }
 }

@@ -1,3 +1,5 @@
+#import "../../fragments/mediaListEntry.graphql"
+
 mutation SaveMediaListEntry(
   $mediaId: Int
   $status: MediaListStatus
@@ -22,24 +24,6 @@ mutation SaveMediaListEntry(
     startedAt: $startedAt
     completedAt: $completedAt
   ) {
-    id
-    status
-    score(format: POINT_100)
-    progress
-    progressVolumes
-    private
-    notes
-    repeat
-    customLists
-    startedAt {
-      year
-      month
-      day
-    }
-    completedAt {
-      year
-      month
-      day
-    }
+    ...mediaListEntry
   }
 }
