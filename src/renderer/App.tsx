@@ -134,7 +134,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <MainUtilsProvider>
-        <div className={`${theme} w-[100vw] h-[100vh] text-text-main`}>
+        <div id="App" className={`${theme} w-[100vw] h-[100vh] text-text-main`}>
           <RouteHandler />
         </div>
       </MainUtilsProvider>

@@ -28,7 +28,10 @@ export default function Layout() {
       <Topbar />
       <div className="w-full h-full flex bg-background-dark overflow-hidden">
         <Sidebar />
-        <div className="w-full h-full overflow-x-hidden">
+        <div
+          id="MainLayoutContainer"
+          className="w-full h-full overflow-x-hidden"
+        >
           <Outlet />
         </div>
       </div>
