@@ -18,7 +18,6 @@ import {
   useSaveMediaListEntryMutation,
   useToggleFavouriteAnimeMutation,
   useToggleFavouriteMangaMutation,
-  useUpdateMediaListEntriesMutation,
 } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -56,16 +55,9 @@ export default function MediaMainData({
     saveMediaListEntry,
     { data: saveMutationData, error: saveMutationError },
   ] = useSaveMediaListEntryMutation();
-  const [
-    updateMediaListEntries,
-    { data: updateMutationData, error: updateMutationError },
-  ] = useUpdateMediaListEntriesMutation();
 
   if (saveMutationError) {
     enqueueSnackbar({ variant: 'error', message: saveMutationError.message });
-  }
-  if (updateMutationError) {
-    enqueueSnackbar({ variant: 'error', message: updateMutationError.message });
   }
 
   const handleEntryChange = (newEntry: MediaListEntryFragment | null) => {
@@ -83,12 +75,6 @@ export default function MediaMainData({
       enqueueSnackbar({ variant: 'success', message: 'Added to list' });
     }
   }, [saveMutationData]);
-  useEffect(() => {
-    if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
-      handleEntryChange(updateMutationData.UpdateMediaListEntries[0] || null);
-      enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
-    }
-  }, [updateMutationData]);
 
   useEffect(() => {
     const handleToggleSuccess = () => {
@@ -145,55 +131,27 @@ export default function MediaMainData({
         progressVolumes !== 0 ||
         data?.mediaListEntry
       ) {
-        if (data?.mediaListEntry) {
-          updateMediaListEntries({
-            variables: {
-              ids: [data.mediaListEntry.id],
-              status:
-                data?.episodes === progress || data?.chapters === progress
-                  ? MediaListStatus.Completed
-                  : data.mediaListEntry.status,
-              scoreRaw: userScore * 10,
-              progress,
-              progressVolumes,
-              private: data.mediaListEntry.private,
-              notes: data.mediaListEntry.notes,
-              repeat: data.mediaListEntry.repeat,
-              startedAt: {
-                year: data.mediaListEntry.startedAt?.year,
-                month: data.mediaListEntry.startedAt?.month,
-                day: data.mediaListEntry.startedAt?.day,
-              },
-              completedAt: {
-                year: data.mediaListEntry.completedAt?.year,
-                month: data.mediaListEntry.completedAt?.month,
-                day: data.mediaListEntry.completedAt?.day,
-              },
+        saveMediaListEntry({
+          variables: {
+            mediaId: data?.id,
+            status:
+              data?.episodes === progress || data?.chapters === progress
+                ? MediaListStatus.Completed
+                : MediaListStatus.Current,
+            scoreRaw: userScore * 10,
+            progress,
+            progressVolumes,
+            private: false,
+            notes: '',
+            repeat: 0,
+            startedAt: {
+              year: new Date().getFullYear(),
+              month: new Date().getMonth(),
+              day: new Date().getDate(),
             },
-          });
-        } else {
-          saveMediaListEntry({
-            variables: {
-              mediaId: data?.id,
-              status:
-                data?.episodes === progress || data?.chapters === progress
-                  ? MediaListStatus.Completed
-                  : MediaListStatus.Current,
-              scoreRaw: userScore * 10,
-              progress,
-              progressVolumes,
-              private: false,
-              notes: '',
-              repeat: 0,
-              startedAt: {
-                year: new Date().getFullYear(),
-                month: new Date().getMonth(),
-                day: new Date().getDate(),
-              },
-              completedAt: null,
-            },
-          });
-        }
+            completedAt: null,
+          },
+        });
       }
     } else {
       navigate('/login');

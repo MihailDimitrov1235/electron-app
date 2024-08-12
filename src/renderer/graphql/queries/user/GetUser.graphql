@@ -1,3 +1,5 @@
+#import "../../fragments/mediaListCollection.graphql"
+
 query GetUser($userId: Int, $activitiesPerPage: Int) {
   User(id: $userId) {
     name
@@ -9,6 +11,14 @@ query GetUser($userId: Int, $activitiesPerPage: Int) {
     isFollowing
     isFollower
     isBlocked
+  }
+
+  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
+    ...mediaListCollection
+  }
+
+  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
+    ...mediaListCollection
   }
 
   Overview: User(id: $userId) {

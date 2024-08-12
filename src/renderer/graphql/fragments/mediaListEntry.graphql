@@ -47,7 +47,6 @@ fragment mediaListEntry on MediaList {
     isAdult
     countryOfOrigin
     genres
-    bannerImage
     startDate {
       year
       month

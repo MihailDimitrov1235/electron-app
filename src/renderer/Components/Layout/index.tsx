@@ -30,7 +30,7 @@ export default function Layout() {
         <Sidebar />
         <div
           id="MainLayoutContainer"
-          className="w-full h-full overflow-x-hidden"
+          className="w-full h-full overflow-x-hidden pb-16"
         >
           <Outlet />
         </div>

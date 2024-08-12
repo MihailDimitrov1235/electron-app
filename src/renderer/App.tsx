@@ -47,7 +47,7 @@ function App() {
         jitter: true,
       },
       attempts: {
-        max: 5,
+        max: 2,
         retryIf: (error, _operation) => !!error && error.statusCode !== 400,
       },
     });
@@ -155,7 +155,7 @@ export default function RootApp() {
           info: Snackbar,
         }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        // preventDuplicate
+        preventDuplicate
         autoHideDuration={2500}
       >
         <AuthProvider>

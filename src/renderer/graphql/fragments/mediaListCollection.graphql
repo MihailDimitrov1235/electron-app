@@ -1,0 +1,28 @@
+fragment mediaListCollection on MediaListCollection {
+  lists {
+    name
+    isCustomList
+    isCompletedList: isSplitCompletedList
+    entries {
+      ...mediaListEntry
+    }
+  }
+  user {
+    mediaListOptions {
+      scoreFormat
+      rowOrder
+      animeList {
+        sectionOrder
+        customLists
+        splitCompletedSectionByFormat
+        theme
+      }
+      mangaList {
+        sectionOrder
+        customLists
+        splitCompletedSectionByFormat
+        theme
+      }
+    }
+  }
+}

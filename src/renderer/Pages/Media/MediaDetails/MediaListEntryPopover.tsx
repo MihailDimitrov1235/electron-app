@@ -9,7 +9,6 @@ import TextField from '@Components/Form/TextField';
 import {
   MediaListStatus,
   useSaveMediaListEntryMutation,
-  useUpdateMediaListEntriesMutation,
   useDeleteMediaListEntryMutation,
   MediaType,
   MediaListEntryFragment,
@@ -55,10 +54,6 @@ export default function MediaListEntryPopover({
     { data: saveMutationData, error: saveMutationError },
   ] = useSaveMediaListEntryMutation();
   const [
-    updateMediaListEntries,
-    { data: updateMutationData, error: updateMutationError },
-  ] = useUpdateMediaListEntriesMutation();
-  const [
     deleteMediaListEntry,
     { data: deleteMutationData, error: deleteMutationError },
   ] = useDeleteMediaListEntryMutation();
@@ -82,9 +77,6 @@ export default function MediaListEntryPopover({
 
   if (saveMutationError) {
     enqueueSnackbar({ variant: 'error', message: saveMutationError.message });
-  }
-  if (updateMutationError) {
-    enqueueSnackbar({ variant: 'error', message: updateMutationError.message });
   }
   if (deleteMutationError) {
     enqueueSnackbar({ variant: 'error', message: deleteMutationError.message });
@@ -119,17 +111,6 @@ export default function MediaListEntryPopover({
     }
   }, [saveMutationData]);
   useEffect(() => {
-    if (!updateMutationError && updateMutationData?.UpdateMediaListEntries) {
-      onChange(
-        updateMutationData.UpdateMediaListEntries[0],
-        Number(media?.id),
-        [getStatusName()],
-      );
-      enqueueSnackbar({ variant: 'success', message: 'Updated entry' });
-      setOpen(false);
-    }
-  }, [updateMutationData]);
-  useEffect(() => {
     if (
       !deleteMutationError &&
       deleteMutationData?.DeleteMediaListEntry?.deleted
@@ -152,53 +133,28 @@ export default function MediaListEntryPopover({
   };
 
   const handleApply = () => {
-    if (entry) {
-      updateMediaListEntries({
-        variables: {
-          ids: [entry.id],
-          status: formData.status,
-          scoreRaw: formData.score || 0,
-          progress: formData.progress,
-          progressVolumes: formData.progressVolumes || 0,
-          private: formData.private,
-          notes: formData.notes,
-          repeat: formData.repeat,
-          startedAt: {
-            year: formData.startedAt?.year,
-            month: formData.startedAt?.month,
-            day: formData.startedAt?.day,
-          },
-          completedAt: {
-            year: formData.completedAt?.year,
-            month: formData.completedAt?.month,
-            day: formData.completedAt?.day,
-          },
+    saveMediaListEntry({
+      variables: {
+        mediaId: media?.id,
+        status: formData.status,
+        scoreRaw: formData.score || 0,
+        progress: formData.progress,
+        progressVolumes: formData.progressVolumes || 0,
+        private: formData.private,
+        notes: formData.notes,
+        repeat: formData.repeat,
+        startedAt: {
+          year: formData.startedAt?.year,
+          month: formData.startedAt?.month,
+          day: formData.startedAt?.day,
         },
-      });
-    } else {
-      saveMediaListEntry({
-        variables: {
-          mediaId: media?.id,
-          status: formData.status,
-          scoreRaw: formData.score || 0,
-          progress: formData.progress,
-          progressVolumes: formData.progressVolumes || 0,
-          private: formData.private,
-          notes: formData.notes,
-          repeat: formData.repeat,
-          startedAt: {
-            year: formData.startedAt?.year,
-            month: formData.startedAt?.month,
-            day: formData.startedAt?.day,
-          },
-          completedAt: {
-            year: formData.completedAt?.year,
-            month: formData.completedAt?.month,
-            day: formData.completedAt?.day,
-          },
+        completedAt: {
+          year: formData.completedAt?.year,
+          month: formData.completedAt?.month,
+          day: formData.completedAt?.day,
         },
-      });
-    }
+      },
+    });
   };
   const handleDelete = () => {
     if (entry) {

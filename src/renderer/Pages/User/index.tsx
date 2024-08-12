@@ -1,4 +1,8 @@
-import { MediaType, useGetUserQuery } from '@graphql/generated/types-and-hooks';
+import {
+  MediaListCollectionFragment,
+  MediaType,
+  useGetUserQuery,
+} from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
 import { SiAuth0 } from 'react-icons/si';
 import { CgBlock } from 'react-icons/cg';
@@ -120,6 +124,7 @@ export default function Users() {
                 <UserMediaList
                   userId={Number(id)}
                   mediaType={MediaType.Anime}
+                  data={data?.animeLists as MediaListCollectionFragment}
                 />
               );
             case userTabs[2]:
@@ -127,6 +132,7 @@ export default function Users() {
                 <UserMediaList
                   userId={Number(id)}
                   mediaType={MediaType.Manga}
+                  data={data?.mangaLists as MediaListCollectionFragment}
                 />
               );
             default:

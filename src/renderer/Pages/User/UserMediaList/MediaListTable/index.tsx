@@ -30,7 +30,7 @@ export default function MediaListTable({
   currentSort,
   isUser,
   handleEdit,
-  selectedList,
+  itemsAffectingHeight,
 }: {
   list: NonNullable<
     NonNullable<GetUserMediaListQuery['MediaListCollection']>['lists']
@@ -42,7 +42,7 @@ export default function MediaListTable({
     entry: MediaListEntryFragment,
     media: MediaListEntryMediaType,
   ) => void;
-  selectedList: string;
+  itemsAffectingHeight: any[];
 }) {
   const filteredList =
     list?.entries?.filter((entry) => entry && entry.media) || [];
@@ -92,7 +92,7 @@ export default function MediaListTable({
     if (windowScrollerRef.current) {
       windowScrollerRef.current.updatePosition();
     }
-  }, [selectedList]);
+  }, [itemsAffectingHeight]);
 
   return (
     <div className="flex-1 border border-background-main shadow-md rounded-md overflow-hidden h-full">
@@ -102,6 +102,7 @@ export default function MediaListTable({
           scrollElement={
             document.getElementById('MainLayoutContainer') || undefined
           }
+          scrollingResetTimeInterval={1000}
         >
           {({ isScrolling, onChildScroll, scrollTop }) => (
             <AutoSizer disableHeight>
