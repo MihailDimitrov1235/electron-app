@@ -1,3 +1,4 @@
+import { MediaType } from '@graphql/generated/types-and-hooks';
 import { TableCellProps } from 'react-virtualized';
 
 export default function TableProgressRenderer({ rowData }: TableCellProps) {
@@ -6,10 +7,11 @@ export default function TableProgressRenderer({ rowData }: TableCellProps) {
   }
   return (
     <div className="flex justify-center">
-      {rowData?.progress}/
-      {rowData?.mediaType === rowData.Anime
-        ? rowData?.episodes || '~'
-        : rowData?.chapters || '~'}
+      {`${rowData?.progress} / ${
+        rowData?.mediaType === MediaType.Anime
+          ? rowData?.episodes || '~'
+          : rowData?.chapters || '~'
+      }`}
     </div>
   );
 }

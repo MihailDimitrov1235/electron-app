@@ -80,10 +80,6 @@ export default function MediaListEntryPopover({
     setFormData(entry || defaultFormData);
   }, [entry]);
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
-
   if (saveMutationError) {
     enqueueSnackbar({ variant: 'error', message: saveMutationError.message });
   }
@@ -237,7 +233,7 @@ export default function MediaListEntryPopover({
                   <div>Status</div>
                   <Dropdown
                     capitalize
-                    name={
+                    value={
                       Object.keys(statusDropdownOptions).find(
                         (key) =>
                           statusDropdownOptions[
@@ -445,7 +441,7 @@ export default function MediaListEntryPopover({
                 <Dropdown
                   className="w-full"
                   options={['Private', 'Public']}
-                  name={formData.private ? 'Private' : 'Public'}
+                  value={formData.private ? 'Private' : 'Public'}
                   onSelect={(option) =>
                     setFormData((prev) => ({
                       ...prev,

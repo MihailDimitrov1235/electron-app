@@ -16,6 +16,8 @@ import MediaListEntryPopover, {
   type MediaListEntryMediaType,
 } from '@Pages/Media/MediaDetails/MediaListEntryPopover';
 import { enqueueSnackbar } from 'notistack';
+import Dropdown from '@Components/Form/Dropdown';
+// import Autocomplete from '@Components/Form/Autocomplete';
 import MediaListTable from './MediaListTable';
 
 type MediaListEntryType = NonNullable<
@@ -52,9 +54,16 @@ export default function UserMediaList({
   const SORT_FUNCTIONS: Record<string, SortFunction> = {
     [MediaListSort.ScoreDesc]: (a, b) => (b?.score || 0) - (a?.score || 0),
     [MediaListSort.Score]: (a, b) => (a?.score || 0) - (b?.score || 0),
+
     [MediaListSort.ProgressDesc]: (a, b) =>
       (b?.progress || 0) - (a?.progress || 0),
     [MediaListSort.Progress]: (a, b) => (a?.progress || 0) - (b?.progress || 0),
+
+    [MediaListSort.UpdatedTime]: (a, b) =>
+      (b?.updatedAt || 0) - (a?.updatedAt || 0),
+    [MediaListSort.UpdatedTimeDesc]: (a, b) =>
+      (a?.updatedAt || 0) - (b?.updatedAt || 0),
+
     Title: (a, b) =>
       (a?.media?.title?.userPreferred || '').localeCompare(
         b?.media?.title?.userPreferred || '',
@@ -175,9 +184,14 @@ export default function UserMediaList({
   };
 
   const listNames = useMemo(() => {
-    const names = orderedLists.map((list) => list?.name);
-    return ['All', ...names];
-  }, [orderedLists]);
+    if (displayData?.MediaListCollection?.lists) {
+      const names = displayData?.MediaListCollection?.lists?.map(
+        (list) => list?.name,
+      );
+      return ['All', ...names];
+    }
+    return [];
+  }, [displayData]);
 
   const [selectedList, setSelectedList] = useState('All');
   type PopoverState = {
@@ -281,29 +295,46 @@ export default function UserMediaList({
           small
           capitalize
         />
+        <Dropdown
+          value="Sort"
+          options={[
+            MediaListSort.Score,
+            MediaListSort.ScoreDesc,
+            MediaListSort.Progress,
+            MediaListSort.ProgressDesc,
+            MediaListSort.UpdatedTime,
+            MediaListSort.UpdatedTimeDesc,
+          ]}
+          onSelect={(newValue) =>
+            setMediaListFilters((prev) => ({
+              ...prev,
+              sort: newValue as MediaListSort,
+            }))
+          }
+          className="w-full"
+          capitalize
+        />
+        {/* <Autocomplete options={} /> */}
       </div>
       <div className="flex flex-col w-full gap-16">
-        {filteredAndSortedLists.map((list) => (
-          <div
-            key={list?.name}
-            className={`w-full flex flex-col gap-2 ${
-              list?.entries &&
-              list.entries.length > 0 &&
-              (selectedList === 'All' || selectedList === list.name)
-                ? 'visible'
-                : 'hidden'
-            } `}
-          >
-            <span className="text-lg">{list?.name}</span>
-            <MediaListTable
-              list={list}
-              onSort={(sort) => handleFilterChange('sort', sort)}
-              currentSort={mediaListFilters.sort}
-              isUser={isLoggedIn && userId === authUserId}
-              handleEdit={handleOpenPopover}
-            />
-          </div>
-        ))}
+        {filteredAndSortedLists
+          .filter(
+            (list) =>
+              list && (selectedList === 'All' || selectedList === list.name),
+          )
+          .map((list) => (
+            <div key={list?.name} className={`w-full flex flex-col gap-2 `}>
+              <span className="text-lg">{list?.name}</span>
+              <MediaListTable
+                list={list}
+                onSort={(sort) => handleFilterChange('sort', sort)}
+                currentSort={mediaListFilters.sort}
+                isUser={isLoggedIn && userId === authUserId}
+                handleEdit={handleOpenPopover}
+                selectedList={selectedList}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ export default function Search() {
         <Dropdown
           options={searchOptions}
           onSelect={(option) => navigate(`/search/${option.toLowerCase()}`)}
-          name={location.pathname.split('/')[2].toUpperCase()}
+          value={location.pathname.split('/')[2].toUpperCase()}
           buttonsClassName="!bg-background-dark hover:border-background-main !w-44 shadow-none text-lg font-bold px-2"
           className="ml-4 !w-44"
         />

@@ -6,7 +6,7 @@ import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
 import Button from './Button';
 
 type DropdownProps = {
-  name: string;
+  value: string;
   options: string[];
   onSelect: (option: string) => void;
   closeOnSelect?: boolean | undefined;
@@ -16,7 +16,7 @@ type DropdownProps = {
 };
 
 export default function Dropdown({
-  name,
+  value,
   options,
   onSelect,
   closeOnSelect = true,
@@ -65,8 +65,8 @@ export default function Dropdown({
         } ${capitalize && 'capitalize'} ${buttonsClassName}`}
       >
         {capitalize
-          ? name.replaceAll('_', ' ').toLowerCase()
-          : name.replaceAll('_', ' ')}
+          ? value.replaceAll('_', ' ').toLowerCase()
+          : value.replaceAll('_', ' ')}
         <div className=" items-center ">
           {open ? (
             <IoMdArrowDropup size="19px" />

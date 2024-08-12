@@ -11,11 +11,6 @@ query GetUserMediaList($userId: Int, $mediaType: MediaType) {
       }
     }
     user {
-      id
-      name
-      avatar {
-        large
-      }
       mediaListOptions {
         scoreFormat
         rowOrder

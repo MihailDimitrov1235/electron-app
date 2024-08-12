@@ -1,4 +1,5 @@
 /* eslint-disable react/destructuring-assignment */
+import { useEffect, useRef } from 'react';
 import {
   WindowScroller,
   AutoSizer,
@@ -29,6 +30,7 @@ export default function MediaListTable({
   currentSort,
   isUser,
   handleEdit,
+  selectedList,
 }: {
   list: NonNullable<
     NonNullable<GetUserMediaListQuery['MediaListCollection']>['lists']
@@ -40,6 +42,7 @@ export default function MediaListTable({
     entry: MediaListEntryFragment,
     media: MediaListEntryMediaType,
   ) => void;
+  selectedList: string;
 }) {
   const filteredList =
     list?.entries?.filter((entry) => entry && entry.media) || [];
@@ -58,6 +61,8 @@ export default function MediaListTable({
         episodes: entry.media?.episodes,
         chapters: entry.media?.chapters,
         volumes: entry.media?.volumes,
+        onSort,
+        currentSort,
         onEditClick: () =>
           handleEdit(entry, {
             id: entry.media?.id || 0,
@@ -82,11 +87,18 @@ export default function MediaListTable({
       {columns}
     </div>
   );
+  const windowScrollerRef = useRef<WindowScroller>(null);
+  useEffect(() => {
+    if (windowScrollerRef.current) {
+      windowScrollerRef.current.updatePosition();
+    }
+  }, [selectedList]);
 
   return (
     <div className="flex-1 border border-background-main shadow-md rounded-md overflow-hidden h-full">
       {filteredList && (
         <WindowScroller
+          ref={windowScrollerRef}
           scrollElement={
             document.getElementById('MainLayoutContainer') || undefined
           }
@@ -131,14 +143,30 @@ export default function MediaListTable({
                     cellRenderer={TableNotesRenderer}
                   />
                   <Column
-                    label="Score"
+                    label={
+                      <SortableColumn
+                        title="Score"
+                        ascending={MediaListSort.Score}
+                        descending={MediaListSort.ScoreDesc}
+                        onSort={onSort}
+                        currentSort={currentSort}
+                      />
+                    }
                     dataKey="score"
                     width={128}
                     cellRenderer={TableScoreRenderer}
                     headerClassName="flex justify-center"
                   />
                   <Column
-                    label="Progress"
+                    label={
+                      <SortableColumn
+                        title="Progress"
+                        ascending={MediaListSort.Progress}
+                        descending={MediaListSort.ProgressDesc}
+                        onSort={onSort}
+                        currentSort={currentSort}
+                      />
+                    }
                     dataKey="progress"
                     width={128}
                     cellRenderer={TableProgressRenderer}

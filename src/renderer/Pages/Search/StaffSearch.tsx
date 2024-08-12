@@ -139,7 +139,7 @@ export default function StaffSearch() {
         />
         <Dropdown
           options={StaffSorts}
-          name={selectedFilters.sort}
+          value={selectedFilters.sort}
           onSelect={(newValue) => handleSelect(newValue, 'sort')}
           className={`w-[300px] `}
           capitalize

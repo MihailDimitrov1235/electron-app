@@ -1,35 +1,48 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { MediaListSort } from '@graphql/generated/types-and-hooks';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 export default function SortableColumn({
   title,
-  Option1,
-  Option2,
+  descending,
+  ascending,
   currentSort,
   onSort,
+  ascFirst = false,
 }: {
   title: string;
-  Option1: MediaListSort;
-  Option2: MediaListSort;
+  descending: MediaListSort;
+  ascending: MediaListSort;
   currentSort: MediaListSort;
   onSort: (newSort: MediaListSort) => void;
+  ascFirst?: boolean;
 }) {
   return (
     <button
       type="button"
       className="flex group items-center gap-2 mx-auto"
-      onClick={() => onSort(currentSort === Option1 ? Option2 : Option1)}
+      onClick={() => {
+        if (currentSort === descending || ascFirst) {
+          onSort(ascending);
+          return;
+        }
+        onSort(descending);
+      }}
     >
       {title}
       <span
         className={`${
-          currentSort === Option1 || currentSort === Option2
+          currentSort === ascending || currentSort === descending
             ? 'text-text-main'
             : 'text-transparent group-hover:text-text-light'
         }`}
       >
-        {currentSort === Option2 ? <FaArrowUp /> : <FaArrowDown />}
+        {currentSort === ascending || ascFirst ? (
+          <FaArrowUp />
+        ) : (
+          <FaArrowDown />
+        )}
       </span>
     </button>
   );

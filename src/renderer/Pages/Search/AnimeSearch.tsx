@@ -292,7 +292,7 @@ export default function AnimeSearch() {
             />
             <Dropdown
               options={MediaSorts}
-              name={selectedFilters.sort}
+              value={selectedFilters.sort}
               onSelect={(newValue) => handleSelect(newValue, 'sort')}
               className={`flex-1 `}
               capitalize

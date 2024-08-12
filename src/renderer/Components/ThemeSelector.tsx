@@ -12,9 +12,10 @@ function ThemeSelector() {
 
   return (
     <Dropdown
-      name="Theme"
+      value="Theme"
       options={themes.map((t) => t)}
       onSelect={handleChange}
+      capitalize
     />
   );
 }
