@@ -10,14 +10,7 @@ query SearchUsers(
       hasNextPage
     }
     users(search: $search, sort: $sort) {
-      id
-      name
-      avatar {
-        large
-        medium
-      }
-      bannerImage
-      about
+      ...user
     }
   }
 }

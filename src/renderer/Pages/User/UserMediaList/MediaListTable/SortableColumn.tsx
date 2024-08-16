@@ -23,7 +23,10 @@ export default function SortableColumn({
       type="button"
       className="flex group items-center gap-2 mx-auto"
       onClick={() => {
-        if (currentSort === descending || ascFirst) {
+        if (
+          currentSort === descending ||
+          (currentSort !== ascending && ascFirst)
+        ) {
           onSort(ascending);
           return;
         }
@@ -38,7 +41,8 @@ export default function SortableColumn({
             : 'text-transparent group-hover:text-text-light'
         }`}
       >
-        {currentSort === ascending || ascFirst ? (
+        {currentSort === ascending ||
+        (currentSort !== descending && ascFirst) ? (
           <FaArrowUp />
         ) : (
           <FaArrowDown />

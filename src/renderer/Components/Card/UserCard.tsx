@@ -1,11 +1,9 @@
 /* eslint-disable react/no-danger */
-import { SearchUsersQuery } from '@graphql/generated/types-and-hooks';
+import { UserFragment } from '@graphql/generated/types-and-hooks';
 import transformAniListText from '@Utils/transformAnilistHtml';
 import { Link } from 'react-router-dom';
 
-type UserType = NonNullable<
-  NonNullable<SearchUsersQuery['Page']>['users']
->[number];
+type UserType = UserFragment;
 
 export default function UserCard({ data }: { data: UserType }) {
   const url = `/users/${data?.id}`;

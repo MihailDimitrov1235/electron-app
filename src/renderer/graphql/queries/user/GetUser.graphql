@@ -1,7 +1,7 @@
 #import "../../fragments/mediaListCollection.graphql"
 #import "../../fragments/favourites.graphql"
 
-query GetUser($userId: Int, $activitiesPerPage: Int, $favouritesPerPage: Int) {
+query GetUser($userId: Int!, $activitiesPerPage: Int, $favouritesPerPage: Int) {
   User(id: $userId) {
     name
     avatar {

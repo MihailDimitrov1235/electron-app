@@ -32,7 +32,7 @@ export default function UserOverview({
         />
       )}
       <div className=" flex gap-4">
-        {data.overview?.statistics?.anime?.minutesWatched && (
+        {data.overview?.statistics?.anime?.minutesWatched ? (
           <div className="space-y-4 flex-1">
             <div className="flex items-center gap-2">
               <span className="text-xl">Anime</span> <RiVideoFill size={20} />
@@ -144,8 +144,8 @@ export default function UserOverview({
               </div>
             </div>
           </div>
-        )}
-        {data.overview?.statistics?.manga?.chaptersRead && (
+        ) : null}
+        {data.overview?.statistics?.manga?.chaptersRead ? (
           <div className="space-y-4 flex-1">
             <div className="flex items-center gap-2">
               <span className="text-xl">Manga</span> <IoBook size={20} />
@@ -248,7 +248,7 @@ export default function UserOverview({
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </div>
       <div className="flex gap-8 mt-8">
         <ListActivities

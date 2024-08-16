@@ -1,0 +1,22 @@
+#import "../../fragments/mediaListCollection.graphql"
+#import "../../fragments/favourites.graphql"
+
+query GetUserExtra($userId: Int!, $followingPerPage: Int) {
+  following: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    following(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+
+  followers: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    followers(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+}

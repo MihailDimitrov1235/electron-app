@@ -1,6 +1,7 @@
 import {
   MediaListCollectionFragment,
   MediaType,
+  useGetUserExtraQuery,
   useGetUserQuery,
 } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
@@ -16,6 +17,7 @@ import { useEffect, useState } from 'react';
 import UserOverview from './UserOverview';
 import UserMediaList from './UserMediaList';
 import UserFavourites from './UserFavourites';
+import UserSocial from './UserSocial';
 
 const userTabs = [
   'Overview',
@@ -33,6 +35,7 @@ export default function Users() {
   const itemsPerPage = {
     activities: 25,
     favourites: 25,
+    following: 50,
   };
   const { data, loading, error } = useGetUserQuery({
     variables: {
@@ -41,13 +44,28 @@ export default function Users() {
       favouritesPerPage: itemsPerPage.favourites,
     },
   });
+  const {
+    data: extraData,
+    loading: extraLoading,
+    error: extraError,
+  } = useGetUserExtraQuery({
+    variables: {
+      userId: Number(id),
+      followingPerPage: itemsPerPage.following,
+    },
+  });
   const { userId, isLoggedIn } = useAuth();
   useEffect(() => {
     if (error) {
       enqueueSnackbar({ variant: 'error', message: error.message });
     }
   }, [error]);
-  if (loading) {
+  useEffect(() => {
+    if (extraError) {
+      enqueueSnackbar({ variant: 'error', message: extraError.message });
+    }
+  }, [extraError]);
+  if (loading || extraLoading) {
     return <div>loading...</div>;
   }
   return (
@@ -145,6 +163,18 @@ export default function Users() {
                   userId={Number(id)}
                   favouritesPerPage={itemsPerPage.favourites}
                   isUser={isLoggedIn && userId === Number(id)}
+                />
+              );
+
+            // TODO add stats tab
+
+            case userTabs[5]:
+              return (
+                <UserSocial
+                  data={{
+                    followers: extraData?.followers,
+                    following: extraData?.following,
+                  }}
                 />
               );
             default:
