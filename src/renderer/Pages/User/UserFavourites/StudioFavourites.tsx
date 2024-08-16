@@ -15,10 +15,12 @@ export default function StudiosFavourites({
   data,
   userId,
   perPage,
+  isUser,
 }: {
   data: StudioFavouritesFragment;
   userId: number;
   perPage: number;
+  isUser: boolean;
 }) {
   const [toggleFavourites, { data: toggleFavouritesData }] =
     useToggleFavouritesMutation();
@@ -66,16 +68,18 @@ export default function StudiosFavourites({
             >
               {studio?.name}
             </span>
-            <button
-              className="absolute top-1 right-1 rounded-md bg-red-500 aspect-square z-20 w-6"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleFavourites({ variables: { studioId: studio?.id } });
-              }}
-            >
-              &#x2716;
-            </button>
+            {isUser && (
+              <button
+                className="absolute top-1 right-1 rounded-md bg-red-500 aspect-square z-20 w-6"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavourites({ variables: { studioId: studio?.id } });
+                }}
+              >
+                &#x2716;
+              </button>
+            )}
           </Link>
         ))
       ) : (

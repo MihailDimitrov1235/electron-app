@@ -239,7 +239,10 @@ export default function ListActivities({
                 <CgDetailsMore size={40} />
               </button>
             )
-          : Array.from({ length: 4 }).map(() => <ListActivityCardSkeleton />)}
+          : Array.from({ length: 4 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <ListActivityCardSkeleton key={index} />
+            ))}
       </div>
     </div>
   );

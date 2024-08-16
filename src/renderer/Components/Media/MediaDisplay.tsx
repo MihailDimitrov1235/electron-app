@@ -10,6 +10,8 @@ import {
   useGetMediaQuery,
 } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaAnglesRight } from 'react-icons/fa6';
 import { enqueueSnackbar } from 'notistack';
 import Checkbox from '@Components/Form/Checkbox';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
@@ -71,7 +73,13 @@ export default function MediaDisplay({
     return (
       <div className="flex flex-col gap-4">
         <div className=" text-xl flex justify-between">
-          <span>{title}</span>
+          <Link
+            className="flex gap-2 items-center hover:text-primary"
+            to={`/search/${mediaType.toLowerCase()}/?sort=${sort}`}
+          >
+            {title}
+            <FaAnglesRight />
+          </Link>
           <Checkbox
             checked={notOnList}
             onCheck={() => setNotOnList((prev) => !prev)}
@@ -89,7 +97,13 @@ export default function MediaDisplay({
   return (
     <div className="flex flex-col gap-4">
       <div className=" text-xl flex justify-between">
-        <span>{title}</span>
+        <Link
+          className="flex gap-2 items-center hover:text-primary"
+          to={`/search/${mediaType.toLowerCase()}/?sort=${sort}`}
+        >
+          {title}
+          <FaAnglesRight />
+        </Link>
         <Checkbox
           checked={notOnList}
           onCheck={handleCheck}

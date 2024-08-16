@@ -144,6 +144,7 @@ export default function Users() {
                   data={data?.User?.favourites}
                   userId={Number(id)}
                   favouritesPerPage={itemsPerPage.favourites}
+                  isUser={isLoggedIn && userId === Number(id)}
                 />
               );
             default:

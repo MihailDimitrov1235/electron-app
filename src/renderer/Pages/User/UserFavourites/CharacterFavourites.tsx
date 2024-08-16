@@ -16,10 +16,12 @@ export default function CharactersFavourites({
   data,
   userId,
   perPage,
+  isUser,
 }: {
   data: CharacterFavouritesFragment;
   userId: number;
   perPage: number;
+  isUser: boolean;
 }) {
   const [toggleFavourites, { data: toggleFavouritesData }] =
     useToggleFavouritesMutation();
@@ -71,16 +73,20 @@ export default function CharactersFavourites({
                 className="w-[138px] h-[195px] rounded-md z-10 relative "
               />
             </Tooltip>
-            <button
-              className="absolute top-1 right-1 rounded-md bg-red-500 aspect-square z-20 w-6"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleFavourites({ variables: { characterId: character?.id } });
-              }}
-            >
-              &#x2716;
-            </button>
+            {isUser && (
+              <button
+                className="absolute top-1 right-1 rounded-md bg-red-500 aspect-square z-20 w-6"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavourites({
+                    variables: { characterId: character?.id },
+                  });
+                }}
+              >
+                &#x2716;
+              </button>
+            )}
           </Link>
         ))
       ) : (

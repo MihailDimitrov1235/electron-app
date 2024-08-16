@@ -67,7 +67,7 @@ export default function MediaShortInfo({
             {following.mediaList.map((mediaList) => (
               <Link
                 key={mediaList?.id}
-                to={`/user/${mediaList?.user?.id}`}
+                to={`/users/${mediaList?.user?.id}`}
                 className="w-full shadow-md flex justify-between rounded-md border items-center pr-3 border-background-main overflow-hidden hover:border-primary cursor-pointer"
               >
                 <div

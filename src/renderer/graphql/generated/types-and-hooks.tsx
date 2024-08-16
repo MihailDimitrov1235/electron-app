@@ -6032,7 +6032,7 @@ export const GetAnimeHomePageDocument = gql`
     }
   }
   Popular: Page(page: 1, perPage: 20) {
-    media(type: MANGA, sort: POPULARITY_DESC) {
+    media(type: ANIME, sort: POPULARITY_DESC) {
       id
       type
       meanScore

@@ -11,10 +11,12 @@ export default function UserFavourites({
   data,
   userId,
   favouritesPerPage,
+  isUser,
 }: {
   data: NonNullable<GetUserQuery['User']>['favourites'];
   userId: number;
   favouritesPerPage: number;
+  isUser: boolean;
 }) {
   const tabs = ['Anime', 'Manga', 'Characters', 'Staff', 'Studios'];
   const [openTab, setOpenTab] = useState(tabs[0]);
@@ -31,6 +33,7 @@ export default function UserFavourites({
                 data={data?.anime}
                 userId={userId}
                 perPage={favouritesPerPage}
+                isUser={isUser}
               />
             ) : null;
           case tabs[1]:
@@ -39,6 +42,7 @@ export default function UserFavourites({
                 data={data?.manga}
                 userId={userId}
                 perPage={favouritesPerPage}
+                isUser={isUser}
               />
             ) : null;
           case tabs[2]:
@@ -47,6 +51,7 @@ export default function UserFavourites({
                 data={data?.characters}
                 userId={userId}
                 perPage={favouritesPerPage}
+                isUser={isUser}
               />
             ) : null;
           case tabs[3]:
@@ -55,6 +60,7 @@ export default function UserFavourites({
                 data={data?.staff}
                 userId={userId}
                 perPage={favouritesPerPage}
+                isUser={isUser}
               />
             ) : null;
           case tabs[4]:
@@ -63,6 +69,7 @@ export default function UserFavourites({
                 data={data?.studios}
                 userId={userId}
                 perPage={favouritesPerPage}
+                isUser={isUser}
               />
             ) : null;
           default:
