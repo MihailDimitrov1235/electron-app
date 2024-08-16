@@ -1,9 +1,0 @@
-mutation ToggleFavouriteManga($mangaId: Int) {
-  ToggleFavourite(mangaId: $mangaId) {
-    manga {
-      edges {
-        id
-      }
-    }
-  }
-}

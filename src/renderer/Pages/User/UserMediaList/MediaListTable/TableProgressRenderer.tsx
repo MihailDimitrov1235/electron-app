@@ -6,7 +6,7 @@ export default function TableProgressRenderer({ rowData }: TableCellProps) {
     return <div>{null}</div>;
   }
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center w-full">
       {`${rowData?.progress} / ${
         rowData?.mediaType === MediaType.Anime
           ? rowData?.episodes || '~'

@@ -1,4 +1,33 @@
-#import "./fragments/mediaListEntry.graphql"
+#import "./mediaListEntry.graphql"
+
+fragment mediaCard on Media {
+  id
+  episodes
+  duration
+  chapters
+  volumes
+  type
+  title {
+    userPreferred
+  }
+  coverImage {
+    extraLarge
+    large
+    medium
+    color
+  }
+  meanScore
+  bannerImage
+  mediaListEntry {
+    ...mediaListEntry
+  }
+  isFavourite
+  nextAiringEpisode {
+    episode
+    timeUntilAiring
+  }
+  format
+}
 
 fragment media on Media {
   id
@@ -64,6 +93,5 @@ fragment media on Media {
       siteUrl
     }
   }
-  source
   synonyms
 }

@@ -1,0 +1,53 @@
+query GetAnimeFavourites($userId: Int, $page: Int, $favouritesPerPage: Int) {
+  User(id: $userId) {
+    favourites {
+      anime(page: $page, perPage: $favouritesPerPage) {
+        ...animeFavourites
+      }
+    }
+  }
+}
+
+query GetMangaFavourites($userId: Int, $page: Int, $favouritesPerPage: Int) {
+  User(id: $userId) {
+    favourites {
+      manga(page: $page, perPage: $favouritesPerPage) {
+        ...mangaFavourites
+      }
+    }
+  }
+}
+
+query GetCharacterFavourites(
+  $userId: Int
+  $page: Int
+  $favouritesPerPage: Int
+) {
+  User(id: $userId) {
+    favourites {
+      characters(page: $page, perPage: $favouritesPerPage) {
+        ...characterFavourites
+      }
+    }
+  }
+}
+
+query GetStaffFavourites($userId: Int, $page: Int, $favouritesPerPage: Int) {
+  User(id: $userId) {
+    favourites {
+      staff(page: $page, perPage: $favouritesPerPage) {
+        ...staffFavourites
+      }
+    }
+  }
+}
+
+query GetStudioFavourites($userId: Int, $page: Int, $favouritesPerPage: Int) {
+  User(id: $userId) {
+    favourites {
+      studios(page: $page, perPage: $favouritesPerPage) {
+        ...studioFavourites
+      }
+    }
+  }
+}

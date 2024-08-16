@@ -69,6 +69,7 @@ export default function MediaListEntryPopover({
     repeat: 0,
     startedAt: null,
     completedAt: null,
+    customLists: {},
   };
   const [formData, setFormData] = useState(entry || defaultFormData);
   useEffect(() => {
@@ -423,13 +424,15 @@ export default function MediaListEntryPopover({
               />
             </div>
             {entry && (
-              <Button
-                variant="error"
-                className="ml-auto mt-6"
-                onClick={handleDelete}
-              >
-                Delete
-              </Button>
+              <div className="flex gap-4">
+                <Button
+                  variant="error"
+                  className="ml-auto mt-6"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
         </div>

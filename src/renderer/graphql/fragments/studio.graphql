@@ -1,0 +1,4 @@
+fragment studio on Studio {
+  id
+  name
+}

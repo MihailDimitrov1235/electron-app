@@ -1,6 +1,7 @@
 #import "../../fragments/mediaListCollection.graphql"
+#import "../../fragments/favourites.graphql"
 
-query GetUser($userId: Int, $activitiesPerPage: Int) {
+query GetUser($userId: Int, $activitiesPerPage: Int, $favouritesPerPage: Int) {
   User(id: $userId) {
     name
     avatar {
@@ -11,6 +12,23 @@ query GetUser($userId: Int, $activitiesPerPage: Int) {
     isFollowing
     isFollower
     isBlocked
+    favourites {
+      anime(page: 1, perPage: $favouritesPerPage) {
+        ...animeFavourites
+      }
+      manga(page: 1, perPage: $favouritesPerPage) {
+        ...mangaFavourites
+      }
+      characters(page: 1, perPage: $favouritesPerPage) {
+        ...characterFavourites
+      }
+      staff(page: 1, perPage: $favouritesPerPage) {
+        ...staffFavourites
+      }
+      studios(page: 1, perPage: $favouritesPerPage) {
+        ...studioFavourites
+      }
+    }
   }
 
   animeLists: MediaListCollection(userId: $userId, type: ANIME) {

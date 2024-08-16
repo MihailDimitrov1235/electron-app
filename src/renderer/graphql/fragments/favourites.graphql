@@ -1,0 +1,46 @@
+#import "./media.graphql"
+
+fragment animeFavourites on MediaConnection {
+  pageInfo {
+    hasNextPage
+  }
+  nodes {
+    ...mediaCard
+  }
+}
+
+fragment mangaFavourites on MediaConnection {
+  pageInfo {
+    hasNextPage
+  }
+  nodes {
+    ...mediaCard
+  }
+}
+
+fragment characterFavourites on CharacterConnection {
+  pageInfo {
+    hasNextPage
+  }
+  nodes {
+    ...character
+  }
+}
+
+fragment staffFavourites on StaffConnection {
+  pageInfo {
+    hasNextPage
+  }
+  nodes {
+    ...staff
+  }
+}
+
+fragment studioFavourites on StudioConnection {
+  pageInfo {
+    hasNextPage
+  }
+  nodes {
+    ...studio
+  }
+}

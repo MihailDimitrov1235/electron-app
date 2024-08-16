@@ -17,12 +17,21 @@ import 'react-virtualized/styles.css';
 import TableImageRenderer from './TableImageRenderer';
 import SortableColumn from './SortableColumn';
 import TableTitleRenderer from './TableTitleRenderer';
-import TableNotesRenderer from './TableNotesRenderer';
 import TableScoreRenderer from './TableScoreRenderer';
 import TableProgressRenderer from './TableProgressRenderer';
 import TableEditRenderer from './TableEditRenderer';
+import TableBadgesRenderer from './TableBadgesRenderer';
+import TableUpdatedAtRenderer from './TableUpdatedAtRenderer';
 
 const ROW_HEIGHT = 112;
+const CELL_WIDTH = {
+  IMAGE: 66,
+  BADGES: 64,
+  SCORE: 96,
+  PROGRESS: 104,
+  UPDATED_AT: 128,
+  EDIT: 32,
+};
 
 export default function MediaListTable({
   list,
@@ -53,7 +62,7 @@ export default function MediaListTable({
       return {
         mediaId: entry.media?.id,
         mediaType: entry.media?.type,
-        image: entry.media?.coverImage?.large,
+        image: entry.media?.coverImage?.medium,
         title: entry.media?.title?.userPreferred,
         notes: entry.notes,
         score: entry.score,
@@ -61,6 +70,8 @@ export default function MediaListTable({
         episodes: entry.media?.episodes,
         chapters: entry.media?.chapters,
         volumes: entry.media?.volumes,
+        isAdult: entry.media?.isAdult,
+        updatedAt: entry.updatedAt,
         onSort,
         currentSort,
         onEditClick: () =>
@@ -129,19 +140,26 @@ export default function MediaListTable({
                 >
                   <Column
                     dataKey="image"
-                    width={66}
+                    width={CELL_WIDTH.IMAGE}
                     cellRenderer={TableImageRenderer}
                   />
                   <Column
                     label="Title"
                     dataKey="title"
-                    width={isUser ? width - 128 * 4 - 80 : width - 128 * 3 - 80}
+                    width={
+                      isUser
+                        ? width -
+                          Object.values(CELL_WIDTH).reduce((a, b) => a + b)
+                        : width -
+                          Object.values(CELL_WIDTH).reduce((a, b) => a + b) +
+                          CELL_WIDTH.EDIT
+                    }
                     cellRenderer={TableTitleRenderer}
                   />
                   <Column
-                    dataKey="notes"
-                    width={128}
-                    cellRenderer={TableNotesRenderer}
+                    dataKey="badges"
+                    width={CELL_WIDTH.BADGES}
+                    cellRenderer={TableBadgesRenderer}
                   />
                   <Column
                     label={
@@ -154,7 +172,7 @@ export default function MediaListTable({
                       />
                     }
                     dataKey="score"
-                    width={128}
+                    width={CELL_WIDTH.SCORE}
                     cellRenderer={TableScoreRenderer}
                     headerClassName="flex justify-center"
                   />
@@ -169,14 +187,30 @@ export default function MediaListTable({
                       />
                     }
                     dataKey="progress"
-                    width={128}
+                    width={CELL_WIDTH.PROGRESS}
                     cellRenderer={TableProgressRenderer}
+                    headerClassName="flex justify-center"
+                  />
+                  <Column
+                    label={
+                      <SortableColumn
+                        title="Updated At"
+                        ascending={MediaListSort.UpdatedTime}
+                        descending={MediaListSort.UpdatedTimeDesc}
+                        onSort={onSort}
+                        currentSort={currentSort}
+                        ascFirst
+                      />
+                    }
+                    dataKey="updatedAt"
+                    width={CELL_WIDTH.UPDATED_AT}
+                    cellRenderer={TableUpdatedAtRenderer}
                     headerClassName="flex justify-center"
                   />
                   {isUser && (
                     <Column
                       dataKey="edit"
-                      width={128}
+                      width={CELL_WIDTH.EDIT}
                       cellRenderer={TableEditRenderer}
                     />
                   )}

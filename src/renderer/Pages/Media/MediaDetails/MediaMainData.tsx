@@ -16,8 +16,7 @@ import {
   MediaListStatus,
   MediaType,
   useSaveMediaListEntryMutation,
-  useToggleFavouriteAnimeMutation,
-  useToggleFavouriteMangaMutation,
+  useToggleFavouritesMutation,
 } from '@graphql/generated/types-and-hooks';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -46,10 +45,8 @@ export default function MediaMainData({
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
-  const [toggleFavouriteAnime, { data: toggleFavouriteAnimeData }] =
-    useToggleFavouriteAnimeMutation();
-  const [toggleFavouriteManga, { data: toggleFavouriteMangaData }] =
-    useToggleFavouriteMangaMutation();
+  const [toggleFavourites, { data: toggleFavouritesData }] =
+    useToggleFavouritesMutation();
 
   const [
     saveMediaListEntry,
@@ -77,21 +74,15 @@ export default function MediaMainData({
   }, [saveMutationData]);
 
   useEffect(() => {
-    const handleToggleSuccess = () => {
+    if (toggleFavouritesData) {
       enqueueSnackbar({ variant: 'success', message: 'Updated favourites' });
       setData((prev) => ({
         ...prev,
         id: prev?.id || 1,
         isFavourite: !prev?.isFavourite,
       }));
-    };
-
-    if (toggleFavouriteMangaData) {
-      handleToggleSuccess();
-    } else if (toggleFavouriteAnimeData) {
-      handleToggleSuccess();
     }
-  }, [toggleFavouriteMangaData, toggleFavouriteAnimeData]);
+  }, [toggleFavouritesData]);
 
   const [progress, setProgress] = useState<number>(0);
   const [progressVolumes, setProgressVolumes] = useState<number>(0);
@@ -109,9 +100,9 @@ export default function MediaMainData({
 
   const handleFavoriteChange = () => {
     if (data?.type === MediaType.Anime) {
-      toggleFavouriteAnime({ variables: { animeId: data.id } });
+      toggleFavourites({ variables: { animeId: data.id } });
     } else if (data?.type === MediaType.Manga) {
-      toggleFavouriteManga({ variables: { mangaId: data.id } });
+      toggleFavourites({ variables: { mangaId: data.id } });
     }
   };
 

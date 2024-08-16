@@ -15,6 +15,7 @@ import Tabs from '@Components/Tabs';
 import { useEffect, useState } from 'react';
 import UserOverview from './UserOverview';
 import UserMediaList from './UserMediaList';
+import UserFavourites from './UserFavourites';
 
 const userTabs = [
   'Overview',
@@ -31,11 +32,13 @@ export default function Users() {
   const [openTab, setOpenTab] = useState(userTabs[0]);
   const itemsPerPage = {
     activities: 25,
+    favourites: 25,
   };
   const { data, loading, error } = useGetUserQuery({
     variables: {
       userId: Number(id),
       activitiesPerPage: itemsPerPage.activities,
+      favouritesPerPage: itemsPerPage.favourites,
     },
   });
   const { userId, isLoggedIn } = useAuth();
@@ -133,6 +136,14 @@ export default function Users() {
                   userId={Number(id)}
                   mediaType={MediaType.Manga}
                   data={data?.mangaLists as MediaListCollectionFragment}
+                />
+              );
+            case userTabs[3]:
+              return (
+                <UserFavourites
+                  data={data?.User?.favourites}
+                  userId={Number(id)}
+                  favouritesPerPage={itemsPerPage.favourites}
                 />
               );
             default:

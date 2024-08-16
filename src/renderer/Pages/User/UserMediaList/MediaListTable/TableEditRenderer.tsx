@@ -12,7 +12,7 @@ export default function TableEditRenderer({ rowData }: TableCellProps) {
         onClick={rowData.onEditClick}
         className="hover:text-text-light"
       >
-        <FaEdit />
+        <FaEdit size={24} />
       </button>
     </div>
   );

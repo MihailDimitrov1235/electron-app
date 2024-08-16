@@ -7,7 +7,7 @@ export default function TableScoreRenderer({ rowData }: TableCellProps) {
   return (
     <div className="flex justify-center">
       {rowData.score && rowData.score !== 0 ? (
-        <div className="w-32 p-2 text-center">{rowData.score / 10}</div>
+        <div className="w-full text-center">{rowData.score / 10}</div>
       ) : (
         '~'
       )}
