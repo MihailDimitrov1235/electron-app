@@ -1,6 +1,5 @@
 /* eslint-disable react/no-danger */
 import { UserFragment } from '@graphql/generated/types-and-hooks';
-import transformAniListText from '@Utils/transformAnilistHtml';
 import { Link } from 'react-router-dom';
 
 type UserType = UserFragment;
@@ -8,25 +7,33 @@ type UserType = UserFragment;
 export default function UserCard({ data }: { data: UserType }) {
   const url = `/users/${data?.id}`;
   return (
-    <div className="flex gap-2 rounded-md border border-background-main h-32 overflow-hidden pr-2">
-      <Link
-        to={url}
-        className="h-32 aspect-square bg-cover"
-        style={{ backgroundImage: `url(${data?.avatar?.medium})` }}
-      />
-      <div className="flex flex-col gap-1 w-full overflow-hidden py-1">
+    <div className="flex flex-col gap-2 rounded-md shadow-md border border-background-main overflow-hidden w-full relative">
+      {data.bannerImage ? (
+        <div className="w-full h-16 overflow-hidden absolute z-0">
+          <div className="h-16 w-full bg-gradient-to-b from-transparent to-background-dark absolute z-20" />
+          <img
+            className=" w-full blur-sm relative z-10"
+            src={data.bannerImage}
+            alt="banner"
+          />
+        </div>
+      ) : (
+        <div className="w-full h-16 overflow-hidden absolute z-0 bg-gradient-to-b from-primary to-background-dark" />
+      )}
+      <Link to={url} className="relative z-10 mt-6 mx-auto">
+        <img
+          className="w-16 aspect-square rounded-md"
+          src={data?.avatar?.medium || ''}
+          alt="user"
+        />
+      </Link>
+      <div className="flex flex-col gap-1 w-full overflow-hidden py-1 text-center">
         <Link
           to={url}
-          className="hover:text-primary line-clamp-1 overflow-hidden text-ellipsis"
+          className="hover:text-primary line-clamp-2 h-12 overflow-hidden text-ellipsis"
         >
           {data?.name}
         </Link>
-        <div
-          className="text-sm text-text-light line-clamp-4 overflow-hidden text-ellipsis"
-          dangerouslySetInnerHTML={{
-            __html: transformAniListText(data?.about || ''),
-          }}
-        />
       </div>
     </div>
   );

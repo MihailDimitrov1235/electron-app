@@ -171,10 +171,12 @@ export default function Users() {
             case userTabs[5]:
               return (
                 <UserSocial
+                  userId={Number(id)}
                   data={{
                     followers: extraData?.followers,
                     following: extraData?.following,
                   }}
+                  perPage={itemsPerPage.following}
                 />
               );
             default:

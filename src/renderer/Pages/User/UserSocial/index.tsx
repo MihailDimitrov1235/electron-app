@@ -5,12 +5,16 @@ import UserFollowing from './UserFollowing';
 import UserFollowers from './UserFollowers';
 
 export default function UserSocial({
+  userId,
   data,
+  perPage,
 }: {
+  userId: number;
   data: {
     following: GetUserExtraQuery['following'];
     followers: GetUserExtraQuery['followers'];
   };
+  perPage: number;
 }) {
   const tabs = ['Following', 'Followers'];
   const [openTab, setOpenTab] = useState(tabs[0]);
@@ -23,11 +27,19 @@ export default function UserSocial({
         switch (openTab) {
           case tabs[0]:
             return data?.following ? (
-              <UserFollowing data={data.following} />
+              <UserFollowing
+                userId={userId}
+                data={data.following}
+                perPage={perPage}
+              />
             ) : null;
           case tabs[1]:
             return data?.followers ? (
-              <UserFollowers data={data.followers} />
+              <UserFollowers
+                userId={userId}
+                data={data.followers}
+                perPage={perPage}
+              />
             ) : null;
           default:
             return <div>Unknown component type</div>;

@@ -79,7 +79,7 @@ export default function Dropdown({
       <div
         className={`${
           open ? 'visible' : 'hidden'
-        } z-10 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-lg space-y-[1px] pt-[1px] `}
+        } z-50 bg-background-main rounded-b-md flex flex-col absolute w-full shadow-lg space-y-[1px] pt-[1px] `}
       >
         {options.map((option, index) => (
           <Button

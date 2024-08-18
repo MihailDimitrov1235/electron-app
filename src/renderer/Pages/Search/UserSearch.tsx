@@ -153,7 +153,7 @@ export default function UserSearch() {
         <div className="grid grid-cols-6 mt-6 w-full gap-4">
           {searchResults.Page.users.map((user) => (
             <div className="w-full" key={user?.id}>
-              <UserCard data={user} />
+              {user ? <UserCard data={user} /> : null}
             </div>
           ))}
           {loading &&
@@ -165,7 +165,7 @@ export default function UserSearch() {
           {hasNextPage && !loading && (
             <button
               type="button"
-              className="rounded-md border-background-main border w-full h-32 flex flex-col justify-center items-center hover:bg-primary/10 transition-colors "
+              className="rounded-md border-background-main border w-full h-[154px] flex flex-col justify-center items-center hover:bg-primary/10 transition-colors "
               onClick={() => {
                 setCurrentPage((prev) => prev + 1);
                 setShouldSearch(true);
