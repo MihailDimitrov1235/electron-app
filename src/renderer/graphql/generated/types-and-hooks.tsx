@@ -4766,6 +4766,13 @@ export type RateReviewMutationVariables = Exact<{
 
 export type RateReviewMutation = { __typename?: 'Mutation', RateReview?: { __typename?: 'Review', rating?: number | null, ratingAmount?: number | null, userRating?: ReviewRating | null } | null };
 
+export type FollowMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type FollowMutation = { __typename?: 'Mutation', ToggleFollow?: { __typename?: 'User', isFollowing?: boolean | null } | null };
+
 export type GetReviewQueryVariables = Exact<{
   id?: InputMaybe<Scalars['Int']['input']>;
 }>;
@@ -5602,6 +5609,39 @@ export function useRateReviewMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RateReviewMutationHookResult = ReturnType<typeof useRateReviewMutation>;
 export type RateReviewMutationResult = Apollo.MutationResult<RateReviewMutation>;
 export type RateReviewMutationOptions = Apollo.BaseMutationOptions<RateReviewMutation, RateReviewMutationVariables>;
+export const FollowDocument = gql`
+    mutation Follow($userId: Int) {
+  ToggleFollow(userId: $userId) {
+    isFollowing
+  }
+}
+    `;
+export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMutationVariables>;
+
+/**
+ * __useFollowMutation__
+ *
+ * To run a mutation, you first call `useFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followMutation, { data, loading, error }] = useFollowMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFollowMutation(baseOptions?: Apollo.MutationHookOptions<FollowMutation, FollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FollowMutation, FollowMutationVariables>(FollowDocument, options);
+      }
+export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
+export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
+export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
 export const GetReviewDocument = gql`
     query GetReview($id: Int) {
   Review(id: $id) {

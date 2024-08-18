@@ -1,6 +1,7 @@
 import {
   MediaListCollectionFragment,
   MediaType,
+  useFollowMutation,
   useGetUserExtraQuery,
   useGetUserQuery,
 } from '@graphql/generated/types-and-hooks';
@@ -32,11 +33,25 @@ const userTabs = [
 export default function Users() {
   const { id } = useParams();
   const [openTab, setOpenTab] = useState(userTabs[0]);
+  const [following, setFollowing] = useState(false);
+  const [toggleFollow, { data: followData, error: followError }] =
+    useFollowMutation();
   const itemsPerPage = {
     activities: 25,
     favourites: 25,
     following: 50,
   };
+  useEffect(() => {
+    if (followData?.ToggleFollow) {
+      enqueueSnackbar({ variant: 'success', message: 'Changed follow state' });
+      setFollowing(followData.ToggleFollow.isFollowing || false);
+    }
+  }, [followData]);
+  useEffect(() => {
+    if (followError) {
+      enqueueSnackbar({ variant: 'error', message: followError.message });
+    }
+  }, [followError]);
   const { data, loading, error } = useGetUserQuery({
     variables: {
       userId: Number(id),
@@ -44,6 +59,11 @@ export default function Users() {
       favouritesPerPage: itemsPerPage.favourites,
     },
   });
+  useEffect(() => {
+    if (data?.User) {
+      setFollowing(data?.User?.isFollowing || false);
+    }
+  }, [data]);
   const {
     data: extraData,
     loading: extraLoading,
@@ -107,13 +127,15 @@ export default function Users() {
               )}
             </div>
 
-            {!isLoggedIn && (
-              <div className="flex gap-4">
-                <Button className="bg-blue-500 text-white text-sm !py-1 !px-2">
-                  {data?.User?.isFollowing ? 'Unfollow' : 'Follow'}
-                </Button>
-                <Button className="bg-red-500 text-white text-sm !py-1 !px-2">
-                  Block
+            {isLoggedIn && !(Number(id) === userId) && (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() =>
+                    toggleFollow({ variables: { userId: Number(id) } })
+                  }
+                  className="bg-blue-500 text-white text-sm !py-1 !px-2 hover:border-transparent"
+                >
+                  {following ? 'Unfollow' : 'Follow'}
                 </Button>
               </div>
             )}

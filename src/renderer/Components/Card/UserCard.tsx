@@ -20,13 +20,11 @@ export default function UserCard({ data }: { data: UserType }) {
       ) : (
         <div className="w-full h-16 overflow-hidden absolute z-0 bg-gradient-to-b from-primary to-background-dark" />
       )}
-      <Link to={url} className="relative z-10 mt-6 mx-auto">
-        <img
-          className="w-16 aspect-square rounded-md"
-          src={data?.avatar?.medium || ''}
-          alt="user"
-        />
-      </Link>
+      <Link
+        to={url}
+        className="relative z-10 mt-6 mx-auto w-16 aspect-square overflow-hidden rounded-md bg-cover bg-no-repeat bg-center"
+        style={{ backgroundImage: `url(${data.avatar?.medium})` }}
+      />
       <div className="flex flex-col gap-1 w-full overflow-hidden py-1 text-center">
         <Link
           to={url}

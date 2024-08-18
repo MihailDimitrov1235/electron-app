@@ -55,7 +55,7 @@ export default function UserFollowing({
   return (
     <div className="grid grid-cols-5 gap-4 w-full">
       {displayData?.following?.map((user) =>
-        user ? <UserCard data={user} /> : null,
+        user ? <UserCard key={user.id} data={user} /> : null,
       )}
       {displayData?.pageInfo?.hasNextPage && !loading ? (
         <button
