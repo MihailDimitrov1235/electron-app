@@ -1,0 +1,57 @@
+fragment listActivity on ListActivity {
+  id
+  type
+  replyCount
+  status
+  progress
+  isLocked
+  isSubscribed
+  isLiked
+  isPinned
+  likeCount
+  createdAt
+  media {
+    ...mediaCard
+  }
+}
+fragment textActivity on TextActivity {
+  id
+  type
+  text
+  replyCount
+  isLocked
+  isSubscribed
+  isLiked
+  isPinned
+  likeCount
+  createdAt
+  user {
+    id
+    name
+    avatar {
+      large
+    }
+  }
+}
+fragment messageActivity on MessageActivity {
+  id
+  type
+  message
+  replyCount
+  isPrivate
+  isLocked
+  isSubscribed
+  isLiked
+  likeCount
+  createdAt
+  messenger {
+    id
+    name
+    donatorTier
+    donatorBadge
+    moderatorRoles
+    avatar {
+      medium
+    }
+  }
+}

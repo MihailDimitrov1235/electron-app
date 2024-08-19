@@ -7,7 +7,7 @@ import { GiBowTieRibbon } from 'react-icons/gi';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook, IoTimeSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import ListActivities from './ListActivities';
+import Activities from './Activities';
 
 export default function UserOverview({
   userId,
@@ -25,7 +25,7 @@ export default function UserOverview({
     <div className="flex flex-col gap-2">
       {data?.overview?.about && (
         <div
-          className="w-full"
+          className="w-[50%] max-h-[500px] overflow-y-scroll mx-auto"
           dangerouslySetInnerHTML={{
             __html: transformAniListText(data.overview.about),
           }}
@@ -251,7 +251,7 @@ export default function UserOverview({
         ) : null}
       </div>
       <div className="flex gap-8 mt-8">
-        <ListActivities
+        <Activities
           userId={userId}
           activitiesData={data.activities}
           activitiesPerPage={activitiesPerPage}

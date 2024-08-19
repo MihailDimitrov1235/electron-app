@@ -4673,6 +4673,12 @@ export type YearStats = {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type ListActivityFragment = { __typename?: 'ListActivity', id: number, type?: ActivityType | null, replyCount: number, status?: string | null, progress?: string | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, media?: { __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null };
+
+export type TextActivityFragment = { __typename?: 'TextActivity', id: number, type?: ActivityType | null, text?: string | null, replyCount: number, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null };
+
+export type MessageActivityFragment = { __typename?: 'MessageActivity', id: number, type?: ActivityType | null, message?: string | null, replyCount: number, isPrivate?: boolean | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, likeCount: number, createdAt: number, messenger?: { __typename?: 'User', id: number, name: string, donatorTier?: number | null, donatorBadge?: string | null, moderatorRoles?: Array<ModRole | null> | null, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null };
+
 export type CharacterFragment = { __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null };
 
 export type CharacterMediaFragment = { __typename?: 'CharacterConnection', edges?: Array<{ __typename?: 'CharacterEdge', role?: CharacterRole | null, voiceActors?: Array<{ __typename?: 'Staff', id: number, languageV2?: string | null, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null, node?: { __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null } | null> | null };
@@ -4712,12 +4718,12 @@ export type ToggleFavouritesMutationVariables = Exact<{
 
 export type ToggleFavouritesMutation = { __typename?: 'Mutation', ToggleFavourite?: { __typename?: 'Favourites', anime?: { __typename?: 'MediaConnection', nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, manga?: { __typename?: 'MediaConnection', nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, characters?: { __typename?: 'CharacterConnection', nodes?: Array<{ __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null> | null } | null, staff?: { __typename?: 'StaffConnection', nodes?: Array<{ __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null } | null, studios?: { __typename?: 'StudioConnection', nodes?: Array<{ __typename?: 'Studio', id: number, name: string } | null> | null } | null } | null };
 
-export type LikeListActivityMutationVariables = Exact<{
+export type LikeActivityMutationVariables = Exact<{
   id?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
-export type LikeListActivityMutation = { __typename?: 'Mutation', ToggleLikeV2?: { __typename: 'ActivityReply' } | { __typename: 'ListActivity', likeCount: number, isLiked?: boolean | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | { __typename: 'Thread' } | { __typename: 'ThreadComment' } | null };
+export type LikeActivityMutation = { __typename?: 'Mutation', ToggleLikeV2?: { __typename: 'ActivityReply', likeCount: number, isLiked?: boolean | null } | { __typename: 'ListActivity', likeCount: number, isLiked?: boolean | null } | { __typename: 'MessageActivity', likeCount: number, isLiked?: boolean | null } | { __typename: 'TextActivity', likeCount: number, isLiked?: boolean | null } | { __typename: 'Thread', likeCount: number, isLiked?: boolean | null } | { __typename: 'ThreadComment', likeCount: number, isLiked?: boolean | null } | null };
 
 export type DeleteMediaListEntryMutationVariables = Exact<{
   id?: InputMaybe<Scalars['Int']['input']>;
@@ -4961,7 +4967,16 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', User?: { __typename?: 'User', name: string, bannerImage?: string | null, isFollowing?: boolean | null, isFollower?: boolean | null, isBlocked?: boolean | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null, favourites?: { __typename?: 'Favourites', anime?: { __typename?: 'MediaConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, manga?: { __typename?: 'MediaConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, characters?: { __typename?: 'CharacterConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null> | null } | null, staff?: { __typename?: 'StaffConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null } | null, studios?: { __typename?: 'StudioConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Studio', id: number, name: string } | null> | null } | null } | null } | null, animeLists?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, isCustomList?: boolean | null, isCompletedList?: boolean | null, entries?: Array<{ __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null> | null } | null> | null, user?: { __typename?: 'User', mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null, rowOrder?: string | null, animeList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null, mangaList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null } | null } | null } | null, mangaLists?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, isCustomList?: boolean | null, isCompletedList?: boolean | null, entries?: Array<{ __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null> | null } | null> | null, user?: { __typename?: 'User', mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null, rowOrder?: string | null, animeList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null, mangaList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null } | null } | null } | null, Overview?: { __typename?: 'User', about?: string | null, statistics?: { __typename?: 'UserStatisticTypes', anime?: { __typename?: 'UserStatistics', count: number, meanScore: number, minutesWatched: number, episodesWatched: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', minutesWatched: number, genre?: string | null } | null> | null } | null, manga?: { __typename?: 'UserStatistics', count: number, meanScore: number, chaptersRead: number, volumesRead: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', chaptersRead: number, genre?: string | null } | null> | null } | null } | null } | null, Activities?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
+export type GetUserQuery = { __typename?: 'Query', User?: { __typename?: 'User', name: string, bannerImage?: string | null, isFollowing?: boolean | null, isFollower?: boolean | null, isBlocked?: boolean | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null, favourites?: { __typename?: 'Favourites', anime?: { __typename?: 'MediaConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, manga?: { __typename?: 'MediaConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null> | null } | null, characters?: { __typename?: 'CharacterConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Character', id: number, isFavourite: boolean, image?: { __typename?: 'CharacterImage', large?: string | null, medium?: string | null } | null, name?: { __typename?: 'CharacterName', userPreferred?: string | null } | null } | null> | null } | null, staff?: { __typename?: 'StaffConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Staff', id: number, name?: { __typename?: 'StaffName', first?: string | null, middle?: string | null, last?: string | null, full?: string | null, native?: string | null, userPreferred?: string | null } | null, image?: { __typename?: 'StaffImage', large?: string | null, medium?: string | null } | null } | null> | null } | null, studios?: { __typename?: 'StudioConnection', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, nodes?: Array<{ __typename?: 'Studio', id: number, name: string } | null> | null } | null } | null } | null, Overview?: { __typename?: 'User', about?: string | null, statistics?: { __typename?: 'UserStatisticTypes', anime?: { __typename?: 'UserStatistics', count: number, meanScore: number, minutesWatched: number, episodesWatched: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', minutesWatched: number, genre?: string | null } | null> | null } | null, manga?: { __typename?: 'UserStatistics', count: number, meanScore: number, chaptersRead: number, volumesRead: number, highestCount?: Array<{ __typename?: 'UserGenreStatistic', count: number, genre?: string | null } | null> | null, highestScore?: Array<{ __typename?: 'UserGenreStatistic', meanScore: number, genre?: string | null } | null> | null, highestProgress?: Array<{ __typename?: 'UserGenreStatistic', chaptersRead: number, genre?: string | null } | null> | null } | null } | null } | null, Activities?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename?: 'ListActivity', id: number, type?: ActivityType | null, replyCount: number, status?: string | null, progress?: string | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, media?: { __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null } | { __typename?: 'MessageActivity', id: number, type?: ActivityType | null, message?: string | null, replyCount: number, isPrivate?: boolean | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, likeCount: number, createdAt: number, messenger?: { __typename?: 'User', id: number, name: string, donatorTier?: number | null, donatorBadge?: string | null, moderatorRoles?: Array<ModRole | null> | null, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null } | { __typename?: 'TextActivity', id: number, type?: ActivityType | null, text?: string | null, replyCount: number, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null } | null> | null } | null };
+
+export type GetUserActivitiesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  activitiesPerPage?: InputMaybe<Scalars['Int']['input']>;
+  userId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetUserActivitiesQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename?: 'ListActivity', id: number, type?: ActivityType | null, replyCount: number, status?: string | null, progress?: string | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, media?: { __typename?: 'Media', id: number, episodes?: number | null, duration?: number | null, chapters?: number | null, volumes?: number | null, type?: MediaType | null, meanScore?: number | null, bannerImage?: string | null, isFavourite: boolean, format?: MediaFormat | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, mediaListEntry?: { __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null, nextAiringEpisode?: { __typename?: 'AiringSchedule', episode: number, timeUntilAiring: number } | null } | null } | { __typename?: 'MessageActivity', id: number, type?: ActivityType | null, message?: string | null, replyCount: number, isPrivate?: boolean | null, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, likeCount: number, createdAt: number, messenger?: { __typename?: 'User', id: number, name: string, donatorTier?: number | null, donatorBadge?: string | null, moderatorRoles?: Array<ModRole | null> | null, avatar?: { __typename?: 'UserAvatar', medium?: string | null } | null } | null } | { __typename?: 'TextActivity', id: number, type?: ActivityType | null, text?: string | null, replyCount: number, isLocked?: boolean | null, isSubscribed?: boolean | null, isLiked?: boolean | null, isPinned?: boolean | null, likeCount: number, createdAt: number, user?: { __typename?: 'User', id: number, name: string, avatar?: { __typename?: 'UserAvatar', large?: string | null } | null } | null } | null> | null } | null };
 
 export type GetUserExtraQueryVariables = Exact<{
   userId: Scalars['Int']['input'];
@@ -4969,16 +4984,7 @@ export type GetUserExtraQueryVariables = Exact<{
 }>;
 
 
-export type GetUserExtraQuery = { __typename?: 'Query', following?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, following?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null, followers?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, followers?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null };
-
-export type GetUserListActivitiesQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']['input']>;
-  activitiesPerPage?: InputMaybe<Scalars['Int']['input']>;
-  userId?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type GetUserListActivitiesQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, activities?: Array<{ __typename: 'ListActivity', id: number, status?: string | null, progress?: string | null, createdAt: number, likeCount: number, isLiked?: boolean | null, isPinned?: boolean | null, replyCount: number, media?: { __typename?: 'Media', id: number, type?: MediaType | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null, color?: string | null } | null, title?: { __typename?: 'MediaTitle', romaji?: string | null, english?: string | null, native?: string | null, userPreferred?: string | null } | null } | null } | { __typename: 'MessageActivity' } | { __typename: 'TextActivity' } | null> | null } | null };
+export type GetUserExtraQuery = { __typename?: 'Query', following?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, following?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null, followers?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, followers?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null, animeLists?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, isCustomList?: boolean | null, isCompletedList?: boolean | null, entries?: Array<{ __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null> | null } | null> | null, user?: { __typename?: 'User', mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null, rowOrder?: string | null, animeList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null, mangaList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null } | null } | null } | null, mangaLists?: { __typename?: 'MediaListCollection', lists?: Array<{ __typename?: 'MediaListGroup', name?: string | null, isCustomList?: boolean | null, isCompletedList?: boolean | null, entries?: Array<{ __typename?: 'MediaList', id: number, mediaId: number, status?: MediaListStatus | null, score?: number | null, progress?: number | null, progressVolumes?: number | null, repeat?: number | null, priority?: number | null, private?: boolean | null, hiddenFromStatusLists?: boolean | null, customLists?: any | null, advancedScores?: any | null, notes?: string | null, updatedAt?: number | null, startedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, completedAt?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null, media?: { __typename?: 'Media', id: number, type?: MediaType | null, format?: MediaFormat | null, status?: MediaStatus | null, episodes?: number | null, volumes?: number | null, chapters?: number | null, averageScore?: number | null, popularity?: number | null, isAdult?: boolean | null, countryOfOrigin?: any | null, genres?: Array<string | null> | null, title?: { __typename?: 'MediaTitle', userPreferred?: string | null, romaji?: string | null, english?: string | null, native?: string | null } | null, coverImage?: { __typename?: 'MediaCoverImage', extraLarge?: string | null, large?: string | null, medium?: string | null } | null, startDate?: { __typename?: 'FuzzyDate', year?: number | null, month?: number | null, day?: number | null } | null } | null } | null> | null } | null> | null, user?: { __typename?: 'User', mediaListOptions?: { __typename?: 'MediaListOptions', scoreFormat?: ScoreFormat | null, rowOrder?: string | null, animeList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null, mangaList?: { __typename?: 'MediaListTypeOptions', sectionOrder?: Array<string | null> | null, customLists?: Array<string | null> | null, splitCompletedSectionByFormat?: boolean | null, theme?: any | null } | null } | null } | null } | null };
 
 export type GetUserMediaListQueryVariables = Exact<{
   userId?: InputMaybe<Scalars['Int']['input']>;
@@ -5016,45 +5022,6 @@ export type GetUserFollowersQueryVariables = Exact<{
 
 export type GetUserFollowersQuery = { __typename?: 'Query', Page?: { __typename?: 'Page', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null } | null, followers?: Array<{ __typename?: 'User', id: number, name: string, bannerImage?: string | null, about?: string | null, avatar?: { __typename?: 'UserAvatar', large?: string | null, medium?: string | null } | null } | null> | null } | null };
 
-export const CharacterFragmentDoc = gql`
-    fragment character on Character {
-  id
-  image {
-    large
-    medium
-  }
-  name {
-    userPreferred
-  }
-  isFavourite
-}
-    `;
-export const CharacterMediaFragmentDoc = gql`
-    fragment characterMedia on CharacterConnection {
-  edges {
-    role
-    voiceActors {
-      id
-      name {
-        first
-        middle
-        last
-        full
-        native
-        userPreferred
-      }
-      image {
-        large
-        medium
-      }
-      languageV2
-    }
-    node {
-      ...character
-    }
-  }
-}
-    ${CharacterFragmentDoc}`;
 export const MediaListEntryFragmentDoc = gql`
     fragment mediaListEntry on MediaList {
   id
@@ -5144,6 +5111,108 @@ export const MediaCardFragmentDoc = gql`
   format
 }
     ${MediaListEntryFragmentDoc}`;
+export const ListActivityFragmentDoc = gql`
+    fragment listActivity on ListActivity {
+  id
+  type
+  replyCount
+  status
+  progress
+  isLocked
+  isSubscribed
+  isLiked
+  isPinned
+  likeCount
+  createdAt
+  media {
+    ...mediaCard
+  }
+}
+    ${MediaCardFragmentDoc}`;
+export const TextActivityFragmentDoc = gql`
+    fragment textActivity on TextActivity {
+  id
+  type
+  text
+  replyCount
+  isLocked
+  isSubscribed
+  isLiked
+  isPinned
+  likeCount
+  createdAt
+  user {
+    id
+    name
+    avatar {
+      large
+    }
+  }
+}
+    `;
+export const MessageActivityFragmentDoc = gql`
+    fragment messageActivity on MessageActivity {
+  id
+  type
+  message
+  replyCount
+  isPrivate
+  isLocked
+  isSubscribed
+  isLiked
+  likeCount
+  createdAt
+  messenger {
+    id
+    name
+    donatorTier
+    donatorBadge
+    moderatorRoles
+    avatar {
+      medium
+    }
+  }
+}
+    `;
+export const CharacterFragmentDoc = gql`
+    fragment character on Character {
+  id
+  image {
+    large
+    medium
+  }
+  name {
+    userPreferred
+  }
+  isFavourite
+}
+    `;
+export const CharacterMediaFragmentDoc = gql`
+    fragment characterMedia on CharacterConnection {
+  edges {
+    role
+    voiceActors {
+      id
+      name {
+        first
+        middle
+        last
+        full
+        native
+        userPreferred
+      }
+      image {
+        large
+        medium
+      }
+      languageV2
+    }
+    node {
+      ...character
+    }
+  }
+}
+    ${CharacterFragmentDoc}`;
 export const AnimeFavouritesFragmentDoc = gql`
     fragment animeFavourites on MediaConnection {
   pageInfo {
@@ -5397,43 +5466,63 @@ export function useToggleFavouritesMutation(baseOptions?: Apollo.MutationHookOpt
 export type ToggleFavouritesMutationHookResult = ReturnType<typeof useToggleFavouritesMutation>;
 export type ToggleFavouritesMutationResult = Apollo.MutationResult<ToggleFavouritesMutation>;
 export type ToggleFavouritesMutationOptions = Apollo.BaseMutationOptions<ToggleFavouritesMutation, ToggleFavouritesMutationVariables>;
-export const LikeListActivityDocument = gql`
-    mutation LikeListActivity($id: Int) {
+export const LikeActivityDocument = gql`
+    mutation LikeActivity($id: Int) {
   ToggleLikeV2(type: ACTIVITY, id: $id) {
     __typename
     ... on ListActivity {
       likeCount
       isLiked
     }
+    ... on MessageActivity {
+      likeCount
+      isLiked
+    }
+    ... on TextActivity {
+      likeCount
+      isLiked
+    }
+    ... on ActivityReply {
+      likeCount
+      isLiked
+    }
+    ... on Thread {
+      likeCount
+      isLiked
+    }
+    ... on ThreadComment {
+      likeCount
+      isLiked
+    }
   }
 }
     `;
-export type LikeListActivityMutationFn = Apollo.MutationFunction<LikeListActivityMutation, LikeListActivityMutationVariables>;
+export type LikeActivityMutationFn = Apollo.MutationFunction<LikeActivityMutation, LikeActivityMutationVariables>;
 
 /**
- * __useLikeListActivityMutation__
+ * __useLikeActivityMutation__
  *
- * To run a mutation, you first call `useLikeListActivityMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLikeListActivityMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLikeActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeActivityMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [likeListActivityMutation, { data, loading, error }] = useLikeListActivityMutation({
+ * const [likeActivityMutation, { data, loading, error }] = useLikeActivityMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useLikeListActivityMutation(baseOptions?: Apollo.MutationHookOptions<LikeListActivityMutation, LikeListActivityMutationVariables>) {
+export function useLikeActivityMutation(baseOptions?: Apollo.MutationHookOptions<LikeActivityMutation, LikeActivityMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LikeListActivityMutation, LikeListActivityMutationVariables>(LikeListActivityDocument, options);
+        return Apollo.useMutation<LikeActivityMutation, LikeActivityMutationVariables>(LikeActivityDocument, options);
       }
-export type LikeListActivityMutationHookResult = ReturnType<typeof useLikeListActivityMutation>;
-export type LikeListActivityMutationResult = Apollo.MutationResult<LikeListActivityMutation>;
-export type LikeListActivityMutationOptions = Apollo.BaseMutationOptions<LikeListActivityMutation, LikeListActivityMutationVariables>;
+export type LikeActivityMutationHookResult = ReturnType<typeof useLikeActivityMutation>;
+export type LikeActivityMutationResult = Apollo.MutationResult<LikeActivityMutation>;
+export type LikeActivityMutationOptions = Apollo.BaseMutationOptions<LikeActivityMutation, LikeActivityMutationVariables>;
 export const DeleteMediaListEntryDocument = gql`
     mutation DeleteMediaListEntry($id: Int) {
   DeleteMediaListEntry(id: $id) {
@@ -7257,12 +7346,6 @@ export const GetUserDocument = gql`
       }
     }
   }
-  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
-    ...mediaListCollection
-  }
-  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
-    ...mediaListCollection
-  }
   Overview: User(id: $userId) {
     about
     statistics {
@@ -7309,32 +7392,14 @@ export const GetUserDocument = gql`
       hasNextPage
     }
     activities(userId: $userId, sort: [PINNED, ID_DESC]) {
-      __typename
       ... on ListActivity {
-        id
-        status
-        progress
-        createdAt
-        likeCount
-        isLiked
-        isPinned
-        replyCount
-        media {
-          id
-          type
-          coverImage {
-            extraLarge
-            large
-            medium
-            color
-          }
-          title {
-            romaji
-            english
-            native
-            userPreferred
-          }
-        }
+        ...listActivity
+      }
+      ... on TextActivity {
+        ...textActivity
+      }
+      ... on MessageActivity {
+        ...messageActivity
       }
     }
   }
@@ -7344,7 +7409,9 @@ ${MangaFavouritesFragmentDoc}
 ${CharacterFavouritesFragmentDoc}
 ${StaffFavouritesFragmentDoc}
 ${StudioFavouritesFragmentDoc}
-${MediaListCollectionFragmentDoc}`;
+${ListActivityFragmentDoc}
+${TextActivityFragmentDoc}
+${MessageActivityFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -7380,6 +7447,63 @@ export type GetUserQueryHookResult = ReturnType<typeof useGetUserQuery>;
 export type GetUserLazyQueryHookResult = ReturnType<typeof useGetUserLazyQuery>;
 export type GetUserSuspenseQueryHookResult = ReturnType<typeof useGetUserSuspenseQuery>;
 export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVariables>;
+export const GetUserActivitiesDocument = gql`
+    query GetUserActivities($page: Int, $activitiesPerPage: Int, $userId: Int) {
+  Page(page: $page, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      ... on ListActivity {
+        ...listActivity
+      }
+      ... on TextActivity {
+        ...textActivity
+      }
+      ... on MessageActivity {
+        ...messageActivity
+      }
+    }
+  }
+}
+    ${ListActivityFragmentDoc}
+${TextActivityFragmentDoc}
+${MessageActivityFragmentDoc}`;
+
+/**
+ * __useGetUserActivitiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserActivitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserActivitiesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      activitiesPerPage: // value for 'activitiesPerPage'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserActivitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>(GetUserActivitiesDocument, options);
+      }
+export function useGetUserActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>(GetUserActivitiesDocument, options);
+        }
+export function useGetUserActivitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>(GetUserActivitiesDocument, options);
+        }
+export type GetUserActivitiesQueryHookResult = ReturnType<typeof useGetUserActivitiesQuery>;
+export type GetUserActivitiesLazyQueryHookResult = ReturnType<typeof useGetUserActivitiesLazyQuery>;
+export type GetUserActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetUserActivitiesSuspenseQuery>;
+export type GetUserActivitiesQueryResult = Apollo.QueryResult<GetUserActivitiesQuery, GetUserActivitiesQueryVariables>;
 export const GetUserExtraDocument = gql`
     query GetUserExtra($userId: Int!, $followingPerPage: Int) {
   following: Page(page: 1, perPage: $followingPerPage) {
@@ -7398,8 +7522,15 @@ export const GetUserExtraDocument = gql`
       ...user
     }
   }
+  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
+    ...mediaListCollection
+  }
+  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
+    ...mediaListCollection
+  }
 }
-    ${UserFragmentDoc}`;
+    ${UserFragmentDoc}
+${MediaListCollectionFragmentDoc}`;
 
 /**
  * __useGetUserExtraQuery__
@@ -7434,79 +7565,6 @@ export type GetUserExtraQueryHookResult = ReturnType<typeof useGetUserExtraQuery
 export type GetUserExtraLazyQueryHookResult = ReturnType<typeof useGetUserExtraLazyQuery>;
 export type GetUserExtraSuspenseQueryHookResult = ReturnType<typeof useGetUserExtraSuspenseQuery>;
 export type GetUserExtraQueryResult = Apollo.QueryResult<GetUserExtraQuery, GetUserExtraQueryVariables>;
-export const GetUserListActivitiesDocument = gql`
-    query GetUserListActivities($page: Int, $activitiesPerPage: Int, $userId: Int) {
-  Page(page: $page, perPage: $activitiesPerPage) {
-    pageInfo {
-      hasNextPage
-    }
-    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
-      __typename
-      ... on ListActivity {
-        id
-        status
-        progress
-        createdAt
-        likeCount
-        isLiked
-        isPinned
-        replyCount
-        media {
-          id
-          type
-          coverImage {
-            extraLarge
-            large
-            medium
-            color
-          }
-          title {
-            romaji
-            english
-            native
-            userPreferred
-          }
-        }
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetUserListActivitiesQuery__
- *
- * To run a query within a React component, call `useGetUserListActivitiesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserListActivitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUserListActivitiesQuery({
- *   variables: {
- *      page: // value for 'page'
- *      activitiesPerPage: // value for 'activitiesPerPage'
- *      userId: // value for 'userId'
- *   },
- * });
- */
-export function useGetUserListActivitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
-      }
-export function useGetUserListActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
-        }
-export function useGetUserListActivitiesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>(GetUserListActivitiesDocument, options);
-        }
-export type GetUserListActivitiesQueryHookResult = ReturnType<typeof useGetUserListActivitiesQuery>;
-export type GetUserListActivitiesLazyQueryHookResult = ReturnType<typeof useGetUserListActivitiesLazyQuery>;
-export type GetUserListActivitiesSuspenseQueryHookResult = ReturnType<typeof useGetUserListActivitiesSuspenseQuery>;
-export type GetUserListActivitiesQueryResult = Apollo.QueryResult<GetUserListActivitiesQuery, GetUserListActivitiesQueryVariables>;
 export const GetUserMediaListDocument = gql`
     query GetUserMediaList($userId: Int, $mediaType: MediaType) {
   MediaListCollection(userId: $userId, type: $mediaType) {

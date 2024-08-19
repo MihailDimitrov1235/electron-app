@@ -1,0 +1,18 @@
+query GetUserActivities($page: Int, $activitiesPerPage: Int, $userId: Int) {
+  Page(page: $page, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      ... on ListActivity {
+        ...listActivity
+      }
+      ... on TextActivity {
+        ...textActivity
+      }
+      ... on MessageActivity {
+        ...messageActivity
+      }
+    }
+  }
+}

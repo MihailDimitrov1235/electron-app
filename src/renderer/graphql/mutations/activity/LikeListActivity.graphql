@@ -1,9 +1,0 @@
-mutation LikeListActivity($id: Int) {
-  ToggleLikeV2(type: ACTIVITY, id: $id) {
-    __typename
-    ... on ListActivity {
-      likeCount
-      isLiked
-    }
-  }
-}

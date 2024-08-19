@@ -39,13 +39,21 @@ export default function transformAniListText(text: string): string {
     // Line
     .replace(/~~(.*?)~~/g, '<del>$1</del>')
     // Link
-    .replace(/\[(.*?)\]\((https?:\/\/.*?)\)/g, '<a href="$2">$1</a>')
+    .replace(
+      /\[(.*?)\]\((.*?https?:\/\/.*?)\)/g,
+      '<a href="$2" class="hover:text-primary underline">$1</a>',
+    )
     // Image
     .replace(
       /img(\d+)\((https?:\/\/.*?)\)/g,
       '<img src="$2" width="$1" alt="AniList Image">',
     )
     .replace(/img\((https?:\/\/.*?)\)/g, '<img src="$1" alt="AniList Image">')
+    .replace(
+      /Img(\d+)\((https?:\/\/.*?)\)/g,
+      '<img src="$2" width="$1" alt="AniList Image">',
+    )
+    .replace(/Img\((https?:\/\/.*?)\)/g, '<img src="$1" alt="AniList Image">')
     // YouTube video
     .replace(
       /youtube\((https?:\/\/.*?)\)/g,
@@ -73,6 +81,10 @@ export default function transformAniListText(text: string): string {
     // Horizontal rule (one or more dashes alone on a line)
     .replace(
       /^-+$/gm,
+      '<div style="border-bottom:5px #ABB6C2 solid; border-radius:99px; height:1px; width:100%;"></div>',
+    )
+    .replace(
+      /\*+/gm,
       '<div style="border-bottom:5px #ABB6C2 solid; border-radius:99px; height:1px; width:100%;"></div>',
     )
     // Spoiler

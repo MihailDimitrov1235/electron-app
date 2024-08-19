@@ -19,4 +19,12 @@ query GetUserExtra($userId: Int!, $followingPerPage: Int) {
       ...user
     }
   }
+
+  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
+    ...mediaListCollection
+  }
+
+  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
+    ...mediaListCollection
+  }
 }

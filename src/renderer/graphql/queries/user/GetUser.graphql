@@ -31,14 +31,6 @@ query GetUser($userId: Int!, $activitiesPerPage: Int, $favouritesPerPage: Int) {
     }
   }
 
-  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
-    ...mediaListCollection
-  }
-
-  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
-    ...mediaListCollection
-  }
-
   Overview: User(id: $userId) {
     about
     statistics {
@@ -86,32 +78,14 @@ query GetUser($userId: Int!, $activitiesPerPage: Int, $favouritesPerPage: Int) {
       hasNextPage
     }
     activities(userId: $userId, sort: [PINNED, ID_DESC]) {
-      __typename
       ... on ListActivity {
-        id
-        status
-        progress
-        createdAt
-        likeCount
-        isLiked
-        isPinned
-        replyCount
-        media {
-          id
-          type
-          coverImage {
-            extraLarge
-            large
-            medium
-            color
-          }
-          title {
-            romaji
-            english
-            native
-            userPreferred
-          }
-        }
+        ...listActivity
+      }
+      ... on TextActivity {
+        ...textActivity
+      }
+      ... on MessageActivity {
+        ...messageActivity
       }
     }
   }

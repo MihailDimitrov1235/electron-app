@@ -167,7 +167,7 @@ export default function Users() {
                 <UserMediaList
                   userId={Number(id)}
                   mediaType={MediaType.Anime}
-                  data={data?.animeLists as MediaListCollectionFragment}
+                  data={extraData?.animeLists as MediaListCollectionFragment}
                 />
               );
             case userTabs[2]:
@@ -175,7 +175,7 @@ export default function Users() {
                 <UserMediaList
                   userId={Number(id)}
                   mediaType={MediaType.Manga}
-                  data={data?.mangaLists as MediaListCollectionFragment}
+                  data={extraData?.mangaLists as MediaListCollectionFragment}
                 />
               );
             case userTabs[3]:
