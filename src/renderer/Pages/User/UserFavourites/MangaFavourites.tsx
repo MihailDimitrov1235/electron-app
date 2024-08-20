@@ -40,8 +40,8 @@ export default function MangaFavourites({
             fetchedData.User?.favourites?.manga?.pageInfo?.hasNextPage,
         },
         nodes: [
-          ...(prev.nodes as []),
-          ...(fetchedData.User?.favourites?.manga?.nodes as []),
+          ...(prev.nodes || []),
+          ...(fetchedData.User?.favourites?.manga?.nodes || []),
         ],
       }));
     }

@@ -40,8 +40,8 @@ export default function StaffFavourites({
             fetchedData.User?.favourites?.staff?.pageInfo?.hasNextPage,
         },
         nodes: [
-          ...(prev.nodes as []),
-          ...(fetchedData.User?.favourites?.staff?.nodes as []),
+          ...(prev.nodes || []),
+          ...(fetchedData.User?.favourites?.staff?.nodes || []),
         ],
       }));
     }

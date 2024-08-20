@@ -1,11 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import ListActivity from '@Components/Card/Activities/ListActivity';
 import MessageActivity from '@Components/Card/Activities/MessageActivity';
+import TextActivity from '@Components/Card/Activities/TextActivity';
 import ListActivityCardSkeleton from '@Components/Skeletons/ListActivitySkeleton';
 import {
   GetUserQuery,
+  LikeableType,
   useGetUserActivitiesQuery,
-  useLikeActivityMutation,
+  useLikeMutation,
 } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -48,18 +50,18 @@ export default function Activities({
   useEffect(() => {
     if (fetchedActivities) {
       setActivities((prev) => [
-        ...(prev as []),
-        ...(fetchedActivities.Page?.activities as []),
+        ...(prev || []),
+        ...(fetchedActivities.Page?.activities || []),
       ]);
     }
   }, [fetchedActivities]);
 
-  const [toggleLikeActivity] = useLikeActivityMutation();
+  const [toggleLike] = useLikeMutation();
 
   const handleToggleLike = async (id: number) => {
     try {
-      const { data: ToggleLikeActivityData } = await toggleLikeActivity({
-        variables: { id },
+      const { data: ToggleLikeActivityData } = await toggleLike({
+        variables: { id, type: LikeableType.Activity },
       });
       setActivities(
         (prevActivities) =>
@@ -93,6 +95,7 @@ export default function Activities({
           if (activity?.__typename === 'ListActivity') {
             return (
               <ListActivity
+                key={activity.id}
                 activity={activity}
                 handleToggleLike={handleToggleLike}
               />
@@ -101,6 +104,16 @@ export default function Activities({
           if (activity?.__typename === 'MessageActivity') {
             return (
               <MessageActivity
+                key={activity.id}
+                activity={activity}
+                handleToggleLike={handleToggleLike}
+              />
+            );
+          }
+          if (activity?.__typename === 'TextActivity') {
+            return (
+              <TextActivity
+                key={activity.id}
                 activity={activity}
                 handleToggleLike={handleToggleLike}
               />

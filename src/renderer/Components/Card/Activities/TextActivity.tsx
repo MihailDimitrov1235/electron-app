@@ -1,17 +1,17 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-danger */
-import { MessageActivityFragment } from '@graphql/generated/types-and-hooks';
+import { TextActivityFragment } from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
 import transformAniListText from '@Utils/transformAnilistHtml';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function MessageActivity({
+export default function TextActivity({
   activity,
   handleToggleLike,
   autoHeight = false,
 }: {
-  activity: MessageActivityFragment;
+  activity: TextActivityFragment;
   handleToggleLike: (id: number) => void;
   autoHeight?: boolean;
 }) {
@@ -30,21 +30,21 @@ export default function MessageActivity({
         <div className="flex gap-2 items-center">
           <Link
             className="h-12 aspect-square rounded-md bg-cover"
-            to={`/user/${activity.messenger?.id}`}
+            to={`/user/${activity.user?.id}`}
             style={{
-              backgroundImage: `url(${activity.messenger?.avatar?.medium})`,
+              backgroundImage: `url(${activity.user?.avatar?.medium})`,
             }}
           />
           <Link
-            to={`/user/${activity.messenger?.id}`}
+            to={`/user/${activity.user?.id}`}
             className="hover:text-primary"
           >
-            {activity.messenger?.name}
+            {activity.user?.name}
           </Link>
         </div>
         <div
           dangerouslySetInnerHTML={{
-            __html: transformAniListText(activity.message || ''),
+            __html: transformAniListText(activity.text || ''),
           }}
         />
       </div>
@@ -52,7 +52,7 @@ export default function MessageActivity({
         <span className="text-text-light text-xs absolute top-2">
           {getTimePassed(activity.createdAt)}
         </span>
-        <div className="text-text-light  flex gap-2">
+        <div className="text-text-light flex gap-2">
           <button
             onClick={() => navigate(`/activity/${activity.id}`)}
             type="button"

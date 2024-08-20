@@ -39,8 +39,8 @@ export default function StudiosFavourites({
             fetchedData.User?.favourites?.studios?.pageInfo?.hasNextPage,
         },
         nodes: [
-          ...(prev.nodes as []),
-          ...(fetchedData.User?.favourites?.studios?.nodes as []),
+          ...(prev.nodes || []),
+          ...(fetchedData.User?.favourites?.studios?.nodes || []),
         ],
       }));
     }

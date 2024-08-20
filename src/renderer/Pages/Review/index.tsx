@@ -83,7 +83,7 @@ export default function Review() {
             by{' '}
             <Link
               className="hover:text-primary"
-              to={`/users/${data.Review?.user?.id}`}
+              to={`/user/${data.Review?.user?.id}`}
             >
               {data.Review?.user?.name}
             </Link>

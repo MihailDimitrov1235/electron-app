@@ -8,3 +8,11 @@ fragment user on User {
   bannerImage
   about
 }
+
+fragment shortUser on User {
+  id
+  avatar {
+    medium
+  }
+  name
+}

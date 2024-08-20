@@ -56,8 +56,8 @@ export default function transformAniListText(text: string): string {
     .replace(/Img\((https?:\/\/.*?)\)/g, '<img src="$1" alt="AniList Image">')
     // YouTube video
     .replace(
-      /youtube\((https?:\/\/.*?)\)/g,
-      '<iframe width="100%" height="315" src="$1" frameborder="0" allowfullscreen></iframe>',
+      /youtube\((https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+).*?)\)/g,
+      '<iframe width="100%" height="315" src="https://www.youtube.com/embed/$2" frameborder="0" allowfullscreen></iframe>',
     )
     // Webm video
     .replace(

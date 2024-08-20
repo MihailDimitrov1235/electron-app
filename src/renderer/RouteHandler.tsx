@@ -19,6 +19,7 @@ import UserSearch from '@Pages/Search/UserSearch';
 import CharacterSearch from '@Pages/Search/CharacterSearch';
 import StaffSearch from '@Pages/Search/StaffSearch';
 import Users from '@Pages/User';
+import Activity from '@Pages/Activity';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -78,7 +79,7 @@ export default function RouteHandler() {
           ],
         },
         {
-          path: '/users/:id',
+          path: '/user/:id',
           element: <Users />,
         },
         {
@@ -95,6 +96,10 @@ export default function RouteHandler() {
         {
           path: '/review/:id',
           element: <Review />,
+        },
+        {
+          path: '/activity/:id',
+          element: <Activity />,
         },
         {
           path: '*',

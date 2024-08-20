@@ -85,7 +85,7 @@ export default function Topbar() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
-              onClick={() => navigate(`/users/${userId}`)}
+              onClick={() => navigate(`/user/${userId}`)}
             />
           </>
         ) : (

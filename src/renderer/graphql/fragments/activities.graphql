@@ -29,7 +29,7 @@ fragment textActivity on TextActivity {
     id
     name
     avatar {
-      large
+      medium
     }
   }
 }
@@ -54,4 +54,16 @@ fragment messageActivity on MessageActivity {
       medium
     }
   }
+}
+fragment activityReply on ActivityReply {
+  id
+  text
+  createdAt
+  user {
+    ...shortUser
+  }
+  likes {
+    ...shortUser
+  }
+  isLiked
 }

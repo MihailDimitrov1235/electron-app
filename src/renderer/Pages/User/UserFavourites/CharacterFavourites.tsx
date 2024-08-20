@@ -40,8 +40,8 @@ export default function CharactersFavourites({
             fetchedData.User?.favourites?.characters?.pageInfo?.hasNextPage,
         },
         nodes: [
-          ...(prev.nodes as []),
-          ...(fetchedData.User?.favourites?.characters?.nodes as []),
+          ...(prev.nodes || []),
+          ...(fetchedData.User?.favourites?.characters?.nodes || []),
         ],
       }));
     }

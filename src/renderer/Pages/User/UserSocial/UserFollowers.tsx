@@ -35,8 +35,8 @@ export default function UserFollowers({
       setDisplayData((prev) => ({
         pageInfo: { hasNextPage: fetchedData.Page?.pageInfo?.hasNextPage },
         followers: [
-          ...(prev?.followers as []),
-          ...(fetchedData.Page?.followers as []),
+          ...(prev?.followers || []),
+          ...(fetchedData.Page?.followers || []),
         ],
       }));
     }

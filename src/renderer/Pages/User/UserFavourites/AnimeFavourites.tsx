@@ -40,8 +40,8 @@ export default function AnimeFavourites({
             fetchedData.User?.favourites?.anime?.pageInfo?.hasNextPage,
         },
         nodes: [
-          ...(prev.nodes as []),
-          ...(fetchedData.User?.favourites?.anime?.nodes as []),
+          ...(prev.nodes || []),
+          ...(fetchedData.User?.favourites?.anime?.nodes || []),
         ],
       }));
     }

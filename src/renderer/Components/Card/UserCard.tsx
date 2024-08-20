@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 type UserType = UserFragment;
 
 export default function UserCard({ data }: { data: UserType }) {
-  const url = `/users/${data?.id}`;
+  const url = `/user/${data?.id}`;
   return (
     <div className="flex flex-col gap-2 rounded-md shadow-md border border-background-main overflow-hidden w-full relative">
       {data.bannerImage ? (

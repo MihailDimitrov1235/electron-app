@@ -60,7 +60,7 @@ export default function ListActivity({
           </Link>
         </div>
       </div>
-      <div className="flex flex-col justify-end h-24 py-2 ml-4 items-end text-end">
+      <div className="flex flex-col mt-auto py-2 ml-4 items-end text-end">
         <span className="text-text-light text-xs absolute top-2">
           {getTimePassed(activity.createdAt)}
         </span>

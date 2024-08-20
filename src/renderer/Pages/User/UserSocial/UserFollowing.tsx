@@ -35,8 +35,8 @@ export default function UserFollowing({
       setDisplayData((prev) => ({
         pageInfo: { hasNextPage: fetchedData.Page?.pageInfo?.hasNextPage },
         following: [
-          ...(prev?.following as []),
-          ...(fetchedData.Page?.following as []),
+          ...(prev?.following || []),
+          ...(fetchedData.Page?.following || []),
         ],
       }));
     }
