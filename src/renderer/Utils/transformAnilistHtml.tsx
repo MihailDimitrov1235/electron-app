@@ -12,6 +12,13 @@ export default function transformAniListText(text: string): string {
       }
     };
   `;
+  const openExternalLink = `
+    window.openExternalLink = function(url) {
+      if (window.electronAPI) {
+        window.electronAPI.openUrl(url);
+      }
+    };
+  `;
 
   // Process the text
   const processedText = DOMPurify.sanitize(text, {
@@ -41,7 +48,7 @@ export default function transformAniListText(text: string): string {
     // Link
     .replace(
       /\[(.*?)\]\((.*?https?:\/\/.*?)\)/g,
-      '<a href="$2" class="hover:text-primary underline">$1</a>',
+      '<button type="button" onClick="openExternalLink(\'$2\')" class="hover:text-primary underline">$1</button>',
     )
     // Image
     .replace(
@@ -57,7 +64,7 @@ export default function transformAniListText(text: string): string {
     // YouTube video
     .replace(
       /youtube\((https?:\/\/(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+).*?)\)/g,
-      '<iframe width="100%" height="315" src="https://www.youtube.com/embed/$2" frameborder="0" allowfullscreen></iframe>',
+      '<iframe height="315" src="https://www.youtube.com/embed/$2" frameborder="0" allowfullscreen class="aspect-video"></iframe>',
     )
     // Webm video
     .replace(
@@ -91,7 +98,7 @@ export default function transformAniListText(text: string): string {
     .replace(
       /~!(.*?)!~/g,
       (_, content) =>
-        ` <span class="bg-primary/70 cursor-pointer text-primary-background px-2 rounded-md" onclick="window.toggleSpoiler(this)" data-spoiler="${DOMPurify.sanitize(
+        ` <span class="bg-primary/70 cursor-pointer text-primary-background px-2 rounded-md select-none" onclick="window.toggleSpoiler(this)" data-spoiler="${DOMPurify.sanitize(
           content,
         )}" >Spoiler</span> `,
     )
@@ -100,7 +107,7 @@ export default function transformAniListText(text: string): string {
 
   if (typeof window !== 'undefined') {
     const script = document.createElement('script');
-    script.textContent = spoilerToggle;
+    script.textContent = spoilerToggle + openExternalLink;
     document.head.appendChild(script);
   }
 

@@ -11,6 +11,9 @@ query GetActivity($id: Int, $page: Int, $perPage: Int) {
     }
   }
   replies: Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      hasNextPage
+    }
     activityReplies(activityId: $id) {
       ...activityReply
     }

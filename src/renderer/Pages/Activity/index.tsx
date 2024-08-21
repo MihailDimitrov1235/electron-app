@@ -1,10 +1,15 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-danger */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-nested-ternary */
 import ActivityReply from '@Components/Card/Activities/ActivityReply';
+import ActivityReplyPreview from '@Components/Card/Activities/ActivityReplyPreview';
 import ListActivity from '@Components/Card/Activities/ListActivity';
 import MessageActivity from '@Components/Card/Activities/MessageActivity';
 import TextActivity from '@Components/Card/Activities/TextActivity';
 import { useAuth } from '@Components/Contexts/AuthContext';
+import RichTextEditor from '@Components/RichTextEditor';
+import ActivityReplySkeleton from '@Components/Skeletons/ActivityReplySkeleton';
 import {
   GetActivityQuery,
   LikeableType,
@@ -13,12 +18,14 @@ import {
 } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
+import { CgDetailsMore } from 'react-icons/cg';
 import { useParams } from 'react-router-dom';
 
 export default function Activity() {
   const { id } = useParams();
-  const { userId, userAvatar, userName } = useAuth();
-  const [currentPage, setCurrentPage] = useState();
+  const { userId, userAvatar, userName, isLoggedIn } = useAuth();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [newReplyText, setNewReplyText] = useState('');
   const { data, loading, error } = useGetActivityQuery({
     variables: { id: Number(id), page: currentPage, perPage: 25 },
   });
@@ -95,9 +102,9 @@ export default function Activity() {
 
           return {
             ...prev,
-            isLiked: ToggleLikeData?.ToggleLikeV2?.isLiked ?? prev.isLiked, // Update isLiked
+            isLiked: ToggleLikeData?.ToggleLikeV2?.isLiked ?? prev.isLiked,
             likeCount:
-              ToggleLikeData?.ToggleLikeV2?.likeCount ?? prev.likeCount, // Update likeCount
+              ToggleLikeData?.ToggleLikeV2?.likeCount ?? prev.likeCount,
           };
         });
       }
@@ -143,6 +150,35 @@ export default function Activity() {
           </div>
         ) : null,
       )}
+      {data?.replies?.pageInfo?.hasNextPage && !loading ? (
+        <div className="w-full px-4">
+          <button
+            type="button"
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className=" w-full border border-background-main rounded-md hover:bg-primary/50 text-center flex items-center justify-center py-4 "
+          >
+            <CgDetailsMore size={30} />
+            <span className="text-xl">Load More</span>
+          </button>
+        </div>
+      ) : null}
+      {loading
+        ? Array.from({ length: 2 }).map((_, index) => (
+            <div key={index} className="w-full px-4">
+              <ActivityReplySkeleton />
+            </div>
+          ))
+        : null}
+      {isLoggedIn ? (
+        <div className="px-4">
+          <RichTextEditor
+            title="Add a new reply"
+            value={newReplyText}
+            setValue={setNewReplyText}
+          />
+          {newReplyText ? <ActivityReplyPreview text={newReplyText} /> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

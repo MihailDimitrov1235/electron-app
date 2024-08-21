@@ -3,7 +3,7 @@
 import { MessageActivityFragment } from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
 import transformAniListText from '@Utils/transformAnilistHtml';
-import { FaComment, FaHeart } from 'react-icons/fa';
+import { FaComment, FaHeart, FaEyeSlash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function MessageActivity({
@@ -41,6 +41,12 @@ export default function MessageActivity({
           >
             {activity.messenger?.name}
           </Link>
+          {activity.isPrivate ? (
+            <div className="flex items-center gap-2 border border-devider rounded-md px-2 py-1">
+              <span>Private</span>
+              <FaEyeSlash />
+            </div>
+          ) : null}
         </div>
         <div
           dangerouslySetInnerHTML={{

@@ -2,7 +2,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/require-default-props */
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import NumberTextfield from './NumberTextField';
 import StringTextfield from './StringTextField';
 import TextArea from './TextArea';
@@ -24,14 +24,21 @@ export type TextFieldPropsType = {
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-function TextField(props: TextFieldPropsType) {
+const TextField = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  TextFieldPropsType
+>((props, ref) => {
   if (props.number) {
-    return <NumberTextfield {...props} />;
+    return (
+      <NumberTextfield {...props} ref={ref as React.Ref<HTMLInputElement>} />
+    );
   }
   if (props.textarea) {
-    return <TextArea {...props} />;
+    return <TextArea {...props} ref={ref as React.Ref<HTMLTextAreaElement>} />;
   }
-  return <StringTextfield {...props} />;
-}
+  return (
+    <StringTextfield {...props} ref={ref as React.Ref<HTMLInputElement>} />
+  );
+});
 
 export default TextField;
