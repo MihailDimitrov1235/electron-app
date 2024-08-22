@@ -11,6 +11,7 @@ import { RetryLink } from '@apollo/client/link/retry';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
+import { DialogProvider } from '@Components/Contexts/DialogContext';
 import { ThemeProvider, useTheme } from '@Components/Contexts/ThemeContext';
 import { AuthProvider, useAuth } from '@Components/Contexts/AuthContext';
 import { MainUtilsProvider } from '@Components/Contexts/MainUtilsContext';
@@ -48,7 +49,7 @@ function App() {
       },
       attempts: {
         max: 2,
-        retryIf: (error, _operation) => !!error && error.statusCode !== 400,
+        retryIf: (error) => !!error && error.statusCode !== 400,
       },
     });
 
@@ -135,7 +136,9 @@ function App() {
     <ApolloProvider client={client}>
       <MainUtilsProvider>
         <div id="App" className={`${theme} w-[100vw] h-[100vh] text-text-main`}>
-          <RouteHandler />
+          <DialogProvider>
+            <RouteHandler />
+          </DialogProvider>
         </div>
       </MainUtilsProvider>
     </ApolloProvider>

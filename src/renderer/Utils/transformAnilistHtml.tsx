@@ -72,19 +72,32 @@ export default function transformAniListText(text: string): string {
       '<video width="100%" controls><source src="$1" type="video/webm"></video>',
     )
     // Ordered list
-    .replace(
-      /(\d+\. .*(\n|$))+/g,
-      (match) => `<ol>${match.replace(/\d+\. (.*)/g, '<li>$1</li>')}</ol>`,
-    )
+    .replace(/(\d+\. .*(\n|$))+/g, (match) => {
+      const listItems = match.match(/\d+\. .*/g)?.map((item) => {
+        const [number, value] = item.split(/\. (.+)/);
+        if (value) {
+          return `<div>${number}. ${value || ''}</div>`;
+        }
+        return `<div>${number}</div>`;
+      });
+      return `<div class="pl-4">${listItems?.join('')}</div>`;
+    })
+
     // Unordered list
     .replace(
       /(- .*(\n|$))+/g,
-      (match) => `<ul>${match.replace(/\d+\. (.*)/g, '<li>$1</li>')}</ul>`,
+      (match) =>
+        `<ul class="pl-4">${match.replace(/\d+\. (.*)/g, '<li>$1</li>')}</ul>`,
     )
     // Quote
-    .replace(/^>(.*)/gm, '<blockquote>$1</blockquote>')
+    .replace(
+      /^>(.*?)(?:(?:\r*\n){2}|$)/gs,
+      (match, content) =>
+        `<div class="pl-8 py-3 flex rounded-md border-l-devider border-l-8 bg-background-main/50">${content.trim()}</div>`,
+    )
+
     // Code
-    .replace(/``(.*?)``/g, '<code>$1</code>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
     // Horizontal rule (one or more dashes alone on a line)
     .replace(
       /^-+$/gm,

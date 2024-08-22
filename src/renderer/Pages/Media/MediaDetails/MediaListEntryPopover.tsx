@@ -18,6 +18,8 @@ import React, { useEffect, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Button from '@Components/Form/Button';
 import { enqueueSnackbar } from 'notistack';
+import { useDialog } from '@Components/Contexts/DialogContext';
+import ConfirmDialog from '@Components/Dialog/ConfimDialog';
 
 export type MediaListEntryMediaType = {
   id: number;
@@ -48,6 +50,7 @@ export default function MediaListEntryPopover({
   entry,
   onChange,
 }: MediaListEntryPopoverPropsType) {
+  const { showDialog } = useDialog();
   const [moreOptions, setMoreOptions] = useState(false);
   const [
     saveMediaListEntry,
@@ -157,15 +160,23 @@ export default function MediaListEntryPopover({
       },
     });
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (entry) {
-      deleteMediaListEntry({ variables: { id: entry.id } });
+      const confirmation = await showDialog(
+        <ConfirmDialog
+          title="Delete entry"
+          message="Are you sure you want to delete this entry?"
+        />,
+      );
+      if (confirmation) {
+        deleteMediaListEntry({ variables: { id: entry.id } });
+      }
     }
   };
 
   return (
     <Popover open={open} setOpen={setOpen}>
-      <div className="flex flex-col gap-2 z-50 relative p-4 w-[1000px] mx-auto bg-background-dark/70 rounded-md mt-20 shadow-lg">
+      <div className="flex flex-col gap-2 p-4 w-[1000px]">
         <div className=" flex gap-4 ">
           <div
             className="h-[280px] bg-cover rounded-md"

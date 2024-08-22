@@ -8,6 +8,7 @@ import ListActivity from '@Components/Card/Activities/ListActivity';
 import MessageActivity from '@Components/Card/Activities/MessageActivity';
 import TextActivity from '@Components/Card/Activities/TextActivity';
 import { useAuth } from '@Components/Contexts/AuthContext';
+import Button from '@Components/Form/Button';
 import RichTextEditor from '@Components/RichTextEditor';
 import ActivityReplySkeleton from '@Components/Skeletons/ActivityReplySkeleton';
 import {
@@ -15,6 +16,7 @@ import {
   LikeableType,
   useGetActivityQuery,
   useLikeMutation,
+  useSaveActivityReplyMutation,
 } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
@@ -23,10 +25,11 @@ import { useParams } from 'react-router-dom';
 
 export default function Activity() {
   const { id } = useParams();
+  const [saveActivityReply] = useSaveActivityReplyMutation();
   const { userId, userAvatar, userName, isLoggedIn } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [newReplyText, setNewReplyText] = useState('');
-  const { data, loading, error } = useGetActivityQuery({
+  const { data, loading, error, refetch } = useGetActivityQuery({
     variables: { id: Number(id), page: currentPage, perPage: 25 },
   });
   const [activity, setActivity] = useState<GetActivityQuery['activity'] | null>(
@@ -56,6 +59,34 @@ export default function Activity() {
       enqueueSnackbar({ variant: 'error', message: error?.message });
     }
   }, [error]);
+
+  const handleAddActivity = async () => {
+    saveActivityReply({
+      variables: { activityId: Number(id), text: newReplyText },
+    }).then(({ data }) => {
+      if (replies?.length === 25 || currentPage !== 1) {
+        setReplies([]);
+        setCurrentPage(1);
+        refetch();
+      } else {
+        setReplies((prev) => {
+          if (prev && data?.SaveActivityReply) {
+            return [...prev, data.SaveActivityReply];
+          }
+          if (prev) {
+            return [...prev];
+          }
+          if (data?.SaveActivityReply) {
+            return [data.SaveActivityReply];
+          }
+          return [];
+        });
+      }
+      setCurrentPage(1);
+      enqueueSnackbar({ variant: 'success', message: 'Reply added' });
+      setNewReplyText('');
+    });
+  };
 
   const [toggleLike] = useLikeMutation();
   const handleToggleLike = async (LikableId: number, type: LikeableType) => {
@@ -176,7 +207,14 @@ export default function Activity() {
             value={newReplyText}
             setValue={setNewReplyText}
           />
-          {newReplyText ? <ActivityReplyPreview text={newReplyText} /> : null}
+          {newReplyText ? (
+            <div className="flex flex-col items-end gap-2">
+              <ActivityReplyPreview text={newReplyText} />
+              <Button onClick={handleAddActivity} variant="gradient">
+                Add reply
+              </Button>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>

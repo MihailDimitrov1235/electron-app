@@ -13,14 +13,16 @@ export default function Popover({ open, setOpen, children }: PopoverPropsType) {
   }
   return (
     <div
-      className={` fixed top-0 right-0 left-0 z-40 justify-center items-center w-full h-full text-text-main`}
+      className={` fixed top-0 right-0 left-0 z-40 flex justify-center items-center w-full h-full text-text-main`}
     >
       <button
         type="button"
         onClick={() => setOpen(false)}
         className="absolute top-0 w-full h-full text-text-main bg-[rgba(0,0,0,0.3)] backdrop-blur-sm cursor-default"
       />
-      {children}
+      <div className="z-50 flex bg-background-main rounded-md shadow-lg">
+        {children}
+      </div>
     </div>
   );
 }
