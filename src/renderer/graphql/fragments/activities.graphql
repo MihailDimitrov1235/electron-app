@@ -10,6 +10,9 @@ fragment listActivity on ListActivity {
   isPinned
   likeCount
   createdAt
+  user {
+    id
+  }
   media {
     ...mediaCard
   }
@@ -44,6 +47,7 @@ fragment messageActivity on MessageActivity {
   isLiked
   likeCount
   createdAt
+  recipientId
   messenger {
     id
     name

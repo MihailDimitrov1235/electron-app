@@ -6,8 +6,7 @@ import {
   MediaType,
   useGetMediaReviewsQuery,
 } from '@graphql/generated/types-and-hooks';
-import { enqueueSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 export default function MediaReviews({
   id,
@@ -36,15 +35,6 @@ export default function MediaReviews({
   });
 
   const displayData = currentPage === 1 ? data : fetchedData?.Media;
-
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      });
-    }
-  }, [error]);
 
   if (loading && currentPage !== 1) {
     return <div>loading...</div>;

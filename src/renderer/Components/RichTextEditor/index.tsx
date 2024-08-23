@@ -186,7 +186,7 @@ export default function RichTextEditor({
     <div>
       <div className="w-full mb-1 rounded-md shadow-md border border-background-main p-2 flex justify-center gap-4">
         {buttons.map((button) => (
-          <Tooltip text={button.title}>
+          <Tooltip key={button.title} text={button.title}>
             <Button variant="icon-square" onClick={button.onClick}>
               {button.icon}
             </Button>

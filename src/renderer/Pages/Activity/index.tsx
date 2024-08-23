@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-danger */
 /* eslint-disable no-underscore-dangle */
@@ -14,6 +15,7 @@ import ActivityReplySkeleton from '@Components/Skeletons/ActivityReplySkeleton';
 import {
   GetActivityQuery,
   LikeableType,
+  useDeleteActivityMutation,
   useGetActivityQuery,
   useLikeMutation,
   useSaveActivityReplyMutation,
@@ -21,15 +23,17 @@ import {
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { CgDetailsMore } from 'react-icons/cg';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 export default function Activity() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [saveActivityReply] = useSaveActivityReplyMutation();
+  const [deleteActivity] = useDeleteActivityMutation();
   const { userId, userAvatar, userName, isLoggedIn } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [newReplyText, setNewReplyText] = useState('');
-  const { data, loading, error, refetch } = useGetActivityQuery({
+  const { data, loading, refetch } = useGetActivityQuery({
     variables: { id: Number(id), page: currentPage, perPage: 25 },
   });
   const [activity, setActivity] = useState<GetActivityQuery['activity'] | null>(
@@ -54,38 +58,61 @@ export default function Activity() {
       });
     }
   }, [data]);
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar({ variant: 'error', message: error?.message });
-    }
-  }, [error]);
 
   const handleAddActivity = async () => {
     saveActivityReply({
       variables: { activityId: Number(id), text: newReplyText },
-    }).then(({ data }) => {
-      if (replies?.length === 25 || currentPage !== 1) {
-        setReplies([]);
+    })
+      .then(({ data: fetchedData }) => {
+        if (replies?.length === 25 || currentPage !== 1) {
+          setReplies([]);
+          setCurrentPage(1);
+          refetch();
+        } else {
+          setReplies((prev) => {
+            if (prev && fetchedData?.SaveActivityReply) {
+              return [...prev, fetchedData.SaveActivityReply];
+            }
+            if (prev) {
+              return [...prev];
+            }
+            if (fetchedData?.SaveActivityReply) {
+              return [fetchedData.SaveActivityReply];
+            }
+            return [];
+          });
+        }
         setCurrentPage(1);
-        refetch();
-      } else {
-        setReplies((prev) => {
-          if (prev && data?.SaveActivityReply) {
-            return [...prev, data.SaveActivityReply];
-          }
-          if (prev) {
-            return [...prev];
-          }
-          if (data?.SaveActivityReply) {
-            return [data.SaveActivityReply];
-          }
-          return [];
+        enqueueSnackbar({ variant: 'success', message: 'Reply added' });
+        setNewReplyText('');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleDeleteActivity = (activityId: number) => {
+    deleteActivity({
+      variables: { activityId },
+    })
+      .then(({ data: fetchedData }) => {
+        if (fetchedData?.DeleteActivity?.deleted) {
+          navigate(`/user/${userId}`);
+          enqueueSnackbar({ variant: 'success', message: 'Activity Deleted' });
+        } else {
+          enqueueSnackbar({
+            variant: 'error',
+            message: "Couldn't delete activity",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          variant: 'error',
+          message: "Couldn't delete activity",
         });
-      }
-      setCurrentPage(1);
-      enqueueSnackbar({ variant: 'success', message: 'Reply added' });
-      setNewReplyText('');
-    });
+      });
   };
 
   const [toggleLike] = useLikeMutation();
@@ -148,6 +175,7 @@ export default function Activity() {
     <div className="flex w-full flex-col justify-center p-16 gap-8">
       {activity?.__typename === 'ListActivity' ? (
         <ListActivity
+          handleDelete={handleDeleteActivity}
           activity={activity}
           handleToggleLike={(activityId) =>
             handleToggleLike(activityId, LikeableType.Activity)
@@ -155,6 +183,7 @@ export default function Activity() {
         />
       ) : activity?.__typename === 'MessageActivity' ? (
         <MessageActivity
+          handleDelete={handleDeleteActivity}
           activity={activity}
           handleToggleLike={(activityId) =>
             handleToggleLike(activityId, LikeableType.Activity)
@@ -162,6 +191,7 @@ export default function Activity() {
         />
       ) : activity?.__typename === 'TextActivity' ? (
         <TextActivity
+          handleDelete={handleDeleteActivity}
           activity={activity}
           handleToggleLike={(activityId) =>
             handleToggleLike(activityId, LikeableType.Activity)
@@ -173,6 +203,7 @@ export default function Activity() {
           <div className="w-full px-4" key={reply.id}>
             <ActivityReply
               key={reply.id}
+              isUser={isLoggedIn && reply.user?.id === userId}
               reply={reply}
               handleToggleLike={(activityId) =>
                 handleToggleLike(activityId, LikeableType.ActivityReply)

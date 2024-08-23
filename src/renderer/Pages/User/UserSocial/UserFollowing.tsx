@@ -5,7 +5,6 @@ import {
   GetUserExtraQuery,
   useGetUserFollowingQuery,
 } from '@graphql/generated/types-and-hooks';
-import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react';
 import { CgDetailsMore } from 'react-icons/cg';
 
@@ -41,12 +40,6 @@ export default function UserFollowing({
       }));
     }
   }, [fetchedData]);
-
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar({ variant: 'error', message: error?.message });
-    }
-  }, [error]);
 
   if (error) {
     return <div>error</div>;

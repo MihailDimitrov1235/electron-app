@@ -1,21 +1,36 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-danger */
-import { TextActivityFragment } from '@graphql/generated/types-and-hooks';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import { useDialog } from '@Components/Contexts/DialogContext';
+import ConfirmDialog from '@Components/Dialog/ConfimDialog';
+import {
+  TextActivityFragment,
+  useActivitySubscribeMutation,
+} from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
 import transformAniListText from '@Utils/transformAnilistHtml';
-import { FaComment, FaHeart } from 'react-icons/fa';
+import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
+import { FaBell, FaComment, FaHeart, FaTrash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function TextActivity({
   activity,
   handleToggleLike,
   autoHeight = false,
+  handleDelete,
 }: {
   activity: TextActivityFragment;
   handleToggleLike: (id: number) => void;
   autoHeight?: boolean;
+  handleDelete: (id: number) => void;
 }) {
   const navigate = useNavigate();
+  const { isLoggedIn, userId } = useAuth();
+  const { showDialog } = useDialog();
+  const [activitySubscribe] = useActivitySubscribeMutation();
+  const [subscribed, setSubscribed] = useState(activity.isSubscribed);
   return (
     <div
       className={`flex items-center w-full ${
@@ -49,9 +64,66 @@ export default function TextActivity({
         />
       </div>
       <div className="flex flex-col mt-auto py-2 ml-4 items-end text-end">
-        <span className="text-text-light text-xs absolute top-2">
-          {getTimePassed(activity.createdAt)}
-        </span>
+        <div className="absolute top-2 flex gap-1">
+          {isLoggedIn ? (
+            <button
+              type="button"
+              className={` ${
+                subscribed
+                  ? 'hover:text-text-light text-green-500'
+                  : 'hover:text-green-500 text-text-light'
+              }`}
+              onClick={() => {
+                activitySubscribe({
+                  variables: {
+                    activityId: activity.id,
+                    subscribe: !subscribed,
+                  },
+                })
+                  .then(() => {
+                    const current = subscribed;
+                    setSubscribed((prev) => !prev);
+                    enqueueSnackbar({
+                      variant: 'success',
+                      message: current ? 'Unsubscribed' : 'Subscribed',
+                    });
+                  })
+                  .catch((e) => console.log(e));
+              }}
+            >
+              <FaBell size={12} />
+            </button>
+          ) : null}
+
+          {isLoggedIn && activity.user?.id === userId ? (
+            <button
+              type="button"
+              className="hover:text-red-500"
+              onClick={() =>
+                showDialog(
+                  <ConfirmDialog
+                    title="Delete List Activity"
+                    message="Are you sure you want to delete this list activity?"
+                  />,
+                )
+                  .then((result) => {
+                    if (result) {
+                      handleDelete(activity.id);
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  })
+              }
+            >
+              <FaTrash size={12} />
+            </button>
+          ) : null}
+
+          <span className="text-text-light text-xs">
+            {getTimePassed(activity.createdAt)}
+          </span>
+        </div>
         <div className="text-text-light flex gap-2">
           <button
             onClick={() => navigate(`/activity/${activity.id}`)}

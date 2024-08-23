@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   useGetMediaStaffQuery,
   MediaType,
@@ -7,7 +7,6 @@ import {
 } from '@graphql/generated/types-and-hooks';
 import StaffCard from '@Components/Card/StaffCard';
 import Pagination from '@Components/Pagination';
-import { enqueueSnackbar } from 'notistack';
 
 export default function Characters({
   id,
@@ -37,15 +36,6 @@ export default function Characters({
   });
 
   const displayData = currentPage === 1 ? data : fetchedData?.Media;
-
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar({
-        variant: 'error',
-        message: error.message,
-      });
-    }
-  }, [error]);
 
   if (loading && currentPage !== 1) {
     return <div>loading...</div>;

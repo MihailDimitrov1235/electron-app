@@ -3,13 +3,15 @@
 import { ActivityReplyFragment } from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
 import transformAniListText from '@Utils/transformAnilistHtml';
-import { FaHeart } from 'react-icons/fa';
+import { FaHeart, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 export default function ActivityReply({
+  isUser,
   reply,
   handleToggleLike,
 }: {
+  isUser: boolean;
   reply: ActivityReplyFragment;
   handleToggleLike: (id: number) => void;
 }) {
@@ -33,9 +35,22 @@ export default function ActivityReply({
         />
       </div>
       <div className="flex flex-col mt-auto py-2 min-w-16 ml-4 items-end text-end">
-        <span className="text-text-light text-xs absolute top-2">
-          {getTimePassed(reply.createdAt)}
-        </span>
+        <div className="absolute top-2 flex gap-1">
+          {isUser ? (
+            <button
+              type="button"
+              className="hover:text-red-500"
+              onClick={() => console.log('delete')}
+            >
+              <FaTrash size={12} />
+            </button>
+          ) : null}
+
+          <span className="text-text-light text-xs">
+            {getTimePassed(reply.createdAt)}
+          </span>
+        </div>
+
         <div className="text-text-light  flex gap-2">
           <button
             type="button"

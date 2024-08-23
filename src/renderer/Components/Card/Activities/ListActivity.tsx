@@ -1,17 +1,31 @@
-import { ListActivityFragment } from '@graphql/generated/types-and-hooks';
+/* eslint-disable promise/always-return */
+import { useAuth } from '@Components/Contexts/AuthContext';
+import { useDialog } from '@Components/Contexts/DialogContext';
+import ConfirmDialog from '@Components/Dialog/ConfimDialog';
+import {
+  ListActivityFragment,
+  useActivitySubscribeMutation,
+} from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
-import React from 'react';
-import { FaComment, FaHeart } from 'react-icons/fa';
+import { enqueueSnackbar } from 'notistack';
+import React, { useState } from 'react';
+import { FaBell, FaComment, FaHeart, FaTrash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function ListActivity({
   activity,
   handleToggleLike,
+  handleDelete,
 }: {
   activity: ListActivityFragment;
   handleToggleLike: (id: number) => void;
+  handleDelete: (id: number) => void;
 }) {
+  const { isLoggedIn, userId } = useAuth();
+  const { showDialog } = useDialog();
   const navigate = useNavigate();
+  const [activitySubscribe] = useActivitySubscribeMutation();
+  const [subscribed, setSubscribed] = useState(activity.isSubscribed);
   const statusColors = {
     'watched episode': 'text-green-500',
     'read chapter': 'text-green-500',
@@ -61,9 +75,66 @@ export default function ListActivity({
         </div>
       </div>
       <div className="flex flex-col mt-auto py-2 ml-4 items-end text-end">
-        <span className="text-text-light text-xs absolute top-2">
-          {getTimePassed(activity.createdAt)}
-        </span>
+        <div className="absolute top-2 flex gap-1">
+          {isLoggedIn ? (
+            <button
+              type="button"
+              className={` ${
+                subscribed
+                  ? 'hover:text-text-light text-green-500'
+                  : 'hover:text-green-500 text-text-light'
+              }`}
+              onClick={() => {
+                activitySubscribe({
+                  variables: {
+                    activityId: activity.id,
+                    subscribe: !subscribed,
+                  },
+                })
+                  .then(() => {
+                    const current = subscribed;
+                    setSubscribed((prev) => !prev);
+                    enqueueSnackbar({
+                      variant: 'success',
+                      message: current ? 'Unsubscribed' : 'Subscribed',
+                    });
+                  })
+                  .catch((e) => console.log(e));
+              }}
+            >
+              <FaBell size={12} />
+            </button>
+          ) : null}
+
+          {isLoggedIn && activity.user?.id === userId ? (
+            <button
+              type="button"
+              className="hover:text-red-500"
+              onClick={() =>
+                showDialog(
+                  <ConfirmDialog
+                    title="Delete List Activity"
+                    message="Are you sure you want to delete this list activity?"
+                  />,
+                )
+                  .then((result) => {
+                    if (result) {
+                      handleDelete(activity.id);
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  })
+              }
+            >
+              <FaTrash size={12} />
+            </button>
+          ) : null}
+
+          <span className="text-text-light text-xs">
+            {getTimePassed(activity.createdAt)}
+          </span>
+        </div>
         <div className="text-text-light flex gap-2">
           <button
             onClick={() => navigate(`/activity/${activity.id}`)}

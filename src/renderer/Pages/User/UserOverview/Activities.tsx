@@ -1,3 +1,4 @@
+/* eslint-disable promise/always-return */
 /* eslint-disable no-underscore-dangle */
 import ListActivity from '@Components/Card/Activities/ListActivity';
 import MessageActivity from '@Components/Card/Activities/MessageActivity';
@@ -6,6 +7,7 @@ import ListActivityCardSkeleton from '@Components/Skeletons/ListActivitySkeleton
 import {
   GetUserQuery,
   LikeableType,
+  useDeleteActivityMutation,
   useGetUserActivitiesQuery,
   useLikeMutation,
 } from '@graphql/generated/types-and-hooks';
@@ -23,6 +25,7 @@ export default function Activities({
   activitiesPerPage: number;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteActivity] = useDeleteActivityMutation();
 
   const {
     data: fetchedActivities,
@@ -57,6 +60,35 @@ export default function Activities({
   }, [fetchedActivities]);
 
   const [toggleLike] = useLikeMutation();
+
+  const handleDeleteActivity = (activityId: number) => {
+    deleteActivity({
+      variables: { activityId },
+    })
+      .then(({ data: fetchedData }) => {
+        if (fetchedData?.DeleteActivity?.deleted) {
+          setActivities((prev) => {
+            if (prev) {
+              return prev.filter((activity) => activity?.id !== activityId);
+            }
+            return [];
+          });
+          enqueueSnackbar({ variant: 'success', message: 'Activity Deleted' });
+        } else {
+          enqueueSnackbar({
+            variant: 'error',
+            message: "Couldn't delete activity",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          variant: 'error',
+          message: "Couldn't delete activity",
+        });
+      });
+  };
 
   const handleToggleLike = async (id: number) => {
     try {
@@ -95,6 +127,7 @@ export default function Activities({
           if (activity?.__typename === 'ListActivity') {
             return (
               <ListActivity
+                handleDelete={handleDeleteActivity}
                 key={activity.id}
                 activity={activity}
                 handleToggleLike={handleToggleLike}
@@ -104,6 +137,7 @@ export default function Activities({
           if (activity?.__typename === 'MessageActivity') {
             return (
               <MessageActivity
+                handleDelete={handleDeleteActivity}
                 key={activity.id}
                 activity={activity}
                 handleToggleLike={handleToggleLike}
@@ -113,6 +147,7 @@ export default function Activities({
           if (activity?.__typename === 'TextActivity') {
             return (
               <TextActivity
+                handleDelete={handleDeleteActivity}
                 key={activity.id}
                 activity={activity}
                 handleToggleLike={handleToggleLike}

@@ -52,7 +52,7 @@ export default function Users() {
       enqueueSnackbar({ variant: 'error', message: followError.message });
     }
   }, [followError]);
-  const { data, loading, error } = useGetUserQuery({
+  const { data, loading } = useGetUserQuery({
     variables: {
       userId: Number(id),
       activitiesPerPage: itemsPerPage.activities,
@@ -64,27 +64,13 @@ export default function Users() {
       setFollowing(data?.User?.isFollowing || false);
     }
   }, [data]);
-  const {
-    data: extraData,
-    loading: extraLoading,
-    error: extraError,
-  } = useGetUserExtraQuery({
+  const { data: extraData, loading: extraLoading } = useGetUserExtraQuery({
     variables: {
       userId: Number(id),
       followingPerPage: itemsPerPage.following,
     },
   });
   const { userId, isLoggedIn } = useAuth();
-  useEffect(() => {
-    if (error) {
-      enqueueSnackbar({ variant: 'error', message: error.message });
-    }
-  }, [error]);
-  useEffect(() => {
-    if (extraError) {
-      enqueueSnackbar({ variant: 'error', message: extraError.message });
-    }
-  }, [extraError]);
   if (loading || extraLoading) {
     return <div>loading...</div>;
   }
