@@ -422,7 +422,7 @@ export default function MediaListEntryPopover({
             <div className="flex-1 flex flex-col gap-1">
               <div>Notes</div>
               <TextField
-                textarea={{ rows: 4 }}
+                textarea={{ rows: 4, expandable: true }}
                 className="w-full"
                 title="Notes"
                 value={formData.notes || ''}

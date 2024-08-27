@@ -9,8 +9,11 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
+type DialogId = string;
+
 type DialogContextType = {
   showDialog: <R>(DialogElement: React.ReactElement) => Promise<R>;
+  closeDialog: (id: DialogId) => void;
 };
 
 const DialogContext = createContext<DialogContextType | undefined>(undefined);
@@ -19,35 +22,63 @@ type DialogProviderProps = {
   children: ReactNode;
 };
 
+type DialogState = {
+  [id: DialogId]: {
+    element: React.ReactElement;
+    resolve: (value: any) => void;
+  };
+};
+
 export function DialogProvider({ children }: DialogProviderProps) {
-  const [dialog, setDialog] = useState<ReactNode | null>(null);
+  const [dialogs, setDialogs] = useState<DialogState>({});
 
   const showDialog = useCallback(
     <R,>(DialogElement: React.ReactElement): Promise<R> => {
       return new Promise<R>((resolve) => {
+        const id = Math.random().toString(36).substr(2, 9);
         const handleClose = (result: any) => {
-          setDialog(null);
+          setDialogs((prevDialogs) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { [id]: removedDialog, ...rest } = prevDialogs;
+            return rest;
+          });
           resolve(result);
         };
-
         const Dialog = React.cloneElement(DialogElement, { handleClose });
-
-        setDialog(Dialog);
+        setDialogs((prevDialogs) => ({
+          ...prevDialogs,
+          [id]: { element: Dialog, resolve },
+        }));
       });
     },
     [],
   );
 
-  const contextValue = useMemo(() => ({ showDialog }), [showDialog]);
+  const closeDialog = useCallback((id: DialogId) => {
+    setDialogs((prevDialogs) => {
+      const { [id]: removedDialog, ...rest } = prevDialogs;
+      if (removedDialog) {
+        removedDialog.resolve(undefined);
+      }
+      return rest;
+    });
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ showDialog, closeDialog }),
+    [showDialog, closeDialog],
+  );
 
   return (
     <DialogContext.Provider value={contextValue}>
       {children}
-      {dialog &&
+      {Object.entries(dialogs).map(([id, { element }]) =>
         ReactDOM.createPortal(
-          dialog,
+          element,
           document.getElementById('App') || document.body,
-        )}
+          id,
+        ),
+      )}
     </DialogContext.Provider>
   );
 }

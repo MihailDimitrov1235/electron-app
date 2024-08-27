@@ -4745,6 +4745,13 @@ export type DeleteActivityMutationVariables = Exact<{
 
 export type DeleteActivityMutation = { __typename?: 'Mutation', DeleteActivity?: { __typename?: 'Deleted', deleted?: boolean | null } | null };
 
+export type DeleteActivityReplyMutationVariables = Exact<{
+  replyId?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type DeleteActivityReplyMutation = { __typename?: 'Mutation', DeleteActivityReply?: { __typename?: 'Deleted', deleted?: boolean | null } | null };
+
 export type SaveActivityReplyMutationVariables = Exact<{
   id?: InputMaybe<Scalars['Int']['input']>;
   activityId?: InputMaybe<Scalars['Int']['input']>;
@@ -5675,6 +5682,39 @@ export function useDeleteActivityMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteActivityMutationHookResult = ReturnType<typeof useDeleteActivityMutation>;
 export type DeleteActivityMutationResult = Apollo.MutationResult<DeleteActivityMutation>;
 export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<DeleteActivityMutation, DeleteActivityMutationVariables>;
+export const DeleteActivityReplyDocument = gql`
+    mutation DeleteActivityReply($replyId: Int) {
+  DeleteActivityReply(id: $replyId) {
+    deleted
+  }
+}
+    `;
+export type DeleteActivityReplyMutationFn = Apollo.MutationFunction<DeleteActivityReplyMutation, DeleteActivityReplyMutationVariables>;
+
+/**
+ * __useDeleteActivityReplyMutation__
+ *
+ * To run a mutation, you first call `useDeleteActivityReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteActivityReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteActivityReplyMutation, { data, loading, error }] = useDeleteActivityReplyMutation({
+ *   variables: {
+ *      replyId: // value for 'replyId'
+ *   },
+ * });
+ */
+export function useDeleteActivityReplyMutation(baseOptions?: Apollo.MutationHookOptions<DeleteActivityReplyMutation, DeleteActivityReplyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteActivityReplyMutation, DeleteActivityReplyMutationVariables>(DeleteActivityReplyDocument, options);
+      }
+export type DeleteActivityReplyMutationHookResult = ReturnType<typeof useDeleteActivityReplyMutation>;
+export type DeleteActivityReplyMutationResult = Apollo.MutationResult<DeleteActivityReplyMutation>;
+export type DeleteActivityReplyMutationOptions = Apollo.BaseMutationOptions<DeleteActivityReplyMutation, DeleteActivityReplyMutationVariables>;
 export const SaveActivityReplyDocument = gql`
     mutation SaveActivityReply($id: Int, $activityId: Int, $text: String) {
   SaveActivityReply(id: $id, activityId: $activityId, text: $text) {

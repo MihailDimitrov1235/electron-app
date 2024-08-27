@@ -18,6 +18,7 @@ export type TextFieldPropsType = {
   };
   textarea?: {
     rows: number;
+    expandable: boolean;
   };
   className?: string;
   endElement?: React.JSX.Element;

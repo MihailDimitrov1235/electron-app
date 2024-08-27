@@ -116,8 +116,8 @@ export default function MessageActivity({
               onClick={() =>
                 showDialog(
                   <ConfirmDialog
-                    title="Delete List Activity"
-                    message="Are you sure you want to delete this list activity?"
+                    title="Delete Message Activity"
+                    message="Are you sure you want to delete this message activity?"
                   />,
                 )
                   .then((result) => {

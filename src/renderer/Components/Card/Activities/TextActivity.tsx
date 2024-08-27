@@ -102,8 +102,8 @@ export default function TextActivity({
               onClick={() =>
                 showDialog(
                   <ConfirmDialog
-                    title="Delete List Activity"
-                    message="Are you sure you want to delete this list activity?"
+                    title="Delete Text Activity"
+                    message="Are you sure you want to delete this text activity?"
                   />,
                 )
                   .then((result) => {

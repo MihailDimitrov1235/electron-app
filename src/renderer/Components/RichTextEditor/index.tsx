@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { useRef } from 'react';
 import { ImBold, ImItalic, ImStrikethrough } from 'react-icons/im';
 import { BiSolidHide } from 'react-icons/bi';
@@ -22,10 +23,14 @@ export default function RichTextEditor({
   title,
   value,
   setValue,
+  expandable = true,
+  rows = 4,
 }: {
   title: string;
   value: string;
   setValue: (newValue: string) => void;
+  expandable?: boolean;
+  rows?: number;
 }) {
   const { showDialog } = useDialog();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -198,7 +203,7 @@ export default function RichTextEditor({
         title={title}
         value={value}
         onChange={(newValue) => setValue(newValue)}
-        textarea={{ rows: 4 }}
+        textarea={{ rows, expandable }}
         className="min-h-24"
       />
     </div>

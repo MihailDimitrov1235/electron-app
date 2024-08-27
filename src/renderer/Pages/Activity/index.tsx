@@ -16,6 +16,7 @@ import {
   GetActivityQuery,
   LikeableType,
   useDeleteActivityMutation,
+  useDeleteActivityReplyMutation,
   useGetActivityQuery,
   useLikeMutation,
   useSaveActivityReplyMutation,
@@ -30,6 +31,7 @@ export default function Activity() {
   const navigate = useNavigate();
   const [saveActivityReply] = useSaveActivityReplyMutation();
   const [deleteActivity] = useDeleteActivityMutation();
+  const [deleteReply] = useDeleteActivityReplyMutation();
   const { userId, userAvatar, userName, isLoggedIn } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [newReplyText, setNewReplyText] = useState('');
@@ -99,6 +101,39 @@ export default function Activity() {
         if (fetchedData?.DeleteActivity?.deleted) {
           navigate(`/user/${userId}`);
           enqueueSnackbar({ variant: 'success', message: 'Activity Deleted' });
+        } else {
+          enqueueSnackbar({
+            variant: 'error',
+            message: "Couldn't delete activity",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar({
+          variant: 'error',
+          message: "Couldn't delete activity",
+        });
+      });
+  };
+  const handleDeleteReply = (replyId: number) => {
+    deleteReply({
+      variables: { replyId },
+    })
+      .then(({ data: fetchedData }) => {
+        if (fetchedData?.DeleteActivityReply?.deleted) {
+          if (replies?.length === 25 || currentPage !== 1) {
+            setReplies([]);
+            setCurrentPage(1);
+            refetch();
+          } else {
+            setReplies((prev) => {
+              if (prev) {
+                return prev.filter((reply) => reply?.id !== replyId);
+              }
+              return [];
+            });
+          }
         } else {
           enqueueSnackbar({
             variant: 'error',
@@ -202,6 +237,7 @@ export default function Activity() {
         reply ? (
           <div className="w-full px-4" key={reply.id}>
             <ActivityReply
+              handleDelete={handleDeleteReply}
               key={reply.id}
               isUser={isLoggedIn && reply.user?.id === userId}
               reply={reply}
