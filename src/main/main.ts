@@ -16,6 +16,7 @@ class AppUpdater {
 
 const protocolName = 'electron-app';
 let mainWindow: BrowserWindow | null = null;
+let splash: BrowserWindow | null = null;
 
 SetupIPCHandlers();
 
@@ -110,7 +111,19 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
+  splash = new BrowserWindow({
+    width: 810,
+    height: 610,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+  });
+  splash.loadURL(
+    `file://${path.resolve(__dirname, '../renderer/', 'splash.html')}`,
+  );
+
   mainWindow.on('ready-to-show', () => {
+    splash?.destroy();
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
