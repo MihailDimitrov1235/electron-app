@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaAnglesRight } from 'react-icons/fa6';
 import { enqueueSnackbar } from 'notistack';
-import Checkbox from '@Components/Form/Checkbox';
+import Switch from '@Components/Form/Switch';
 import MediaCardSkeleton from '@Components/Skeletons/MediaCardSkeleton';
 import MediaCard from '../Card/MediaCard';
 
@@ -80,7 +80,7 @@ export default function MediaDisplay({
             {title}
             <FaAnglesRight />
           </Link>
-          <Checkbox
+          <Switch
             checked={notOnList}
             onCheck={() => setNotOnList((prev) => !prev)}
             label="Not on list"
@@ -104,11 +104,7 @@ export default function MediaDisplay({
           {title}
           <FaAnglesRight />
         </Link>
-        <Checkbox
-          checked={notOnList}
-          onCheck={handleCheck}
-          label="Not on list"
-        />
+        <Switch checked={notOnList} onCheck={handleCheck} label="Not on list" />
       </div>
       <div className="flex gap-6 overflow-x-scroll pb-4">
         {displayData.media?.map((media) => (

@@ -9,6 +9,7 @@ type TooltipProps = {
   text: string;
   direction?: Direction;
   className?: string;
+  toolTipClassName?: string;
   center?: boolean;
   children: React.ReactNode;
 };
@@ -17,6 +18,7 @@ function Tooltip({
   text,
   direction = 'top',
   className = '',
+  toolTipClassName = '',
   center = false,
   children,
 }: TooltipProps) {
@@ -73,7 +75,7 @@ function Tooltip({
       {isVisible &&
         ReactDOM.createPortal(
           <div
-            className={`fixed z-10 px-3 py-2 text-sm font-medium text-text-main bg-background-light max-w-96 rounded-md shadow-sm tooltip ${
+            className={`fixed  z-10 px-3 py-2 text-sm font-medium text-text-main bg-background-light max-w-96 rounded-md shadow-sm tooltip ${toolTipClassName} ${
               center && 'text-center'
             }`}
             style={tooltipStyles}

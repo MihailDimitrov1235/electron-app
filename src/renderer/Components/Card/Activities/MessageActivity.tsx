@@ -1,12 +1,15 @@
+/* eslint-disable promise/no-nesting */
 /* eslint-disable promise/always-return */
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-danger */
 import { useAuth } from '@Components/Contexts/AuthContext';
 import { useDialog } from '@Components/Contexts/DialogContext';
 import ConfirmDialog from '@Components/Dialog/ConfimDialog';
+import EditDialog from '@Components/Dialog/EditDialog';
 import {
   MessageActivityFragment,
   useActivitySubscribeMutation,
+  useSaveMessageActivityMutation,
 } from '@graphql/generated/types-and-hooks';
 import getTimePassed from '@Utils/getTimePassed';
 import transformAniListText from '@Utils/transformAnilistHtml';
@@ -19,6 +22,7 @@ import {
   FaBell,
   FaTrash,
 } from 'react-icons/fa';
+import { MdModeEditOutline } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function MessageActivity({
@@ -26,17 +30,20 @@ export default function MessageActivity({
   handleToggleLike,
   autoHeight = false,
   handleDelete,
+  handleEdit,
 }: {
   activity: MessageActivityFragment;
   handleToggleLike: (id: number) => void;
   autoHeight?: boolean;
   handleDelete: (id: number) => void;
+  handleEdit: (text: string, activityId: number) => void;
 }) {
   const navigate = useNavigate();
   const { isLoggedIn, userId } = useAuth();
   const { showDialog } = useDialog();
   const [activitySubscribe] = useActivitySubscribeMutation();
   const [subscribed, setSubscribed] = useState(activity.isSubscribed);
+  const [saveMessageActivity] = useSaveMessageActivityMutation();
   return (
     <div
       className={`flex items-center w-full ${
@@ -44,7 +51,7 @@ export default function MessageActivity({
       }  gap-2 rounded-md overflow-hidden border shadow-md border-background-main px-3 py-2 relative`}
     >
       <div
-        className={`flex flex-col gap-2 w-full overflow-y-scroll ${
+        className={`flex flex-col gap-2 w-full overflow-hidden ${
           autoHeight ? 'max-h-[500px] ' : 'h-48'
         } `}
       >
@@ -70,6 +77,7 @@ export default function MessageActivity({
           ) : null}
         </div>
         <div
+          className="overflow-y-scroll"
           dangerouslySetInnerHTML={{
             __html: transformAniListText(activity.message || ''),
           }}
@@ -104,6 +112,46 @@ export default function MessageActivity({
               }}
             >
               <FaBell size={12} />
+            </button>
+          ) : null}
+
+          {isLoggedIn && activity.messenger?.id === userId ? (
+            <button
+              type="button"
+              className="hover:text-blue-500"
+              onClick={() =>
+                showDialog(
+                  <EditDialog
+                    title="Edit Message Activity"
+                    message=""
+                    textFieldTitle=""
+                    initialValue={activity.message || ''}
+                    previewType="reply"
+                  />,
+                )
+                  .then((result) => {
+                    if (typeof result === 'string' && result.length > 0) {
+                      saveMessageActivity({
+                        variables: {
+                          activityId: activity.id,
+                          text: result,
+                        },
+                      })
+                        .then(({ data }) => {
+                          handleEdit(
+                            data?.SaveMessageActivity?.message || '',
+                            activity.id,
+                          );
+                        })
+                        .catch((e) => console.log(e));
+                    }
+                  })
+                  .catch((e) => {
+                    console.log(e);
+                  })
+              }
+            >
+              <MdModeEditOutline size={12} />
             </button>
           ) : null}
 

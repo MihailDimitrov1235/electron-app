@@ -57,6 +57,7 @@ export default function Users() {
       userId: Number(id),
       activitiesPerPage: itemsPerPage.activities,
       favouritesPerPage: itemsPerPage.favourites,
+      followingPerPage: itemsPerPage.following,
     },
   });
   useEffect(() => {
@@ -64,14 +65,14 @@ export default function Users() {
       setFollowing(data?.User?.isFollowing || false);
     }
   }, [data]);
-  const { data: extraData, loading: extraLoading } = useGetUserExtraQuery({
+  const { data: extraData } = useGetUserExtraQuery({
     variables: {
       userId: Number(id),
-      followingPerPage: itemsPerPage.following,
     },
+    skip: openTab !== userTabs[1] && openTab !== userTabs[2],
   });
   const { userId, isLoggedIn } = useAuth();
-  if (loading || extraLoading) {
+  if (loading) {
     return <div>loading...</div>;
   }
   return (
@@ -131,7 +132,9 @@ export default function Users() {
           <Tabs
             tabs={userTabs}
             openTab={openTab}
-            setOpenTab={setOpenTab}
+            setOpenTab={(newTab) => {
+              setOpenTab(newTab);
+            }}
             col={false}
           />
         </div>
@@ -181,8 +184,8 @@ export default function Users() {
                 <UserSocial
                   userId={Number(id)}
                   data={{
-                    followers: extraData?.followers,
-                    following: extraData?.following,
+                    followers: data?.followers,
+                    following: data?.following,
                   }}
                   perPage={itemsPerPage.following}
                 />

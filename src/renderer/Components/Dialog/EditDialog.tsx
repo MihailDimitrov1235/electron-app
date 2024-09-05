@@ -2,7 +2,7 @@
 /* eslint-disable react/no-danger */
 import ActivityReplyPreview from '@Components/Card/Activities/ActivityReplyPreview';
 import Button from '@Components/Form/Button';
-import Checkbox from '@Components/Form/Checkbox';
+import Switch from '@Components/Form/Switch';
 import Popover from '@Components/Popover';
 import RichTextEditor from '@Components/RichTextEditor';
 import { useState } from 'react';
@@ -45,7 +45,7 @@ export default function EditDialog({
       <div className="w-[834px] bg-background-dark text-text-main p-6 rounded-md shadow-md flex flex-col gap-4">
         <span className="text-xl font-bold">{title}</span>
         <span className="">{message}</span>
-        <Checkbox
+        <Switch
           checked={preview}
           onCheck={() => setPreview((prev) => !prev)}
           label="Preview"

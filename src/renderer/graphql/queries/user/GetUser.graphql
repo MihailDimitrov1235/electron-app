@@ -1,7 +1,12 @@
 #import "../../fragments/mediaListCollection.graphql"
 #import "../../fragments/favourites.graphql"
 
-query GetUser($userId: Int!, $activitiesPerPage: Int, $favouritesPerPage: Int) {
+query GetUser(
+  $userId: Int!
+  $activitiesPerPage: Int
+  $favouritesPerPage: Int
+  $followingPerPage: Int
+) {
   User(id: $userId) {
     name
     avatar {
@@ -70,6 +75,24 @@ query GetUser($userId: Int!, $activitiesPerPage: Int, $favouritesPerPage: Int) {
           genre
         }
       }
+    }
+  }
+
+  following: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    following(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+
+  followers: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    followers(userId: $userId, sort: USERNAME) {
+      ...user
     }
   }
 

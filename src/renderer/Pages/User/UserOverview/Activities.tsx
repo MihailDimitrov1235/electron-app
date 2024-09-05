@@ -1,31 +1,45 @@
 /* eslint-disable promise/always-return */
 /* eslint-disable no-underscore-dangle */
+import ActivityReplyPreview from '@Components/Card/Activities/ActivityReplyPreview';
 import ListActivity from '@Components/Card/Activities/ListActivity';
 import MessageActivity from '@Components/Card/Activities/MessageActivity';
 import TextActivity from '@Components/Card/Activities/TextActivity';
+import { useAuth } from '@Components/Contexts/AuthContext';
+import Button from '@Components/Form/Button';
+import Switch from '@Components/Form/Switch';
+import RichTextEditor from '@Components/RichTextEditor';
 import ListActivityCardSkeleton from '@Components/Skeletons/ListActivitySkeleton';
+import Tooltip from '@Components/Tooltip';
 import {
   GetUserQuery,
   LikeableType,
   useDeleteActivityMutation,
   useGetUserActivitiesQuery,
   useLikeMutation,
+  useSaveMessageActivityMutation,
+  useSaveTextActivityMutation,
 } from '@graphql/generated/types-and-hooks';
 import { enqueueSnackbar } from 'notistack';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CgDetailsMore } from 'react-icons/cg';
 
 export default function Activities({
-  userId,
+  PageUserId,
   activitiesData,
   activitiesPerPage,
 }: {
-  userId: number;
+  PageUserId: number;
   activitiesData: GetUserQuery['Activities'];
   activitiesPerPage: number;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [deleteActivity] = useDeleteActivityMutation();
+  const [newActivityValue, setNewActivityValue] = useState('');
+  const [previewCheck, setPreviewCheck] = useState(false);
+  const { userId } = useAuth();
+
+  const [saveTextActivity] = useSaveTextActivityMutation();
+  const [saveMessageActivity] = useSaveMessageActivityMutation();
 
   const {
     data: fetchedActivities,
@@ -33,7 +47,7 @@ export default function Activities({
     error,
   } = useGetUserActivitiesQuery({
     variables: {
-      userId,
+      userId: PageUserId,
       page: currentPage,
       activitiesPerPage,
     },
@@ -90,6 +104,22 @@ export default function Activities({
       });
   };
 
+  const handleEditActivity = (text: string, activityId: number) => {
+    setActivities(
+      activities?.map((activity) => {
+        if (activity?.id === activityId) {
+          if (activity.__typename === 'TextActivity') {
+            return { ...activity, text };
+          }
+          if (activity.__typename === 'MessageActivity') {
+            return { ...activity, message: text };
+          }
+        }
+        return activity;
+      }),
+    );
+  };
+
   const handleToggleLike = async (id: number) => {
     try {
       const { data: ToggleLikeActivityData } = await toggleLike({
@@ -115,6 +145,36 @@ export default function Activities({
     }
   };
 
+  const handleAddActivity = (text: string, priv: boolean) => {
+    if (PageUserId === userId) {
+      saveTextActivity({ variables: { text } })
+        .then(({ data }) => {
+          if (data?.SaveTextActivity) {
+            setActivities([
+              data.SaveTextActivity,
+              ...(activities?.slice(0, -1) || []),
+            ]);
+            setNewActivityValue('');
+          }
+        })
+        .catch((e) => console.log(e));
+    } else {
+      saveMessageActivity({
+        variables: { recipientId: PageUserId, text, private: priv },
+      })
+        .then(({ data }) => {
+          if (data?.SaveMessageActivity) {
+            setActivities([
+              data.SaveMessageActivity,
+              ...(activities?.slice(0, -1) || []),
+            ]);
+            setNewActivityValue('');
+          }
+        })
+        .catch((e) => console.log(e));
+    }
+  };
+
   if (error && !activities) {
     return <div>error</div>;
   }
@@ -122,6 +182,60 @@ export default function Activities({
   return (
     <div className="space-y-2 flex-1">
       <span className="text-xl">Activities</span>
+      <div className="flex flex-col gap-4">
+        <div>
+          <Switch
+            checked={previewCheck}
+            onCheck={() => setPreviewCheck((prev) => !prev)}
+            label="Preview"
+          />
+        </div>
+        {previewCheck ? (
+          <ActivityReplyPreview text={newActivityValue} />
+        ) : (
+          <RichTextEditor
+            title="Add an activity"
+            value={newActivityValue}
+            setValue={setNewActivityValue}
+            expandable
+            rows={4}
+          />
+        )}
+
+        <div
+          className={`flex gap-4 justify-end ${
+            newActivityValue ? 'visible' : 'hidden'
+          }`}
+        >
+          <Button
+            onClick={() => {
+              setNewActivityValue('');
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleAddActivity(newActivityValue, false)}
+            variant="gradient"
+          >
+            Add
+          </Button>
+          {userId !== PageUserId && (
+            <Tooltip
+              toolTipClassName="w-48"
+              text="Only you, the recipient and mods can see this message"
+            >
+              <Button
+                onClick={() => handleAddActivity(newActivityValue, true)}
+                variant="gradient"
+              >
+                Add private
+              </Button>
+            </Tooltip>
+          )}
+        </div>
+      </div>
+
       <div className="grid grid-cols-4 gap-4 ">
         {activities?.map((activity) => {
           if (activity?.__typename === 'ListActivity') {
@@ -137,6 +251,7 @@ export default function Activities({
           if (activity?.__typename === 'MessageActivity') {
             return (
               <MessageActivity
+                handleEdit={handleEditActivity}
                 handleDelete={handleDeleteActivity}
                 key={activity.id}
                 activity={activity}
@@ -147,6 +262,7 @@ export default function Activities({
           if (activity?.__typename === 'TextActivity') {
             return (
               <TextActivity
+                handleEdit={handleEditActivity}
                 handleDelete={handleDeleteActivity}
                 key={activity.id}
                 activity={activity}

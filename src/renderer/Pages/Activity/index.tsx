@@ -206,6 +206,21 @@ export default function Activity() {
       enqueueSnackbar({ variant: 'error', message: 'Error updating activity' });
     }
   };
+
+  const handleEditActivity = (text: string, activityId: number) => {
+    setActivity(() => {
+      if (activity?.id === activityId) {
+        if (activity.__typename === 'TextActivity') {
+          return { ...activity, text };
+        }
+        if (activity.__typename === 'MessageActivity') {
+          return { ...activity, message: text };
+        }
+      }
+      return activity;
+    });
+  };
+
   return (
     <div className="flex w-full flex-col justify-center p-16 gap-8">
       {activity?.__typename === 'ListActivity' ? (
@@ -218,6 +233,7 @@ export default function Activity() {
         />
       ) : activity?.__typename === 'MessageActivity' ? (
         <MessageActivity
+          handleEdit={handleEditActivity}
           handleDelete={handleDeleteActivity}
           activity={activity}
           handleToggleLike={(activityId) =>
@@ -226,6 +242,7 @@ export default function Activity() {
         />
       ) : activity?.__typename === 'TextActivity' ? (
         <TextActivity
+          handleEdit={handleEditActivity}
           handleDelete={handleDeleteActivity}
           activity={activity}
           handleToggleLike={(activityId) =>

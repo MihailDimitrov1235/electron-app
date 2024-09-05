@@ -1,0 +1,5 @@
+mutation SaveTextActivity($activityId: Int, $text: String) {
+  SaveTextActivity(id: $activityId, text: $text) {
+    ...textActivity
+  }
+}

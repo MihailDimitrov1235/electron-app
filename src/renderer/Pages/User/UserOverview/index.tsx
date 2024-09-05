@@ -252,7 +252,7 @@ export default function UserOverview({
       </div>
       <div className="flex gap-8 mt-8">
         <Activities
-          userId={userId}
+          PageUserId={userId}
           activitiesData={data.activities}
           activitiesPerPage={activitiesPerPage}
         />
