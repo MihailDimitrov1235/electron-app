@@ -7,6 +7,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openUrl: (url: string) => ipcRenderer.invoke('open-url', url),
   goBack: () => ipcRenderer.send('go-back'),
   goForward: () => ipcRenderer.send('go-forward'),
+  reload: () => ipcRenderer.send('reload'),
   canGoBack: () => ipcRenderer.invoke('can-go-back'),
   canGoForward: () => ipcRenderer.invoke('can-go-forward'),
   // renderer to renderer
@@ -37,6 +38,7 @@ declare global {
       openUrl: (url: string) => Promise<void>;
       goBack: () => void;
       goForward: () => void;
+      reload: () => void;
       canGoBack: () => Promise<boolean>;
       canGoForward: () => Promise<boolean>;
       handleSetToken: (callback: (message: string) => void) => () => void;

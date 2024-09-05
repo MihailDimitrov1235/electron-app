@@ -15,6 +15,13 @@ export default function SetupPageNavigationHandlers() {
     }
   });
 
+  ipcMain.on('reload', () => {
+    const win = BrowserWindow.getFocusedWindow();
+    if (win) {
+      win.reload();
+    }
+  });
+
   ipcMain.handle('can-go-back', () => {
     const win = BrowserWindow.getFocusedWindow();
     return win ? win.webContents.canGoBack() : false;
