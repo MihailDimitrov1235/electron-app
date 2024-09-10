@@ -1,0 +1,51 @@
+query GetMedia(
+  $mediaType: MediaType!
+  $sort: [MediaSort]
+  $status: MediaStatus
+  $onList: Boolean
+  $season: MediaSeason
+  $year: Int
+  $page: Int = 1
+  $perPage: Int = 20
+) {
+  Page(page: $page, perPage: $perPage) {
+    media(
+      type: $mediaType
+      sort: $sort
+      status: $status
+      onList: $onList
+      season: $season
+      seasonYear: $year
+    ) {
+      id
+      type
+      meanScore
+      bannerImage
+      format
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+}

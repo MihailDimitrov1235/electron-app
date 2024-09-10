@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IoIosNotifications } from 'react-icons/io';
-import { IoLogIn, IoSearchSharp } from 'react-icons/io5';
+import { IoLogIn, IoReloadOutline } from 'react-icons/io5';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 import { useAuth } from '../Contexts/AuthContext';
-import Button from '../Button';
-import TextField from '../TextField';
+import Button from '../Form/Button';
+import TextField from '../Form/TextField';
 
 export default function Topbar() {
-  const { isLoggedIn, userAvatar } = useAuth();
+  const navigate = useNavigate();
+  const { isLoggedIn, userAvatar, userId } = useAuth();
   const [search, setSearch] = useState('');
+  const [openSearchOptions, setOpenSearchOptions] = useState(false);
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
   const location = useLocation();
@@ -21,7 +23,7 @@ export default function Topbar() {
 
   useEffect(() => {
     updateNavigationState();
-  }, [location]); // This will run every time the location changes
+  }, [location]);
 
   const handleGoBack = () => {
     window.electronAPI.goBack();
@@ -30,11 +32,34 @@ export default function Topbar() {
   const handleGoForward = () => {
     window.electronAPI.goForward();
   };
+
+  const handleReload = () => {
+    window.electronAPI.reload();
+  };
   const onSearchChange = (newValue: string) => {
     setSearch(newValue);
   };
+
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setOpenSearchOptions(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="w-full bg-background-main p-2 flex justify-between relative items-center">
+    <div className="relative z-50 w-full bg-background-main p-2 flex justify-between items-center">
       <Link
         to="/"
         className="flex items-center justify-center text-text-main P-2"
@@ -56,20 +81,46 @@ export default function Topbar() {
               disabled={!canGoForward}
               variant="icon-square"
               Icon={FaAngleRight}
+              className=" !rounded-x-none"
+            />
+            <Button
+              onClick={handleReload}
+              variant="icon-square"
+              Icon={IoReloadOutline}
               className=" !rounded-l-none"
             />
           </div>
           <TextField
-            className="w-[25vw] rounded-r-none"
+            className="w-[25vw]"
             title="Search"
             value={search}
             onChange={onSearchChange}
+            onFocus={() => setOpenSearchOptions(true)}
+            // onBlur={() => setOpenSearchOptions(false)}
           />
-          <Button
-            variant="icon-square"
-            className="!rounded-l-none !rounded-r-md border-l-0 text-2xl px-2"
-            Icon={IoSearchSharp}
-          />
+          <div
+            ref={searchRef}
+            className={`absolute right-0 top-12 flex flex-col w-[212px] ${
+              openSearchOptions && search.length > 0 ? 'visible' : 'hidden'
+            }`}
+          >
+            {['Anime', 'Manga', 'Users', 'Characters', 'staff'].map(
+              (searchOption) => (
+                <button
+                  key={searchOption}
+                  className="text-start first:rounded-t-md last:rounded-b-md border border-transparent border-b-devider/50 bg-background-main hover:border-text-main p-2"
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      `/search/${searchOption.toLowerCase()}?search=${search}`,
+                    )
+                  }
+                >
+                  Search in {searchOption}
+                </button>
+              ),
+            )}
+          </div>
         </div>
       </div>
       <div className="flex gap-2">
@@ -84,6 +135,7 @@ export default function Topbar() {
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
+              onClick={() => navigate(`/user/${userId}`)}
             />
           </>
         ) : (

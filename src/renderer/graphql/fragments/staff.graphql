@@ -1,0 +1,15 @@
+fragment staff on Staff {
+  id
+  name {
+    first
+    middle
+    last
+    full
+    native
+    userPreferred
+  }
+  image {
+    large
+    medium
+  }
+}

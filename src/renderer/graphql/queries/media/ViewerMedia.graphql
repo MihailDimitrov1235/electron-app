@@ -1,0 +1,50 @@
+query GetViewerMedia(
+  $userId: Int
+  $mediaType: MediaType
+  $status: MediaListStatus
+  $sort: [MediaListSort]
+) {
+  MediaListCollection(
+    userId: $userId
+    type: $mediaType
+    status: $status
+    sort: $sort
+  ) {
+    lists {
+      name
+      entries {
+        id
+        media {
+          id
+          type
+          meanScore
+          bannerImage
+          coverImage {
+            extraLarge
+            large
+            medium
+            color
+          }
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+          description
+          genres
+          episodes
+          status
+          mediaListEntry {
+            progress
+          }
+          nextAiringEpisode {
+            episode
+          }
+        }
+        progress
+        score
+      }
+    }
+  }
+}

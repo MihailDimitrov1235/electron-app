@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme, themes, type Theme } from './Contexts/ThemeContext';
-import Dropdown from './Dropdown';
+import Dropdown from './Form/Dropdown';
 
 function ThemeSelector() {
   const { setTheme } = useTheme();
@@ -12,9 +12,10 @@ function ThemeSelector() {
 
   return (
     <Dropdown
-      name="Theme"
+      value="Theme"
       options={themes.map((t) => t)}
       onSelect={handleChange}
+      capitalize
     />
   );
 }

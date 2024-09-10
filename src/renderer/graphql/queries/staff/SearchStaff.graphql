@@ -1,0 +1,38 @@
+query SearchStaff(
+  $search: String
+  $sort: [StaffSort]
+  $page: Int
+  $perPage: Int
+) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
+    staff(search: $search, sort: $sort) {
+      id
+      name {
+        full
+        native
+        userPreferred
+      }
+      image {
+        large
+        medium
+      }
+      characters(sort: ROLE) {
+        nodes {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            userPreferred
+          }
+        }
+      }
+    }
+  }
+}

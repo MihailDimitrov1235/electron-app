@@ -1,0 +1,115 @@
+#import "../../fragments/mediaListCollection.graphql"
+#import "../../fragments/favourites.graphql"
+
+query GetUser(
+  $userId: Int!
+  $activitiesPerPage: Int
+  $favouritesPerPage: Int
+  $followingPerPage: Int
+) {
+  User(id: $userId) {
+    name
+    avatar {
+      large
+      medium
+    }
+    bannerImage
+    isFollowing
+    isFollower
+    isBlocked
+    favourites {
+      anime(page: 1, perPage: $favouritesPerPage) {
+        ...animeFavourites
+      }
+      manga(page: 1, perPage: $favouritesPerPage) {
+        ...mangaFavourites
+      }
+      characters(page: 1, perPage: $favouritesPerPage) {
+        ...characterFavourites
+      }
+      staff(page: 1, perPage: $favouritesPerPage) {
+        ...staffFavourites
+      }
+      studios(page: 1, perPage: $favouritesPerPage) {
+        ...studioFavourites
+      }
+    }
+  }
+
+  Overview: User(id: $userId) {
+    about
+    statistics {
+      anime {
+        count
+        meanScore
+        minutesWatched
+        episodesWatched
+        highestCount: genres(limit: 5, sort: [COUNT_DESC]) {
+          count
+          genre
+        }
+        highestScore: genres(limit: 5, sort: [MEAN_SCORE_DESC]) {
+          meanScore
+          genre
+        }
+        highestProgress: genres(limit: 5, sort: [PROGRESS_DESC]) {
+          minutesWatched
+          genre
+        }
+      }
+      manga {
+        count
+        meanScore
+        chaptersRead
+        volumesRead
+        highestCount: genres(limit: 5, sort: [COUNT_DESC]) {
+          count
+          genre
+        }
+        highestScore: genres(limit: 5, sort: [MEAN_SCORE_DESC]) {
+          meanScore
+          genre
+        }
+        highestProgress: genres(limit: 5, sort: [PROGRESS_DESC]) {
+          chaptersRead
+          genre
+        }
+      }
+    }
+  }
+
+  following: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    following(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+
+  followers: Page(page: 1, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    followers(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+
+  Activities: Page(page: 1, perPage: $activitiesPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activities(userId: $userId, sort: [PINNED, ID_DESC]) {
+      ... on ListActivity {
+        ...listActivity
+      }
+      ... on TextActivity {
+        ...textActivity
+      }
+      ... on MessageActivity {
+        ...messageActivity
+      }
+    }
+  }
+}

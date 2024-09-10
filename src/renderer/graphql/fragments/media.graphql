@@ -1,0 +1,97 @@
+#import "./mediaListEntry.graphql"
+
+fragment mediaCard on Media {
+  id
+  episodes
+  duration
+  chapters
+  volumes
+  type
+  title {
+    userPreferred
+  }
+  coverImage {
+    extraLarge
+    large
+    medium
+    color
+  }
+  meanScore
+  bannerImage
+  mediaListEntry {
+    ...mediaListEntry
+  }
+  isFavourite
+  nextAiringEpisode {
+    episode
+    timeUntilAiring
+  }
+  format
+}
+
+fragment media on Media {
+  id
+  favourites
+  popularity
+  status
+  episodes
+  duration
+  chapters
+  volumes
+  type
+  title {
+    romaji
+    english
+    native
+    userPreferred
+  }
+  coverImage {
+    extraLarge
+    large
+    medium
+    color
+  }
+  trailer {
+    site
+    id
+  }
+  meanScore
+  bannerImage
+  mediaListEntry {
+    ...mediaListEntry
+  }
+  isFavourite
+  nextAiringEpisode {
+    episode
+    timeUntilAiring
+  }
+  source
+  format
+  genres
+  tags {
+    name
+    rank
+    isMediaSpoiler
+  }
+  countryOfOrigin
+  season
+  seasonYear
+  startDate {
+    year
+    month
+    day
+  }
+  endDate {
+    year
+    month
+    day
+  }
+  studios(isMain: true) {
+    nodes {
+      id
+      name
+      siteUrl
+    }
+  }
+  synonyms
+}

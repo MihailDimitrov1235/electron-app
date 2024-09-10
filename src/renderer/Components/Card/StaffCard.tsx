@@ -22,7 +22,7 @@ export default function StaffCard({
   image,
 }: StaffCardPropsType) {
   return (
-    <div className="flex w-full gap-4 border-background-main border shadow-md rounded-md">
+    <div className="flex w-full gap-4 border-background-main border shadow-md rounded-md overflow-hidden">
       <Link
         to={`/staff/${id}`}
         className=" overflow-hidden relative w-28 bg-cover shrink-0"

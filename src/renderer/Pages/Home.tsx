@@ -1,16 +1,27 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-props-no-spreading */
-import { useGetCurrentMediaQuery } from '@graphql/generated/types-and-hooks';
+import {
+  MediaListSort,
+  MediaListStatus,
+  MediaType,
+  useGetViewerMediaQuery,
+} from '@graphql/generated/types-and-hooks';
 import { useAuth } from '@Components/Contexts/AuthContext';
-import MediaCard from '@Components/Media/MediaCard';
-import { MediaType } from '@graphql/generated/types-and-hooks';
+import MediaCard from '@Components/Card/MediaCard';
+import { enqueueSnackbar } from 'notistack';
 
 export default function Home() {
   const { userId } = useAuth();
-  const { loading, error, data } = useGetCurrentMediaQuery({
-    variables: { userId, mediaType: MediaType.Anime },
+  const { loading, error, data } = useGetViewerMediaQuery({
+    variables: {
+      userId,
+      mediaType: MediaType.Anime,
+      status: MediaListStatus.Current,
+      sort: [MediaListSort.UpdatedTimeDesc],
+    },
   });
   if (error) {
+    enqueueSnackbar({ variant: 'error', message: error.message });
     return <p>No data available</p>;
   }
   if (loading || !data) {

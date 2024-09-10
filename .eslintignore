@@ -34,3 +34,6 @@ npm-debug.log.*
 
 # generated graphql files
 src/renderer/graphql/*
+
+# splash.html
+src/renderer/splash.html

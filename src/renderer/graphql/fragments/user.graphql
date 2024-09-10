@@ -1,0 +1,18 @@
+fragment user on User {
+  id
+  name
+  avatar {
+    large
+    medium
+  }
+  bannerImage
+  about
+}
+
+fragment shortUser on User {
+  id
+  avatar {
+    medium
+  }
+  name
+}

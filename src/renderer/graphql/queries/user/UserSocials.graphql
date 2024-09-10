@@ -1,0 +1,21 @@
+query GetUserFollowing($userId: Int!, $page: Int, $followingPerPage: Int) {
+  Page(page: $page, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    following(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+}
+
+query GetUserFollowers($userId: Int!, $page: Int, $followingPerPage: Int) {
+  Page(page: $page, perPage: $followingPerPage) {
+    pageInfo {
+      hasNextPage
+    }
+    followers(userId: $userId, sort: USERNAME) {
+      ...user
+    }
+  }
+}

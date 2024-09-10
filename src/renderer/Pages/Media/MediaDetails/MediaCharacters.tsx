@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   useGetMediaCharactersQuery,
   MediaType,
+  GetMediaCharactersQuery,
 } from '@graphql/generated/types-and-hooks';
 import CharacterCard from '@Components/Card/CharacterCard';
 import Pagination from '@Components/Pagination';
@@ -10,26 +11,40 @@ import Pagination from '@Components/Pagination';
 export default function Characters({
   id,
   mediaType,
+  data,
+  charactersPerPage,
 }: {
   id: string;
   mediaType: MediaType;
+  data: GetMediaCharactersQuery['Media'] | null;
+  charactersPerPage: number;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const { loading, error, data } = useGetMediaCharactersQuery({
+
+  const {
+    data: fetchedData,
+    loading,
+    error,
+  } = useGetMediaCharactersQuery({
     variables: {
       mediaId: Number(id),
       mediaType,
       page: currentPage,
-      perPage: mediaType === MediaType.Anime ? 6 : 12,
+      perPage: charactersPerPage,
     },
+    skip: currentPage === 1,
   });
-  if (error) {
-    console.error(error);
-    return <div>error</div>;
-  }
-  if (loading || !data) {
+
+  const displayData = currentPage === 1 ? data : fetchedData?.Media;
+
+  if (loading && currentPage !== 1) {
     return <div>loading...</div>;
   }
+
+  if (error && !displayData) {
+    return <div>error</div>;
+  }
+
   return (
     <div className="flex flex-col gap-4 w-full">
       <div className="text-lg font-semibold">Characters</div>
@@ -38,7 +53,7 @@ export default function Characters({
           mediaType === MediaType.Manga ? 'grid-cols-6' : 'grid-cols-3'
         } gap-4`}
       >
-        {data.Media?.characters?.edges?.map((edge) => (
+        {displayData?.characters?.edges?.map((edge) => (
           <CharacterCard
             key={edge?.node?.id}
             role={edge?.role}
@@ -50,7 +65,7 @@ export default function Characters({
       <div className="mx-auto">
         <Pagination
           pages={-1}
-          hasNextPage={!!data.Media?.characters?.pageInfo?.hasNextPage}
+          hasNextPage={!!displayData?.characters?.pageInfo?.hasNextPage}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />

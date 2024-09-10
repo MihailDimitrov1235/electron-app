@@ -6,7 +6,11 @@ import {
   useGetMediaDetailsQuery,
   MediaType,
   GetMediaDetailsQuery,
+  GetMediaCharactersQuery,
+  GetMediaStaffQuery,
+  GetMediaReviewsQuery,
 } from '@graphql/generated/types-and-hooks';
+import { enqueueSnackbar } from 'notistack';
 import MediaInfo from './MediaInfo';
 import MediaShortInfo from './MediaShortInfo';
 import MediaMainData from './MediaMainData';
@@ -18,17 +22,28 @@ const MediaTabs = ['Info', 'Characters', 'Staff', 'Reviews'];
 
 export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
   const { id } = useParams();
-  const { loading, error, data } = useGetMediaDetailsQuery({
-    variables: { mediaId: Number(id), mediaType },
+  const itemsPerPage = {
+    characters: { ANIME: 24, MANGA: 18 },
+    staff: 25,
+    reviews: 24,
+  };
+  const MediaDetailsQuery = useGetMediaDetailsQuery({
+    variables: {
+      mediaId: Number(id),
+      mediaType,
+      charactersPerPage: itemsPerPage.characters[mediaType],
+      staffPerPage: itemsPerPage.staff,
+      reviewsPerPage: itemsPerPage.reviews,
+    },
   });
-  const [displayData, setDisplayData] = useState<GetMediaDetailsQuery | null>(
-    null,
-  );
+  const [displayData, setDisplayData] = useState<
+    GetMediaDetailsQuery['MediaDetails'] | null
+  >(null);
   useEffect(() => {
-    if (data) {
-      setDisplayData(data);
+    if (MediaDetailsQuery.data) {
+      setDisplayData(MediaDetailsQuery.data.MediaDetails);
     }
-  }, [data]);
+  }, [MediaDetailsQuery.data]);
 
   const openTabSessionKey = `${mediaType}${id}openTab`;
   const [openTab, setOpenTab] = useState<string>(
@@ -39,23 +54,25 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
     sessionStorage.setItem(openTabSessionKey, openTab);
   }, [openTab, openTabSessionKey]);
 
-  if (error) {
-    console.error(error);
+  if (MediaDetailsQuery.error) {
+    enqueueSnackbar({
+      variant: 'error',
+      message: MediaDetailsQuery.error.message,
+    });
     return <div>error</div>;
   }
-  if (loading || !displayData) {
+  if (MediaDetailsQuery.loading || !displayData) {
     return <div>loading...</div>;
   }
 
   return (
     <div className="relative w-full pb-8">
-      {displayData.Media?.bannerImage && (
+      {(displayData.bannerImage || displayData.coverImage?.extraLarge) && (
         <div
           className="w-full h-[450px] blur-sm absolute z-0 bg-cover"
           style={{
             backgroundImage: `url(${
-              displayData.Media?.bannerImage ||
-              displayData.Media.coverImage?.extraLarge
+              displayData.bannerImage || displayData.coverImage?.extraLarge
             })`,
           }}
         >
@@ -70,17 +87,52 @@ export default function MediaDetails({ mediaType }: { mediaType: MediaType }) {
         MediaTabs={MediaTabs}
       />
       <div className="px-8 flex gap-10">
-        <MediaShortInfo data={displayData} />
+        <MediaShortInfo
+          data={displayData}
+          following={MediaDetailsQuery.data?.Following}
+        />
         {(() => {
           switch (openTab) {
             case MediaTabs[0]:
-              return <MediaInfo id={id || ''} mediaType={mediaType} />;
+              return (
+                <MediaInfo data={MediaDetailsQuery.data?.MediaInfo || null} />
+              );
             case MediaTabs[1]:
-              return <Characters id={id || ''} mediaType={mediaType} />;
+              return (
+                <Characters
+                  id={id || ''}
+                  mediaType={mediaType}
+                  data={
+                    MediaDetailsQuery.data
+                      ?.MediaCharacters as GetMediaCharactersQuery['Media']
+                  }
+                  charactersPerPage={itemsPerPage.characters[mediaType]}
+                />
+              );
             case MediaTabs[2]:
-              return <MediaStaff id={id || ''} mediaType={mediaType} />;
+              return (
+                <MediaStaff
+                  id={id || ''}
+                  mediaType={mediaType}
+                  data={
+                    MediaDetailsQuery.data
+                      ?.MediaStaff as GetMediaStaffQuery['Media']
+                  }
+                  staffPerPage={itemsPerPage.staff}
+                />
+              );
             case MediaTabs[3]:
-              return <MediaReviews id={id || ''} mediaType={mediaType} />;
+              return (
+                <MediaReviews
+                  id={id || ''}
+                  mediaType={mediaType}
+                  data={
+                    MediaDetailsQuery.data
+                      ?.MediaReviews as GetMediaReviewsQuery['Media']
+                  }
+                  reviewsPerPage={itemsPerPage.reviews}
+                />
+              );
             default:
               return <div>Unknown component type</div>;
           }

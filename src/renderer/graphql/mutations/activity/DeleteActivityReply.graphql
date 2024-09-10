@@ -1,0 +1,5 @@
+mutation DeleteActivityReply($replyId: Int) {
+  DeleteActivityReply(id: $replyId) {
+    deleted
+  }
+}

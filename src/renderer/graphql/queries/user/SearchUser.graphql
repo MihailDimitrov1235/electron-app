@@ -1,0 +1,16 @@
+query SearchUsers(
+  $search: String
+  $page: Int
+  $perPage: Int
+  $sort: [UserSort]
+) {
+  Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      currentPage
+      hasNextPage
+    }
+    users(search: $search, sort: $sort) {
+      ...user
+    }
+  }
+}

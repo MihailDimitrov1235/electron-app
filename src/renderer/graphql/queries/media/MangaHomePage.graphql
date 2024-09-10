@@ -1,0 +1,134 @@
+query GetMangaHomePage {
+  Carousel: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: [POPULARITY_DESC], status: RELEASING) {
+      id
+      type
+      meanScore
+      bannerImage
+      format
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Trending: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: TRENDING_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      format
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  HighestRated: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: SCORE_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      format
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+  Popular: Page(page: 1, perPage: 20) {
+    media(type: MANGA, sort: POPULARITY_DESC, onList: false) {
+      id
+      type
+      meanScore
+      bannerImage
+      format
+      coverImage {
+        extraLarge
+        large
+        medium
+        color
+      }
+      title {
+        romaji
+        english
+        native
+        userPreferred
+      }
+      description
+      genres
+      episodes
+      chapters
+      volumes
+      status
+      mediaListEntry {
+        progress
+      }
+      nextAiringEpisode {
+        episode
+      }
+    }
+  }
+}

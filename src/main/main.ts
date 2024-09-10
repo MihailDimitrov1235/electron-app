@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -16,8 +17,9 @@ class AppUpdater {
 
 const protocolName = 'electron-app';
 let mainWindow: BrowserWindow | null = null;
+let splash: BrowserWindow | null = null;
 
-SetupIPCHandlers(mainWindow);
+SetupIPCHandlers();
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -34,7 +36,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on('second-instance', (event, commandLine, workingDirectory) => {
+  app.on('second-instance', (event, commandLine) => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
@@ -110,7 +112,19 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
+  splash = new BrowserWindow({
+    width: 810,
+    height: 610,
+    transparent: true,
+    frame: false,
+    alwaysOnTop: true,
+  });
+  splash.loadURL(
+    `file://${path.resolve(__dirname, '../renderer/', 'splash.html')}`,
+  );
+
   mainWindow.on('ready-to-show', () => {
+    splash?.destroy();
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -137,6 +151,8 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  // createInitialServer(mainWindow);
 };
 
 app.on('window-all-closed', () => {

@@ -1,15 +1,20 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-
-import MediaCard from '@Components/Media/MediaCard';
-import { useGetSeasonalMediaQuery } from '@graphql/generated/types-and-hooks';
 import Carousel from '@Components/Media/Carousel';
-import { MediaSeason, MediaType } from '@graphql/generated/types-and-hooks';
+import {
+  GetMediaQuery,
+  MediaSeason,
+  MediaSort,
+  MediaType,
+  useGetAnimeHomePageQuery,
+  useGetMangaHomePageQuery,
+} from '@graphql/generated/types-and-hooks';
+import MediaDisplay from '@Components/Media/MediaDisplay';
 
-export default function MediaHome({ mediaType }: { mediaType: MediaType }) {
+function AnimeHome() {
   const now = new Date();
-  const month = now.getMonth(); // 0-11
+  const month = now.getMonth();
   const year = now.getFullYear();
 
   let season;
@@ -22,29 +27,88 @@ export default function MediaHome({ mediaType }: { mediaType: MediaType }) {
   } else {
     season = MediaSeason.Fall;
   }
-
-  const { loading, error, data } = useGetSeasonalMediaQuery({
-    variables: { season, year, mediaType },
+  const AnimeHomeQuery = useGetAnimeHomePageQuery({
+    variables: { year, season },
   });
-  if (error) {
-    return <p>No data available</p>;
-  }
-  if (loading || !data || !data.Page || !data.Page.media) {
-    return <p>loading</p>;
+  if (!AnimeHomeQuery.data?.Carousel) {
+    return <div>loading...</div>;
   }
   return (
     <>
       <div className="w-full">
-        <Carousel data={data} />
+        <Carousel
+          data={AnimeHomeQuery.data.Carousel as GetMediaQuery['Page']}
+        />
       </div>
-      <div className="mx-10">
-        <div className=" text-xl">Trending</div>
-        <div className="flex gap-6 overflow-x-scroll pb-2">
-          {data.Page.media.map((anime, index) => (
-            <MediaCard key={index} {...anime} />
-          ))}
-        </div>
+      <div className="flex flex-col gap-8 mx-10">
+        <MediaDisplay
+          data={AnimeHomeQuery.data.Trending as GetMediaQuery['Page']}
+          title="Trending"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.TrendingDesc]}
+        />
+        <MediaDisplay
+          data={AnimeHomeQuery.data.HighestRated as GetMediaQuery['Page']}
+          title="Highest rated"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.ScoreDesc]}
+        />
+        <MediaDisplay
+          data={AnimeHomeQuery.data.Popular as GetMediaQuery['Page']}
+          title="Most Popular"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.PopularityDesc]}
+        />
       </div>
     </>
   );
+}
+
+function MangaHome() {
+  const MangaHomeQuery = useGetMangaHomePageQuery();
+  if (!MangaHomeQuery.data?.Carousel) {
+    return <div>loading...</div>;
+  }
+  return (
+    <>
+      <div className="w-full">
+        <Carousel
+          data={MangaHomeQuery.data.Carousel as GetMediaQuery['Page']}
+        />
+      </div>
+      <div className="flex flex-col gap-8 mx-10">
+        <MediaDisplay
+          data={MangaHomeQuery.data.Trending as GetMediaQuery['Page']}
+          title="Trending"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.TrendingDesc]}
+        />
+        <MediaDisplay
+          data={MangaHomeQuery.data.HighestRated as GetMediaQuery['Page']}
+          title="Highest rated"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.ScoreDesc]}
+        />
+        <MediaDisplay
+          data={MangaHomeQuery.data.Popular as GetMediaQuery['Page']}
+          title="Most Popular"
+          mediaType={MediaType.Anime}
+          withCheckbox
+          sort={[MediaSort.PopularityDesc]}
+        />
+      </div>
+    </>
+  );
+}
+
+export default function MediaHome({ mediaType }: { mediaType: MediaType }) {
+  if (mediaType === MediaType.Anime) {
+    return <AnimeHome />;
+  }
+  return <MangaHome />;
 }

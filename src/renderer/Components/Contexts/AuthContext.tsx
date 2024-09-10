@@ -12,6 +12,7 @@ import {
   gql,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { enqueueSnackbar } from 'notistack';
 
 type AuthContextType = {
   token: string | null;
@@ -19,6 +20,7 @@ type AuthContextType = {
   isLoggedIn: boolean;
   userId: number | null;
   userAvatar: string | null;
+  userName: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +49,9 @@ const GET_USER_ID = gql`
       id
       avatar {
         large
+        medium
       }
+      name
     }
   }
 `;
@@ -64,14 +68,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storageUserAvatar = localStorage.getItem('userAvatar');
     return storageUserAvatar || null;
   });
+  const [userName, setUserName] = useState<string | null>(() => {
+    const storageUserName = localStorage.getItem('userName');
+    return storageUserName || null;
+  });
 
   function removeAuth() {
     setToken(null);
     setUserId(null);
     setUserAvatar(null);
+    setUserName(null);
     localStorage.removeItem('token');
     localStorage.removeItem('userId');
     localStorage.removeItem('userAvatar');
+    localStorage.removeItem('userName');
   }
 
   useEffect(() => {
@@ -80,22 +90,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       client
         .query({ query: GET_USER_ID })
         .then(({ data, error }) => {
-          if (error) {
+          if (error?.message === 'Unauthorized.') {
             removeAuth();
-          }
-          const fetchedUserId = data.Viewer.id;
-          setUserId(fetchedUserId);
-          localStorage.setItem('userId', fetchedUserId.toString());
+          } else if (data) {
+            const fetchedUserId = data.Viewer.id;
+            setUserId(fetchedUserId);
+            localStorage.setItem('userId', fetchedUserId.toString());
 
-          const fetchedUserAvatar = data.Viewer.avatar.large;
-          setUserAvatar(fetchedUserAvatar);
-          localStorage.setItem('userAvatar', fetchedUserAvatar);
+            const fetchedUserAvatar = data.Viewer.avatar.medium;
+            setUserAvatar(fetchedUserAvatar);
+            localStorage.setItem('userAvatar', fetchedUserAvatar);
+
+            const fetchedUserName = data.Viewer.name;
+            setUserName(fetchedUserName);
+            localStorage.setItem('userName', fetchedUserName);
+            enqueueSnackbar({
+              variant: 'success',
+              message: 'Successfully Logged In',
+            });
+          }
 
           return 0;
         })
         .catch((error) => {
-          console.error('Error fetching user data:', error);
-          removeAuth();
+          enqueueSnackbar({ variant: 'error', message: error.message });
+          if (error?.message === 'Invalid token') {
+            removeAuth();
+          }
         });
     }
   }, [token]);
@@ -114,8 +135,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isLoggedIn: !!userId,
       userId,
       userAvatar,
+      userName,
     }),
-    [token, userId, userAvatar],
+    [token, userId, userAvatar, userName],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

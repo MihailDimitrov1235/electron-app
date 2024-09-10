@@ -11,6 +11,15 @@ import MediaHome from '@Pages/Media';
 import Page404 from '@Pages/Page404';
 import MediaDetails from '@Pages/Media/MediaDetails';
 import { MediaType } from '@graphql/generated/types-and-hooks';
+import Review from '@Pages/Review';
+import AnimeSearch from '@Pages/Search/AnimeSearch';
+import Search from '@Pages/Search';
+import MangaSearch from '@Pages/Search/MangaSearch';
+import UserSearch from '@Pages/Search/UserSearch';
+import CharacterSearch from '@Pages/Search/CharacterSearch';
+import StaffSearch from '@Pages/Search/StaffSearch';
+import Users from '@Pages/User';
+import Activity from '@Pages/Activity';
 
 export default function RouteHandler() {
   const { isLoggedIn } = useAuth();
@@ -68,6 +77,29 @@ export default function RouteHandler() {
               element: <MediaDetails mediaType={MediaType.Manga} />,
             },
           ],
+        },
+        {
+          path: '/user/:id',
+          element: <Users />,
+        },
+        {
+          path: '/search',
+          children: [
+            { path: 'anime', element: <AnimeSearch /> },
+            { path: 'manga', element: <MangaSearch /> },
+            { path: 'users', element: <UserSearch /> },
+            { path: 'characters', element: <CharacterSearch /> },
+            { path: 'staff', element: <StaffSearch /> },
+          ],
+          element: <Search />,
+        },
+        {
+          path: '/review/:id',
+          element: <Review />,
+        },
+        {
+          path: '/activity/:id',
+          element: <Activity />,
         },
         {
           path: '*',

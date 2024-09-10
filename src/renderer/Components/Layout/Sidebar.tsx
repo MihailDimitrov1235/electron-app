@@ -3,12 +3,14 @@ import { GoHomeFill } from 'react-icons/go';
 import { RiVideoFill } from 'react-icons/ri';
 import { IoBook } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { FaSearch } from 'react-icons/fa';
 import Settings from './Settings';
 
 const menuItems = [
   { name: 'Home', icon: GoHomeFill, href: '/' },
   { name: 'Anime', icon: RiVideoFill, href: '/anime' },
   { name: 'Manga', icon: IoBook, href: '/manga' },
+  { name: 'Search', icon: FaSearch, href: '/search/anime' },
 ];
 
 export default function Sidebar() {

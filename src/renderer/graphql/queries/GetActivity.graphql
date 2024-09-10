@@ -1,0 +1,21 @@
+query GetActivity($id: Int, $page: Int, $perPage: Int) {
+  activity: Activity(id: $id) {
+    ... on ListActivity {
+      ...listActivity
+    }
+    ... on TextActivity {
+      ...textActivity
+    }
+    ... on MessageActivity {
+      ...messageActivity
+    }
+  }
+  replies: Page(page: $page, perPage: $perPage) {
+    pageInfo {
+      hasNextPage
+    }
+    activityReplies(activityId: $id) {
+      ...activityReply
+    }
+  }
+}

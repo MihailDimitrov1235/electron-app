@@ -1,0 +1,12 @@
+#import "../../fragments/mediaListCollection.graphql"
+#import "../../fragments/favourites.graphql"
+
+query GetUserExtra($userId: Int!) {
+  animeLists: MediaListCollection(userId: $userId, type: ANIME) {
+    ...mediaListCollection
+  }
+
+  mangaLists: MediaListCollection(userId: $userId, type: MANGA) {
+    ...mediaListCollection
+  }
+}

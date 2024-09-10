@@ -2,35 +2,37 @@ import { GetMediaDetailsQuery } from '@graphql/generated/types-and-hooks';
 import { useMainUtils } from '@Components/Contexts/MainUtilsContext';
 import { FaStar, FaYoutube } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Button from '@Components/Button';
+import Button from '@Components/Form/Button';
 
 export default function MediaShortInfo({
   data,
+  following,
 }: {
-  data: GetMediaDetailsQuery;
+  data: GetMediaDetailsQuery['MediaDetails'];
+  following: GetMediaDetailsQuery['Following'];
 }) {
   const { openUrl } = useMainUtils();
   return (
     <div className="w-[230px] h-full flex flex-col gap-2 shrink-0">
-      {data.Media?.season && (
+      {data?.season && (
         <div className="flex justify-between w-full">
           <div className="text-text-light">Season</div>
-          <div>{data.Media.season}</div>
+          <div>{data.season}</div>
         </div>
       )}
 
-      {data.Media?.seasonYear && (
+      {data?.seasonYear && (
         <div className="flex justify-between w-full">
           <div className="text-text-light">Season Year</div>
-          <div>{data.Media.seasonYear}</div>
+          <div>{data.seasonYear}</div>
         </div>
       )}
       <div className="flex justify-between w-full">
         <div className="text-text-light">Start date</div>
-        {data.Media?.startDate?.day ? (
+        {data?.startDate?.day ? (
           <div>
-            {data.Media?.startDate?.day}/{data.Media?.startDate?.month}/
-            {data.Media?.startDate?.year}
+            {data?.startDate?.day}/{data?.startDate?.month}/
+            {data?.startDate?.year}
           </div>
         ) : (
           <div>~</div>
@@ -38,32 +40,31 @@ export default function MediaShortInfo({
       </div>
       <div className="flex justify-between w-full">
         <div className="text-text-light">End date</div>
-        {data.Media?.endDate?.day ? (
+        {data?.endDate?.day ? (
           <div>
-            {data.Media?.endDate?.day}/{data.Media?.endDate?.month}/
-            {data.Media?.endDate?.year}
+            {data?.endDate?.day}/{data?.endDate?.month}/{data?.endDate?.year}
           </div>
         ) : (
           <div>~</div>
         )}
       </div>
-      {data.Media?.source && (
+      {data?.source && (
         <div className="flex justify-between w-full">
           <div className="text-text-light">Source</div>
-          <div>{String(data.Media.source).replace('_', ' ')}</div>
+          <div>{String(data.source).replaceAll('_', ' ')}</div>
         </div>
       )}
-      {data.Media?.countryOfOrigin && (
+      {data?.countryOfOrigin && (
         <div className="flex justify-between w-full">
           <div className="text-text-light">Country of origin</div>
-          <div>{data.Media?.countryOfOrigin}</div>
+          <div>{data?.countryOfOrigin}</div>
         </div>
       )}
-      {data.Page?.mediaList && data.Page?.mediaList.length > 0 && (
+      {following?.mediaList && following?.mediaList.length > 0 && (
         <div className="flex flex-col w-full">
           <div className="text-text-light">Following</div>
           <div className="flex gap-2 flex-col">
-            {data.Page.mediaList.map((mediaList) => (
+            {following.mediaList.map((mediaList) => (
               <Link
                 key={mediaList?.id}
                 to={`/user/${mediaList?.user?.id}`}
@@ -89,11 +90,11 @@ export default function MediaShortInfo({
           </div>
         </div>
       )}
-      {data.Media?.studios?.nodes && data.Media?.studios.nodes.length > 0 && (
+      {data?.studios?.nodes && data?.studios.nodes.length > 0 && (
         <div className="flex flex-col w-full">
           <div className="text-text-light">Studios</div>
           <div className="flex gap-2 flex-col justify-end">
-            {data.Media.studios.nodes.map((studio) => (
+            {data.studios.nodes.map((studio) => (
               <Link
                 key={studio?.id}
                 to={`/studio/${studio?.id}`}
@@ -105,24 +106,22 @@ export default function MediaShortInfo({
           </div>
         </div>
       )}
-      {data.Media?.synonyms && data.Media?.synonyms.length > 0 && (
+      {data?.synonyms && data?.synonyms.length > 0 && (
         <div className="flex flex-col w-full">
           <div className="text-text-light">Synonims</div>
           <div className="flex gap-2 flex-col justify-end">
-            {data.Media?.synonyms?.map((synonym) => (
+            {data?.synonyms?.map((synonym) => (
               <div key={synonym}>{synonym}</div>
             ))}
           </div>
         </div>
       )}
-      {data.Media?.trailer?.site === 'youtube' && (
+      {data?.trailer?.site === 'youtube' && (
         <Button
           className="w-full bg-red-700 text-white"
           Icon={FaYoutube}
           onClick={() =>
-            openUrl(
-              `https://www.youtube.com/watch?v=${data.Media?.trailer?.id}`,
-            )
+            openUrl(`https://www.youtube.com/watch?v=${data?.trailer?.id}`)
           }
         >
           Watch trailer

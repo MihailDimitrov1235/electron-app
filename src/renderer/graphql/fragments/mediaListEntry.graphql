@@ -1,0 +1,57 @@
+fragment mediaListEntry on MediaList {
+  id
+  mediaId
+  status
+  score(format: POINT_100)
+  progress
+  progressVolumes
+  repeat
+  priority
+  private
+  hiddenFromStatusLists
+  customLists
+  advancedScores
+  notes
+  updatedAt
+  startedAt {
+    year
+    month
+    day
+  }
+  completedAt {
+    year
+    month
+    day
+  }
+  customLists
+  media {
+    id
+    title {
+      userPreferred
+      romaji
+      english
+      native
+    }
+    coverImage {
+      extraLarge
+      large
+      medium
+    }
+    type
+    format
+    status(version: 2)
+    episodes
+    volumes
+    chapters
+    averageScore
+    popularity
+    isAdult
+    countryOfOrigin
+    genres
+    startDate {
+      year
+      month
+      day
+    }
+  }
+}
