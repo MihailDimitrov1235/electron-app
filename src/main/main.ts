@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path';
 import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
